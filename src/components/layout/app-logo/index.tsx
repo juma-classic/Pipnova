@@ -11,9 +11,9 @@ export const AppLogo = () => {
             href='https://www.pipnova.site/'
             target='_blank'
             rel='noopener noreferrer'
-            className='app-header__logo autotrades-logo'
+            className='app-header__logo pipnova-logo'
         >
-            <span className='autotrades-text'>AUTOTRADES</span>
+            <span className='pipnova-text'>PIPNOVA</span>
         </a>
     );
 };

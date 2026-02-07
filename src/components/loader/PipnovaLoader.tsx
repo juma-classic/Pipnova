@@ -1,15 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import './TraderMasterLoader.scss';
+import './PipnovaLoader.scss';
 
-interface TraderMasterLoaderProps {
+interface PipnovaLoaderProps {
     onLoadComplete?: () => void;
     duration?: number;
 }
 
-export const TraderMasterLoader: React.FC<TraderMasterLoaderProps> = ({ 
-    onLoadComplete, 
-    duration = 4000 
-}) => {
+export const PipnovaLoader: React.FC<PipnovaLoaderProps> = ({ onLoadComplete, duration = 4000 }) => {
     const [progress, setProgress] = useState(0);
     const [statusIndex, setStatusIndex] = useState(0);
     const [isComplete, setIsComplete] = useState(false);
@@ -17,11 +14,11 @@ export const TraderMasterLoader: React.FC<TraderMasterLoaderProps> = ({
     const particlesRef = useRef<HTMLCanvasElement>(null);
 
     const statuses = [
-        "Initializing Trading Engine...",
-        "Connecting to Market Data...",
-        "Loading AI Algorithms...",
-        "Synchronizing Strategies...",
-        "Ready to Trade!"
+        'Initializing Trading Engine...',
+        'Connecting to Market Data...',
+        'Loading AI Algorithms...',
+        'Synchronizing Strategies...',
+        'Ready to Trade!',
     ];
 
     // Particle Animation Effect
@@ -56,7 +53,7 @@ export const TraderMasterLoader: React.FC<TraderMasterLoaderProps> = ({
                 vy: (Math.random() - 0.5) * 2,
                 size: Math.random() * 3 + 1,
                 opacity: Math.random() * 0.8 + 0.2,
-                color: colors[Math.floor(Math.random() * colors.length)]
+                color: colors[Math.floor(Math.random() * colors.length)],
             });
         }
 
@@ -90,7 +87,7 @@ export const TraderMasterLoader: React.FC<TraderMasterLoaderProps> = ({
                         ctx.moveTo(particle.x, particle.y);
                         ctx.lineTo(otherParticle.x, otherParticle.y);
                         ctx.strokeStyle = '#00D4FF';
-                        ctx.globalAlpha = (100 - distance) / 100 * 0.3;
+                        ctx.globalAlpha = ((100 - distance) / 100) * 0.3;
                         ctx.lineWidth = 1;
                         ctx.stroke();
                     }
@@ -159,67 +156,67 @@ export const TraderMasterLoader: React.FC<TraderMasterLoaderProps> = ({
     }, [duration, onLoadComplete, statuses.length]);
 
     return (
-        <div className={`tradermaster-loader ${isComplete ? 'fade-out' : ''}`}>
-            <canvas ref={particlesRef} className="particles-canvas" />
-            
-            <div className="loader-content">
+        <div className={`pipnova-loader ${isComplete ? 'fade-out' : ''}`}>
+            <canvas ref={particlesRef} className='particles-canvas' />
+
+            <div className='loader-content'>
                 {/* Animated Logo */}
                 <div className={`logo-container ${showLogo ? 'show' : ''}`}>
-                    <div className="logo-wrapper">
-                        <div className="logo-icon">
-                            <div className="icon-circle"></div>
-                            <div className="icon-arrow"></div>
+                    <div className='logo-wrapper'>
+                        <div className='logo-icon'>
+                            <div className='icon-circle'></div>
+                            <div className='icon-arrow'></div>
                         </div>
-                        <h1 className="logo-text">
-                            <span className="trader">TRADER</span>
-                            <span className="master">MASTER</span>
+                        <h1 className='logo-text'>
+                            <span className='pip'>PIP</span>
+                            <span className='nova'>NOVA</span>
                         </h1>
                     </div>
-                    <p className="tagline">Advanced Trading Platform</p>
+                    <p className='tagline'>Advanced Trading Platform</p>
                 </div>
 
                 {/* Modern Progress Ring */}
-                <div className="progress-ring-container">
-                    <svg className="progress-ring" width="120" height="120">
+                <div className='progress-ring-container'>
+                    <svg className='progress-ring' width='120' height='120'>
                         <circle
-                            className="progress-ring-background"
-                            cx="60"
-                            cy="60"
-                            r="54"
-                            fill="transparent"
-                            stroke="#1a2332"
-                            strokeWidth="4"
+                            className='progress-ring-background'
+                            cx='60'
+                            cy='60'
+                            r='54'
+                            fill='transparent'
+                            stroke='#1a2332'
+                            strokeWidth='4'
                         />
                         <circle
-                            className="progress-ring-fill"
-                            cx="60"
-                            cy="60"
-                            r="54"
-                            fill="transparent"
-                            stroke="#00D4FF"
-                            strokeWidth="4"
-                            strokeLinecap="round"
+                            className='progress-ring-fill'
+                            cx='60'
+                            cy='60'
+                            r='54'
+                            fill='transparent'
+                            stroke='#00D4FF'
+                            strokeWidth='4'
+                            strokeLinecap='round'
                             strokeDasharray={`${2 * Math.PI * 54}`}
                             strokeDashoffset={`${2 * Math.PI * 54 * (1 - progress / 100)}`}
                         />
                     </svg>
-                    <div className="progress-percentage">{Math.round(progress)}%</div>
+                    <div className='progress-percentage'>{Math.round(progress)}%</div>
                 </div>
 
                 {/* Status Text */}
-                <div className="status-container">
-                    <p className="status-text">{statuses[statusIndex]}</p>
+                <div className='status-container'>
+                    <p className='status-text'>{statuses[statusIndex]}</p>
                 </div>
 
                 {/* Loading Dots */}
-                <div className="loading-dots">
-                    <div className="dot"></div>
-                    <div className="dot"></div>
-                    <div className="dot"></div>
+                <div className='loading-dots'>
+                    <div className='dot'></div>
+                    <div className='dot'></div>
+                    <div className='dot'></div>
                 </div>
             </div>
         </div>
     );
 };
 
-export default TraderMasterLoader;
+export default PipnovaLoader;
