@@ -6,6 +6,7 @@ import { PatelSignalCenterNavButton } from '@/components/navigation/PatelSignalC
 import { PatelSignalsNavButton } from '@/components/navigation/PatelSignalsNavButton';
 import { SpeedBotNavButton } from '@/components/navigation/SpeedBotNavButton';
 import { DTraderManualNavButton } from '@/components/navigation/DTraderManualNavButton';
+import { NovaAnalysisNavButton } from '@/components/navigation/NovaAnalysisNavButton';
 import { useOauth2 } from '@/hooks/auth/useOauth2';
 import useRemoteConfig from '@/hooks/growthbook/useRemoteConfig';
 import { useIsIntercomAvailable } from '@/hooks/useIntercom';
@@ -86,6 +87,12 @@ const useMobileMenuConfig = (client?: RootStore['client']) => {
             {
                 as: 'button',
                 label: <DTraderManualNavButton />,
+                LeftComponent: () => null,
+                onClick: () => {}, // Navigation handled by the button itself
+            },
+            {
+                as: 'button',
+                label: <NovaAnalysisNavButton variant='mobile' />,
                 LeftComponent: () => null,
                 onClick: () => {}, // Navigation handled by the button itself
             },
