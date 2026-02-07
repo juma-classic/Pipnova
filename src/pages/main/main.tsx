@@ -351,18 +351,13 @@ const AppWrapper = observer(() => {
         const fetchBots = async () => {
             const botFiles = [
                 // Core Trading Bots
-                'PATEL (with Entry).xml', // Added to top of the list
-                'Game Changer AI (1).xml', // NEW: Game Changer AI bot
-                'Game Changer AI -  State FX.xml', // NEW: Game Changer AI - States FX version
-                'Random LDP Differ -  State FX.xml', // NEW: Random LDP Differ bot
+                'PATEL (with Entry).xml',
+                'Game Changer AI (1).xml',
+                'Game Changer AI .xml',
+                'Random LDP Differ .xml',
 
                 // CFX Series Bots
                 'CFX-025-Base.xml',
-                'CFX-025-Step1.xml',
-                'CFX-025-Step2.xml',
-                'CFX-025-Step3.xml',
-                'CFX-025-Step4.xml',
-                'CFX-025-Enhanced.xml',
                 'CFX - 025.xml',
                 'CFX-EvenOdd.xml',
                 'CFX-RiseFall.xml',
@@ -370,27 +365,24 @@ const AppWrapper = observer(() => {
                 // Professional Trading Bots
                 'Digit-Hunter-Pro.xml',
                 'MatchesMaster.xml',
-                'MarketMakerPro-Enhanced.xml',
-                'MarketMakerPro.xml',
-                'Deriv Killer -  State FX.xml',
+                'Deriv Killer.xml',
                 'SpeedHunter.xml',
 
-                // States FX Bot Collection
-                'States FX SpeedBot(With Entry).xml',
+                // Elvis Bot Collection
                 'Elvis SpeedBot(Risk-Based Martingale).xml',
                 'Elvis SpeedBot(Risk-Based).xml',
                 'Elvis SpeedBot(With Entry).xml',
-                'Over 3 Delirium by  State FX.xml',
-                'Over_Under Ghost - by  State FX.xml',
-                'Over_Under Ghost v2 - by State FX.xml',
-                'Flipping-Tool-2026 -  State FX .xml',
+                'Over 3 Delirium.xml',
+                'Over_Under Ghost .xml',
+                'Over_Under Ghost v2 .xml',
+                'Flipping-Tool-2026 .xml',
 
                 // Advanced Strategy Bots
                 'Dexterator AI .xml',
-                'Dexterator CFX Hit&Run by  State FX.xml',
-                'D6 Deriv by  State FX.xml',
-                'Even Odd Ghost V1 by  State FX.xml',
-                'updated CFX Auto-Bot by  State FX.xml',
+                'Dexterator CFX Hit&Run.xml',
+                'D6 Deriv.xml',
+                'Even Odd Ghost V1 .xml',
+                'updated CFX Auto-Bot .xml',
 
                 // Specialized Bots
                 'MATCHES (with Entry).xml',
