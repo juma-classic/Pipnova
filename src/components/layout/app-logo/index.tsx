@@ -8,7 +8,7 @@ export const AppLogo = () => {
     if (!isDesktop) return null;
     return (
         <a
-            href='https://www.autotrades.site/'
+            href='https://www.pipnova.site/'
             target='_blank'
             rel='noopener noreferrer'
             className='app-header__logo autotrades-logo'

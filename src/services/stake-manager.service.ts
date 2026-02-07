@@ -13,7 +13,7 @@ export interface StakeSettings {
 
 class StakeManagerService {
     private static instance: StakeManagerService;
-    private readonly STORAGE_KEY = 'autotrades_stake_settings';
+    private readonly STORAGE_KEY = 'pipnova_stake_settings';
     private readonly DEFAULT_STAKE = 0.42;
     private readonly DEFAULT_MARTINGALE = 2.0;
 
@@ -89,7 +89,7 @@ class StakeManagerService {
     public updateAggressiveMode(aggressiveMode: boolean): void {
         this.currentSettings.aggressiveMode = aggressiveMode;
         this.currentSettings.timestamp = Date.now();
-        
+
         this.saveSettings();
         this.notifyListeners();
 

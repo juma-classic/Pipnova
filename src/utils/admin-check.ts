@@ -11,8 +11,8 @@ const ADMIN_IDENTIFIERS = [
     'CR7005911', // New admin real account
     'CR2371589', // New admin real account
     'VRTC4143924', // New admin demo account
-    'admin@autotrades.site',
-    'support@autotrades.site',
+    'admin@pipnova.site',
+    'support@pipnova.site',
 ];
 
 /**
