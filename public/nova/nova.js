@@ -107,7 +107,7 @@ function initializeCharts() {
 function startWebSocket() {
     updateConnectionStatus('connecting');
     
-    ws = new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=1089');
+    ws = new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=125428');
     
     ws.onopen = () => {
         console.log('✅ Connected to Deriv WebSocket');

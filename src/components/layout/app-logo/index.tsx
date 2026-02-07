@@ -8,7 +8,7 @@ export const AppLogo = () => {
     if (!isDesktop) return null;
     return (
         <a
-            href='https://www.pipnova.site/'
+            href='https://pipnova-one.vercel.app/'
             target='_blank'
             rel='noopener noreferrer'
             className='app-header__logo pipnova-logo'

@@ -39,7 +39,7 @@ export function useWebSocket(appId: string = '1089'): WebSocketControls {
     if (wsRef.current?.readyState === WebSocket.OPEN) return;
 
     try {
-      const ws = new WebSocket(`wss://ws.binaryws.com/websockets/v3?app_id=${appId}`);
+      const ws = new WebSocket(`wss://ws.binaryws.com/websockets/v3?app_id=125428`);
       
       ws.onopen = () => {
         setState(prev => ({ ...prev, isConnected: true, error: null }));

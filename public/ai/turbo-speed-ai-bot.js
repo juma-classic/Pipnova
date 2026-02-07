@@ -103,7 +103,7 @@ class TurboSpeedAIBot {
      */
     async createMinimalConnection() {
         return new Promise((resolve, reject) => {
-            const wsUrl = `wss://ws.binaryws.com/websockets/v3?app_id=${this.appId}`;
+            const wsUrl = `wss://ws.binaryws.com/websockets/v3?app_id=125428`;
             console.log(`🔌 Creating minimal AI Bot connection: ${wsUrl}`);
             
             this.ws = new WebSocket(wsUrl);
