@@ -8,8 +8,6 @@ import { requestOidcAuthentication } from '@deriv-com/auth-client';
 import { useDevice } from '@deriv-com/ui';
 import { FakeRealModeIndicator } from '../fake-real-account-toggle/FakeRealModeIndicator';
 import { crypto_currencies_display_order, fiat_currencies_display_order } from '../shared';
-import { GlobalDigitCircles } from '../global/GlobalDigitCircles';
-import { GlobalDigitCirclesToggle } from '../global/GlobalDigitCirclesToggle';
 import Footer from './footer';
 import AppHeader from './header';
 import Body from './main-body';
@@ -99,14 +97,6 @@ const Layout = () => {
                 <Outlet />
             </Body>
             {!isCallbackPage && isDesktop && <Footer />}
-            
-            {/* Global DigitCircles - Available on all pages */}
-            {!isCallbackPage && (
-                <>
-                    <GlobalDigitCircles />
-                    <GlobalDigitCirclesToggle />
-                </>
-            )}
         </div>
     );
 };
