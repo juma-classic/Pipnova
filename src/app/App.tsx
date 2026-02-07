@@ -62,9 +62,6 @@ const PatelSignalCenterPage = lazy(() =>
     import('../pages/patel-signal-center-page').then(m => ({ default: m.default }))
 );
 
-// Rich Mother Page
-const RichMotherPage = lazy(() => import('../pages/rich-mother-page').then(m => ({ default: m.default })));
-
 // Speed Bot Page
 const SpeedBotPage = lazy(() => import('../pages/speed-bot-page').then(m => ({ default: m.default })));
 
@@ -125,9 +122,6 @@ const router = createBrowserRouter(
 
             {/* Patel Signal Center Page */}
             <Route path='patel-signal-center' element={<PatelSignalCenterPage />} />
-
-            {/* Rich Mother Page */}
-            <Route path='rich-mother' element={<RichMotherPage />} />
 
             {/* Speed Bot Page */}
             <Route path='speed-bot' element={<SpeedBotPage />} />

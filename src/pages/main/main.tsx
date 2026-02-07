@@ -253,68 +253,6 @@ const FreeBotsIcon = () => (
     </svg>
 );
 
-const RichMotherIcon = () => (
-    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
-        <defs>
-            <linearGradient id='richGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
-                <stop offset='0%' stopColor='#ffd700' />
-                <stop offset='50%' stopColor='#ffed4e' />
-                <stop offset='100%' stopColor='#e6c200' />
-            </linearGradient>
-            <linearGradient id='richStrokeGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
-                <stop offset='0%' stopColor='#ffffff' />
-                <stop offset='100%' stopColor='#fbbf24' />
-            </linearGradient>
-        </defs>
-        {/* Diamond shape */}
-        <path
-            d='M12 2L16 8H8L12 2Z'
-            fill='url(#richGrad)'
-            stroke='url(#richStrokeGrad)'
-            strokeWidth='1.5'
-            strokeLinejoin='round'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
-        <path
-            d='M8 8L12 22L16 8H8Z'
-            fill='url(#richGrad)'
-            stroke='url(#richStrokeGrad)'
-            strokeWidth='1.5'
-            strokeLinejoin='round'
-            opacity='0.8'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
-
-        {/* Inner diamond facets */}
-        <path d='M12 2L14 8L12 12L10 8L12 2Z' fill='#ffed4e' opacity='0.6' />
-        <path d='M12 12L10 8L8 8L12 22L12 12Z' fill='#e6c200' opacity='0.4' />
-        <path d='M12 12L14 8L16 8L12 22L12 12Z' fill='#e6c200' opacity='0.4' />
-
-        {/* Sparkle effects */}
-        <circle cx='6' cy='6' r='1' fill='#ffd700' opacity='0.8'>
-            <animate attributeName='opacity' values='0.8;1;0.8' dur='2s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='18' cy='6' r='1' fill='#ffd700' opacity='0.8'>
-            <animate attributeName='opacity' values='0.8;1;0.8' dur='2s' begin='0.5s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='4' cy='12' r='0.8' fill='#ffd700' opacity='0.6'>
-            <animate attributeName='opacity' values='0.6;1;0.6' dur='2s' begin='1s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='20' cy='12' r='0.8' fill='#ffd700' opacity='0.6'>
-            <animate attributeName='opacity' values='0.6;1;0.6' dur='2s' begin='1.5s' repeatCount='indefinite' />
-        </circle>
-
-        {/* Crown elements */}
-        <path d='M10 4L11 6L12 4L13 6L14 4' stroke='#ffd700' strokeWidth='1' strokeLinecap='round' opacity='0.7' />
-
-        {/* Wealth indicator */}
-        <circle cx='12' cy='15' r='1.5' fill='#ffffff' />
-        <text x='12' y='17' textAnchor='middle' fontSize='6' fill='#e6c200' fontWeight='bold'>
-            $
-        </text>
-    </svg>
-);
-
 const AppWrapper = observer(() => {
     const { connectionStatus } = useApiBase();
     const { dashboard, load_modal, run_panel, summary_card } = useStore();
@@ -3366,10 +3304,42 @@ const AppWrapper = observer(() => {
                                                 <stop offset='100%' stopColor='#fbbf24' />
                                             </linearGradient>
                                         </defs>
-                                        <rect x='3' y='3' width='8' height='8' rx='1' fill='url(#dtraderGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
-                                        <rect x='13' y='3' width='8' height='8' rx='1' fill='url(#dtraderGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
-                                        <rect x='3' y='13' width='8' height='8' rx='1' fill='url(#dtraderGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
-                                        <rect x='13' y='13' width='8' height='8' rx='1' fill='url(#dtraderGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+                                        <rect
+                                            x='3'
+                                            y='3'
+                                            width='8'
+                                            height='8'
+                                            rx='1'
+                                            fill='url(#dtraderGrad)'
+                                            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+                                        />
+                                        <rect
+                                            x='13'
+                                            y='3'
+                                            width='8'
+                                            height='8'
+                                            rx='1'
+                                            fill='url(#dtraderGrad)'
+                                            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+                                        />
+                                        <rect
+                                            x='3'
+                                            y='13'
+                                            width='8'
+                                            height='8'
+                                            rx='1'
+                                            fill='url(#dtraderGrad)'
+                                            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+                                        />
+                                        <rect
+                                            x='13'
+                                            y='13'
+                                            width='8'
+                                            height='8'
+                                            rx='1'
+                                            fill='url(#dtraderGrad)'
+                                            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+                                        />
                                     </svg>
                                     <Localize i18n_default_text='DTrader' />
                                 </>
@@ -3393,41 +3363,6 @@ const AppWrapper = observer(() => {
                                         border: 'none',
                                         display: 'block',
                                     }}
-                                />
-                            </div>
-                        </div>
-
-                        {/* RICH MOTHER TAB */}
-                        <div
-                            label={
-                                <>
-                                    <RichMotherIcon />
-                                </>
-                            }
-                            id='id-rich-mother'
-                            className='rich-mother-tab-content'
-                        >
-                            <div
-                                className='rich-mother-container'
-                                style={{
-                                    width: '100%',
-                                    height: 'calc(100vh - 120px)',
-                                    minHeight: 'calc(100vh - 120px)',
-                                    overflow: 'hidden',
-                                    background: '#fff',
-                                }}
-                            >
-                                <iframe
-                                    src='/RichMother/index.html'
-                                    title='💎 Advanced Trading Tool'
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        border: 'none',
-                                        display: 'block',
-                                    }}
-                                    allow='clipboard-write'
-                                    sandbox='allow-same-origin allow-scripts allow-forms allow-popups allow-modals'
                                 />
                             </div>
                         </div>

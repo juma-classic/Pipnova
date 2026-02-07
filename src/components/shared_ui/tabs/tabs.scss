@@ -169,10 +169,9 @@
     }
 }
 
-
 // Enhanced Modern Navigation Tabs - Redesigned to match reference
 .dc-tabs--enhanced {
-    background: #ffffff;
+    background: #fff;
     box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
     border-bottom: 1px solid rgb(229 231 235);
     position: relative;
@@ -186,7 +185,7 @@
         flex-wrap: nowrap;
         overflow-x: auto;
         scrollbar-width: thin;
-        scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+        scrollbar-color: rgb(255 255 255 / 20%) transparent;
 
         &::-webkit-scrollbar {
             height: 4px;
@@ -197,9 +196,38 @@
         }
 
         &::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgb(255 255 255 / 20%);
             border-radius: 2px;
         }
+
+        /* Reorder tabs using flexbox order */
+        .dc-tabs__item:nth-child(1) {
+            order: 2;
+        } /* Dashboard -> 2nd */
+        .dc-tabs__item:nth-child(2) {
+            order: 3;
+        } /* Bot Builder -> 3rd */
+        .dc-tabs__item:nth-child(3) {
+            order: 7;
+        } /* Charts -> 7th */
+        .dc-tabs__item:nth-child(4) {
+            order: 8;
+        } /* Tutorials -> 8th */
+        .dc-tabs__item:nth-child(5) {
+            order: 5;
+        } /* Analysis Tool -> 5th */
+        .dc-tabs__item:nth-child(6) {
+            order: 9;
+        } /* Signals -> 9th */
+        .dc-tabs__item:nth-child(7) {
+            order: 1;
+        } /* Free Bots -> 1st */
+        .dc-tabs__item:nth-child(8) {
+            order: 4;
+        } /* Nova Analysis -> 4th */
+        .dc-tabs__item:nth-child(9) {
+            order: 6;
+        } /* DTrader -> 6th */
     }
 
     .dc-tabs__item {
@@ -209,22 +237,23 @@
         gap: 0.5rem;
         padding: 0.845rem 1.625rem !important;
         background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        border: 1px solid rgb(255 255 255 / 20%);
         border-radius: 8px;
-        color: rgba(255, 255, 255, 0.95) !important;
+        color: rgb(255 255 255 / 95%) !important;
         font-size: 1.507rem;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         user-select: none;
         line-height: 1.2;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
         flex-shrink: 0;
         white-space: nowrap;
 
         // Ensure text color
-        span, div {
-            color: rgba(255, 255, 255, 0.95) !important;
+        span,
+        div {
+            color: rgb(255 255 255 / 95%) !important;
         }
 
         // Icon styling
@@ -238,35 +267,37 @@
         // Hover state
         &:hover:not(&--active) {
             background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            border-color: rgba(255, 255, 255, 0.3);
-            color: #ffffff !important;
+            border-color: rgb(255 255 255 / 30%);
+            color: #fff !important;
             transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 8px rgb(0 0 0 / 30%);
 
             svg {
                 transform: scale(1.05);
             }
 
-            span, div {
-                color: #ffffff !important;
+            span,
+            div {
+                color: #fff !important;
             }
         }
 
         // Active state
         &--active {
             background: linear-gradient(135deg, #0c4a6e 0%, #075985 100%) !important;
-            border-color: rgba(251, 191, 36, 0.5);
-            color: #ffffff !important;
-            box-shadow: 
-                0 4px 12px rgba(251, 191, 36, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            border-color: rgb(251 191 36 / 50%);
+            color: #fff !important;
+            box-shadow:
+                0 4px 12px rgb(251 191 36 / 30%),
+                inset 0 1px 0 rgb(255 255 255 / 20%);
 
             svg {
                 transform: scale(1.1);
             }
 
-            span, div {
-                color: #ffffff !important;
+            span,
+            div {
+                color: #fff !important;
             }
         }
 
@@ -293,7 +324,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
+        box-shadow: 0 2px 8px rgb(239 68 68 / 50%);
     }
 
     // Responsive design
@@ -341,7 +372,8 @@
 
 // Animations
 @keyframes pulse-badge {
-    0%, 100% {
+    0%,
+    100% {
         transform: scale(1);
         box-shadow: 0 2px 8px rgb(239 68 68 / 40%);
     }
@@ -353,7 +385,8 @@
 }
 
 @keyframes glow-line {
-    0%, 100% {
+    0%,
+    100% {
         opacity: 0.6;
         box-shadow: 0 0 10px rgb(0 102 204 / 50%);
     }
