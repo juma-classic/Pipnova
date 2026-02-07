@@ -3349,6 +3349,54 @@ const AppWrapper = observer(() => {
                             </div>
                         </div>
 
+                        {/* DTRADER MANUAL TRADING TAB */}
+                        <div
+                            label={
+                                <>
+                                    <svg
+                                        width='24'
+                                        height='24'
+                                        viewBox='0 0 24 24'
+                                        fill='none'
+                                        xmlns='http://www.w3.org/2000/svg'
+                                    >
+                                        <defs>
+                                            <linearGradient id='dtraderGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                                                <stop offset='0%' stopColor='#ffffff' />
+                                                <stop offset='100%' stopColor='#fbbf24' />
+                                            </linearGradient>
+                                        </defs>
+                                        <rect x='3' y='3' width='8' height='8' rx='1' fill='url(#dtraderGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+                                        <rect x='13' y='3' width='8' height='8' rx='1' fill='url(#dtraderGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+                                        <rect x='3' y='13' width='8' height='8' rx='1' fill='url(#dtraderGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+                                        <rect x='13' y='13' width='8' height='8' rx='1' fill='url(#dtraderGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+                                    </svg>
+                                    <Localize i18n_default_text='DTrader' />
+                                </>
+                            }
+                            id='id-dtrader'
+                        >
+                            <div
+                                style={{
+                                    width: '100%',
+                                    height: 'calc(100vh - 120px)',
+                                    minHeight: 'calc(100vh - 120px)',
+                                    overflow: 'hidden',
+                                }}
+                            >
+                                <iframe
+                                    src='/dtrader/index.html'
+                                    title='DTrader Manual Trading'
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        border: 'none',
+                                        display: 'block',
+                                    }}
+                                />
+                            </div>
+                        </div>
+
                         {/* RICH MOTHER TAB */}
                         <div
                             label={
