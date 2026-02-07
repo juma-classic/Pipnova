@@ -189,9 +189,25 @@
         <!-- Trade Parameters -->
         <div class="trade-parameters">
             <div class="parameter-row">
-                <span class="parameter-label">5 ticks</span>
-                <span class="parameter-value">10.00 AUD</span>
-                <span class="parameter-label-right">Stake</span>
+                <div class="parameter-group">
+                    <label class="parameter-label">Duration</label>
+                    <div class="parameter-control">
+                        <button class="param-btn minus" id="ticksMinus">−</button>
+                        <input type="number" id="ticksInput" class="param-input" value="5" min="1" max="10" />
+                        <button class="param-btn plus" id="ticksPlus">+</button>
+                        <span class="param-unit">ticks</span>
+                    </div>
+                </div>
+                
+                <div class="parameter-group">
+                    <label class="parameter-label">Stake</label>
+                    <div class="parameter-control">
+                        <button class="param-btn minus" id="stakeMinus">−</button>
+                        <input type="number" id="stakeInput" class="param-input" value="10.00" min="0.35" step="0.50" />
+                        <button class="param-btn plus" id="stakePlus">+</button>
+                        <span class="param-unit">AUD</span>
+                    </div>
+                </div>
             </div>
         </div>
 
