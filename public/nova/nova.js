@@ -1,138 +1,155 @@
-// Nova Analysis - Simplified Trading Analytics
+// Nova Analysis - Exact Match to Screenshot
 let ws;
 let tickHistory = [];
-let currentSymbol = localStorage.getItem('novaSymbol') || 'R_50';
-let tickCount = parseInt(localStorage.getItem('novaTickCount')) || 500;
-let digitChart, evenOddChart;
+let currentSymbol = 'R_50'; // Volatility 50 Index
+let selectedDigit = 3;
 
 // Initialize on page load
-document.addEventListener('DOMContentLoaded', function() {
-    initializeControls();
-    initializeCharts();
+document.addEventListener('DOMContentLoaded', function () {
+    initializeUI();
     startWebSocket();
 });
 
-// Initialize controls
-function initializeControls() {
-    const symbolSelect = document.getElementById('symbol-select');
-    const tickCountInput = document.getElementById('tick-count-input');
-    const reconnectBtn = document.getElementById('reconnect-btn');
-
-    symbolSelect.value = currentSymbol;
-    tickCountInput.value = tickCount;
-
-    symbolSelect.addEventListener('change', (e) => {
-        currentSymbol = e.target.value;
-        localStorage.setItem('novaSymbol', currentSymbol);
-        reconnect();
-    });
-
-    tickCountInput.addEventListener('change', (e) => {
-        tickCount = parseInt(e.target.value) || 500;
-        localStorage.setItem('novaTickCount', tickCount);
-        reconnect();
-    });
-
-    reconnectBtn.addEventListener('click', reconnect);
+// Initialize UI
+function initializeUI() {
+    renderDigitCircles();
+    renderDigitSelector();
+    updateMarketLabel();
+    setupShowMoreButton();
 }
 
-// Initialize charts
-function initializeCharts() {
-    const digitCtx = document.getElementById('digit-chart').getContext('2d');
-    const evenOddCtx = document.getElementById('even-odd-chart').getContext('2d');
+// Setup show more button
+function setupShowMoreButton() {
+    const btn = document.getElementById('show-more-btn');
+    let showing = 50;
 
-    digitChart = new Chart(digitCtx, {
-        type: 'bar',
-        data: {
-            labels: ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'],
-            datasets: [{
-                label: 'Digit Frequency',
-                data: Array(10).fill(0),
-                backgroundColor: 'rgba(0, 212, 255, 0.6)',
-                borderColor: 'rgba(0, 212, 255, 1)',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                    ticks: { color: '#8892b0' }
-                },
-                x: {
-                    grid: { color: 'rgba(255, 255, 255, 0.1)' },
-                    ticks: { color: '#8892b0' }
-                }
-            }
+    btn.addEventListener('click', () => {
+        if (showing === 50) {
+            showing = 100;
+            btn.textContent = 'Show Less (50) →';
+        } else {
+            showing = 50;
+            btn.textContent = 'Show More (100) →';
+        }
+        updateDigitsStream(showing);
+    });
+}
+
+// Render digit circles (0-9)
+function renderDigitCircles() {
+    const container = document.getElementById('digit-circles');
+    container.innerHTML = '';
+
+    for (let i = 0; i <= 9; i++) {
+        const circle = createDigitCircle(i);
+        container.appendChild(circle);
+    }
+}
+
+// Create a single digit circle with SVG progress ring
+function createDigitCircle(digit) {
+    const div = document.createElement('div');
+    div.className = 'digit-circle';
+    div.setAttribute('data-digit', digit);
+
+    const radius = 34;
+    const circumference = 2 * Math.PI * radius;
+
+    div.innerHTML = `
+        <svg class="circle-svg" width="80" height="80">
+            <circle class="circle-bg" cx="40" cy="40" r="${radius}"></circle>
+            <circle class="circle-progress" cx="40" cy="40" r="${radius}"
+                    stroke-dasharray="${circumference}"
+                    stroke-dashoffset="${circumference}"></circle>
+        </svg>
+        <div class="digit-number">${digit}</div>
+        <div class="digit-percentage">0.0%</div>
+    `;
+
+    return div;
+}
+
+// Render digit selector buttons
+function renderDigitSelector() {
+    const container = document.getElementById('digit-selector');
+    container.innerHTML = '';
+
+    for (let i = 0; i <= 9; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'digit-btn';
+        btn.textContent = i;
+        btn.setAttribute('data-digit', i);
+
+        if (i === selectedDigit) {
+            btn.classList.add('active');
+        }
+
+        btn.addEventListener('click', () => {
+            selectedDigit = i;
+            updateDigitSelector();
+            updateComparison();
+        });
+
+        container.appendChild(btn);
+    }
+}
+
+// Update digit selector active state
+function updateDigitSelector() {
+    document.querySelectorAll('.digit-btn').forEach(btn => {
+        const digit = parseInt(btn.getAttribute('data-digit'));
+        if (digit === selectedDigit) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
         }
     });
 
-    evenOddChart = new Chart(evenOddCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Even', 'Odd'],
-            datasets: [{
-                data: [0, 0],
-                backgroundColor: [
-                    'rgba(0, 212, 255, 0.6)',
-                    'rgba(255, 100, 100, 0.6)'
-                ],
-                borderColor: [
-                    'rgba(0, 212, 255, 1)',
-                    'rgba(255, 100, 100, 1)'
-                ],
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: {
-                    position: 'bottom',
-                    labels: { color: '#e0e6ed' }
-                }
-            }
-        }
-    });
+    // Update selected digit labels
+    document.getElementById('selected-digit-over').textContent = selectedDigit;
+    document.getElementById('selected-digit-under').textContent = selectedDigit;
+    document.getElementById('selected-digit-equal').textContent = selectedDigit;
+}
+
+// Update market label
+function updateMarketLabel() {
+    const marketNames = {
+        'R_10': 'Volatility 10 Index',
+        'R_25': 'Volatility 25 Index',
+        'R_50': 'Volatility 50 Index',
+        'R_75': 'Volatility 75 Index',
+        'R_100': 'Volatility 100 Index',
+        '1HZ10V': 'Volatility 10 (1s) Index',
+        '1HZ25V': 'Volatility 25 (1s) Index',
+        '1HZ50V': 'Volatility 50 (1s) Index',
+        '1HZ75V': 'Volatility 75 (1s) Index',
+        '1HZ100V': 'Volatility 100 (1s) Index',
+    };
+
+    document.getElementById('market-label').textContent = marketNames[currentSymbol] || currentSymbol;
 }
 
 // WebSocket connection
 function startWebSocket() {
-    updateConnectionStatus('connecting');
-    
     ws = new WebSocket('wss://ws.derivws.com/websockets/v3?app_id=125428');
-    
+
     ws.onopen = () => {
         console.log('✅ Connected to Deriv WebSocket');
-        updateConnectionStatus('connected');
         requestTickHistory();
     };
-    
-    ws.onmessage = (event) => {
+
+    ws.onmessage = event => {
         const data = JSON.parse(event.data);
         handleWebSocketMessage(data);
     };
-    
-    ws.onerror = (error) => {
+
+    ws.onerror = error => {
         console.error('❌ WebSocket error:', error);
-        updateConnectionStatus('error');
     };
-    
+
     ws.onclose = () => {
-        console.log('🔌 WebSocket closed');
-        updateConnectionStatus('disconnected');
-        setTimeout(() => {
-            if (ws.readyState === WebSocket.CLOSED) {
-                startWebSocket();
-            }
-        }, 3000);
+        console.log('🔌 WebSocket closed, reconnecting...');
+        setTimeout(startWebSocket, 3000);
     };
 }
 
@@ -141,12 +158,12 @@ function requestTickHistory() {
     const request = {
         ticks_history: currentSymbol,
         adjust_start_time: 1,
-        count: tickCount,
+        count: 1000,
         end: 'latest',
         start: 1,
-        style: 'ticks'
+        style: 'ticks',
     };
-    
+
     ws.send(JSON.stringify(request));
 }
 
@@ -159,7 +176,7 @@ function handleWebSocketMessage(data) {
             for (let i = 0; i < data.history.times.length; i++) {
                 tickHistory.push({
                     time: data.history.times[i],
-                    quote: parseFloat(data.history.prices[i])
+                    quote: parseFloat(data.history.prices[i]),
                 });
             }
         }
@@ -169,14 +186,14 @@ function handleWebSocketMessage(data) {
         // Process live tick
         tickHistory.push({
             time: data.tick.epoch,
-            quote: parseFloat(data.tick.quote)
+            quote: parseFloat(data.tick.quote),
         });
-        
-        // Keep only the specified number of ticks
-        if (tickHistory.length > tickCount) {
+
+        // Keep last 1000 ticks
+        if (tickHistory.length > 1000) {
             tickHistory.shift();
         }
-        
+
         updateUI();
     }
 }
@@ -185,7 +202,7 @@ function handleWebSocketMessage(data) {
 function subscribeToTicks() {
     const request = {
         ticks: currentSymbol,
-        subscribe: 1
+        subscribe: 1,
     };
     ws.send(JSON.stringify(request));
 }
@@ -193,38 +210,35 @@ function subscribeToTicks() {
 // Update UI with current data
 function updateUI() {
     if (tickHistory.length === 0) return;
-    
-    // Update stats
-    document.getElementById('total-ticks').textContent = tickHistory.length;
+
+    // Update current price
     const lastTick = tickHistory[tickHistory.length - 1];
     document.getElementById('current-price').textContent = lastTick.quote.toFixed(3);
-    
+
     // Calculate digit distribution
     const digitCounts = Array(10).fill(0);
     const lastDigits = [];
-    
+
     tickHistory.forEach(tick => {
         const digit = getLastDigit(tick.quote);
         digitCounts[digit]++;
         lastDigits.push(digit);
     });
-    
-    // Update last digit display
-    const lastDigit = lastDigits[lastDigits.length - 1];
-    document.getElementById('last-digit').textContent = lastDigit;
-    
-    // Update digit distribution display
-    updateDigitDisplay(digitCounts);
-    
-    // Update digit chart
-    digitChart.data.datasets[0].data = digitCounts;
-    digitChart.update();
-    
-    // Update even/odd analysis
-    updateEvenOddAnalysis(lastDigits);
-    
-    // Update recent digits
-    updateRecentDigits(lastDigits.slice(-50));
+
+    // Update digit circles
+    updateDigitCircles(digitCounts);
+
+    // Update comparison
+    updateComparison();
+
+    // Update even/odd pattern
+    updateEvenOddPattern();
+
+    // Update market movement
+    updateMarketMovement();
+
+    // Update digits stream
+    updateDigitsStream(50);
 }
 
 // Get last digit from price
@@ -238,111 +252,169 @@ function getLastDigit(price) {
     return parseInt(priceStr[priceStr.length - 1]);
 }
 
-// Update digit display
-function updateDigitDisplay(digitCounts) {
-    const container = document.getElementById('digit-display');
+// Update digit circles with percentages and progress rings
+function updateDigitCircles(digitCounts) {
     const total = digitCounts.reduce((a, b) => a + b, 0);
-    
-    container.innerHTML = '';
+    if (total === 0) return;
+
+    let highestDigit = 0;
+    let lowestDigit = 0;
+    let highestCount = digitCounts[0];
+    let lowestCount = digitCounts[0];
+
+    // Get current last digit
+    const currentLastDigit = tickHistory.length > 0 ? getLastDigit(tickHistory[tickHistory.length - 1].quote) : null;
+
     digitCounts.forEach((count, digit) => {
-        const percentage = total > 0 ? ((count / total) * 100).toFixed(1) : 0;
-        const item = document.createElement('div');
-        item.className = 'digit-item';
-        item.innerHTML = `
-            <div class="digit-number">${digit}</div>
-            <div class="digit-count">${count}</div>
-            <div class="digit-percentage">${percentage}%</div>
-        `;
-        container.appendChild(item);
+        const percentage = ((count / total) * 100).toFixed(1);
+        const circle = document.querySelector(`.digit-circle[data-digit="${digit}"]`);
+
+        if (circle) {
+            // Remove active class from all circles first
+            circle.classList.remove('active');
+
+            // Add active class to current last digit
+            if (digit === currentLastDigit) {
+                circle.classList.add('active');
+            }
+
+            // Update percentage text
+            const percentageEl = circle.querySelector('.digit-percentage');
+            percentageEl.textContent = `${percentage}%`;
+
+            // Update progress ring
+            const progressCircle = circle.querySelector('.circle-progress');
+            const radius = 34;
+            const circumference = 2 * Math.PI * radius;
+            const offset = circumference - (percentage / 100) * circumference;
+            progressCircle.style.strokeDashoffset = offset;
+        }
+
+        // Track highest and lowest
+        if (count > highestCount) {
+            highestCount = count;
+            highestDigit = digit;
+        }
+        if (count < lowestCount) {
+            lowestCount = count;
+            lowestDigit = digit;
+        }
     });
+
+    // Update highest/lowest display
+    const highestPercentage = ((highestCount / total) * 100).toFixed(1);
+    const lowestPercentage = ((lowestCount / total) * 100).toFixed(1);
+
+    document.getElementById('highest-digit').textContent = `${highestDigit} (${highestPercentage}%)`;
+    document.getElementById('lowest-digit').textContent = `${lowestDigit} (${lowestPercentage}%)`;
 }
 
-// Update even/odd analysis
-function updateEvenOddAnalysis(lastDigits) {
+// Update comparison section
+function updateComparison() {
+    if (tickHistory.length === 0) return;
+
+    const lastDigits = tickHistory.map(tick => getLastDigit(tick.quote));
+    const total = lastDigits.length;
+
+    let overCount = 0;
+    let underCount = 0;
+    let equalCount = 0;
+
+    lastDigits.forEach(digit => {
+        if (digit > selectedDigit) {
+            overCount++;
+        } else if (digit < selectedDigit) {
+            underCount++;
+        } else {
+            equalCount++;
+        }
+    });
+
+    const overPercentage = ((overCount / total) * 100).toFixed(1);
+    const underPercentage = ((underCount / total) * 100).toFixed(1);
+    const equalPercentage = ((equalCount / total) * 100).toFixed(1);
+
+    document.getElementById('over-value').textContent = `${overPercentage}%`;
+    document.getElementById('under-value').textContent = `${underPercentage}%`;
+    document.getElementById('equal-value').textContent = `${equalPercentage}%`;
+}
+
+// Update even/odd pattern
+function updateEvenOddPattern() {
+    if (tickHistory.length === 0) return;
+
+    const lastDigits = tickHistory.map(tick => getLastDigit(tick.quote));
+    const last50 = lastDigits.slice(-50);
+
     let evenCount = 0;
     let oddCount = 0;
-    
-    lastDigits.forEach(digit => {
+
+    last50.forEach(digit => {
         if (digit % 2 === 0) {
             evenCount++;
         } else {
             oddCount++;
         }
     });
-    
-    const total = evenCount + oddCount;
-    const evenPercentage = total > 0 ? ((evenCount / total) * 100).toFixed(1) : 0;
-    const oddPercentage = total > 0 ? ((oddCount / total) * 100).toFixed(1) : 0;
-    
-    // Update display
-    const container = document.getElementById('even-odd-display');
-    container.innerHTML = `
-        <div class="even-odd-item">
-            <div class="even-odd-label">⚪ Even</div>
-            <div class="even-odd-count">${evenCount}</div>
-            <div class="even-odd-percentage">${evenPercentage}%</div>
-        </div>
-        <div class="even-odd-item">
-            <div class="even-odd-label">⚫ Odd</div>
-            <div class="even-odd-count">${oddCount}</div>
-            <div class="even-odd-percentage">${oddPercentage}%</div>
-        </div>
-    `;
-    
-    // Update percentage text
-    document.getElementById('even-odd-percentage').textContent = 
-        `Even: ${evenPercentage}% | Odd: ${oddPercentage}%`;
-    
-    // Update chart
-    evenOddChart.data.datasets[0].data = [evenCount, oddCount];
-    evenOddChart.update();
-}
 
-// Update recent digits display
-function updateRecentDigits(recentDigits) {
-    const container = document.getElementById('recent-digits');
+    const total = last50.length;
+    const evenPercentage = ((evenCount / total) * 100).toFixed(1);
+    const oddPercentage = ((oddCount / total) * 100).toFixed(1);
+
+    document.getElementById('even-percentage').textContent = `${evenPercentage}%`;
+    document.getElementById('odd-percentage').textContent = `${oddPercentage}%`;
+
+    // Render pattern stream
+    const container = document.getElementById('pattern-stream');
     container.innerHTML = '';
-    
-    recentDigits.forEach(digit => {
-        const item = document.createElement('div');
-        item.className = `recent-digit ${digit % 2 === 0 ? 'even' : 'odd'}`;
-        item.textContent = digit;
-        container.appendChild(item);
+
+    last50.forEach(digit => {
+        const badge = document.createElement('div');
+        badge.className = `pattern-badge ${digit % 2 === 0 ? 'even' : 'odd'}`;
+        badge.textContent = digit % 2 === 0 ? 'E' : 'O';
+        container.appendChild(badge);
     });
 }
 
-// Update connection status
-function updateConnectionStatus(status) {
-    const statusEl = document.getElementById('connection-status');
-    const dot = statusEl.querySelector('.status-dot');
-    const text = statusEl.querySelector('.status-text');
-    
-    dot.className = 'status-dot';
-    
-    switch(status) {
-        case 'connecting':
-            text.textContent = 'Connecting...';
-            break;
-        case 'connected':
-            dot.classList.add('connected');
-            text.textContent = 'Connected';
-            break;
-        case 'disconnected':
-            text.textContent = 'Disconnected';
-            break;
-        case 'error':
-            text.textContent = 'Connection Error';
-            break;
+// Update market movement (Rise/Fall)
+function updateMarketMovement() {
+    if (tickHistory.length < 2) return;
+
+    let riseCount = 0;
+    let fallCount = 0;
+
+    for (let i = 1; i < tickHistory.length; i++) {
+        if (tickHistory[i].quote > tickHistory[i - 1].quote) {
+            riseCount++;
+        } else if (tickHistory[i].quote < tickHistory[i - 1].quote) {
+            fallCount++;
+        }
     }
+
+    const total = riseCount + fallCount;
+    const risePercentage = total > 0 ? ((riseCount / total) * 100).toFixed(1) : '0.0';
+    const fallPercentage = total > 0 ? ((fallCount / total) * 100).toFixed(1) : '0.0';
+
+    document.getElementById('rise-percentage').textContent = `${risePercentage}%`;
+    document.getElementById('fall-percentage').textContent = `${fallPercentage}%`;
 }
 
-// Reconnect
-function reconnect() {
-    if (ws) {
-        ws.close();
-    }
-    tickHistory = [];
-    startWebSocket();
+// Update digits stream
+function updateDigitsStream(count = 50) {
+    if (tickHistory.length === 0) return;
+
+    const lastDigits = tickHistory.map(tick => getLastDigit(tick.quote));
+    const displayDigits = lastDigits.slice(-count);
+
+    const container = document.getElementById('digits-stream');
+    container.innerHTML = '';
+
+    displayDigits.forEach(digit => {
+        const badge = document.createElement('div');
+        badge.className = `digit-badge ${digit % 2 === 0 ? 'even' : 'odd'}`;
+        badge.textContent = digit;
+        container.appendChild(badge);
+    });
 }
 
 console.log('✨ Nova Analysis initialized');

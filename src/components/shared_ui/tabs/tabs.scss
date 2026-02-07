@@ -170,182 +170,170 @@
 }
 
 
-// Enhanced Modern Navigation Tabs with White Background, Maroon Buttons, Yellow Text
+// Enhanced Modern Navigation Tabs - Redesigned to match reference
 .dc-tabs--enhanced {
-    background: #fff;
-    box-shadow: 0 4px 20px rgb(0 0 0 / 10%);
-    border-bottom: 3px solid #f0f0f0;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+    border-bottom: 1px solid rgb(229 231 235);
     position: relative;
-
-    // Subtle overlay
-    &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: linear-gradient(
-            180deg,
-            rgb(0 49 83 / 2%) 0%,
-            transparent 100%
-        );
-        pointer-events: none;
-    }
+    padding: 0.75rem 1rem;
 
     .dc-tabs__list {
-        padding: 0.5rem 1rem;
+        padding: 0;
         gap: 0.5rem;
-        justify-content: center;
+        justify-content: flex-start;
         border-bottom: none;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+
+        &::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+        }
     }
 
     .dc-tabs__item {
         position: relative;
         display: flex;
         align-items: center;
-        gap: 0.75rem;
-        padding: 0.35rem 1.275rem !important;
-        background: linear-gradient(135deg, #003153 0%, #004080 100%);
-        border: 2px solid transparent;
-        border-radius: 12px;
-        color: #fff !important;
-        font-size: 0.95rem;
+        gap: 0.5rem;
+        padding: 0.845rem 1.625rem !important;
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 8px;
+        color: rgba(255, 255, 255, 0.95) !important;
+        font-size: 1.507rem;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         user-select: none;
         line-height: 1.2;
-        box-shadow: 0 2px 8px rgb(0 49 83 / 20%);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        flex-shrink: 0;
+        white-space: nowrap;
 
-        // Ensure all text is white
+        // Ensure text color
         span, div {
-            color: #fff !important;
+            color: rgba(255, 255, 255, 0.95) !important;
         }
 
         // Icon styling
         svg {
-            width: 24px;
-            height: 24px;
+            width: 20px;
+            height: 20px;
             transition: all 0.3s ease;
-            filter: drop-shadow(0 2px 4px rgb(0 0 0 / 20%));
-            color: #fff !important;
+            flex-shrink: 0;
         }
 
         // Hover state
         &:hover:not(&--active) {
-            background: linear-gradient(135deg, #004080 0%, #0066cc 100%);
-            border-color: rgb(255 255 255 / 30%);
-            color: #fff;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgb(0 49 83 / 40%);
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            border-color: rgba(255, 255, 255, 0.3);
+            color: #ffffff !important;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 
             svg {
-                transform: scale(1.1);
-                filter: drop-shadow(0 4px 8px rgb(255 255 255 / 30%));
+                transform: scale(1.05);
+            }
+
+            span, div {
+                color: #ffffff !important;
             }
         }
 
-        // Active state with glow effect
+        // Active state
         &--active {
-            background: linear-gradient(135deg, #003153 0%, #004080 100%) !important;
-            border-color: #0066cc;
-            color: #fff !important;
+            background: linear-gradient(135deg, #0c4a6e 0%, #075985 100%) !important;
+            border-color: rgba(251, 191, 36, 0.5);
+            color: #ffffff !important;
             box-shadow: 
-                0 8px 24px rgb(0 49 83 / 50%),
-                0 0 40px rgb(0 102 204 / 30%),
-                inset 0 1px 0 rgb(0 102 204 / 20%);
-            transform: translateY(-3px);
+                0 4px 12px rgba(251, 191, 36, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
 
             svg {
-                transform: scale(1.15);
-                filter: drop-shadow(0 4px 12px rgb(0 102 204 / 50%));
+                transform: scale(1.1);
             }
 
-            // Active indicator line
-            &:after {
-                content: '';
-                position: absolute;
-                bottom: -3px;
-                left: 50%;
-                transform: translateX(-50%);
-                width: 60%;
-                height: 3px;
-                background: linear-gradient(90deg, transparent, #0066cc, transparent);
-                border-radius: 2px 2px 0 0;
-                animation: glow-line 2s ease-in-out infinite;
+            span, div {
+                color: #ffffff !important;
             }
         }
 
         // Pressed state
         &:active {
-            transform: translateY(-1px);
+            transform: translateY(0);
         }
     }
 
     // Badge for notifications
     .tab-badge {
         position: absolute;
-        top: 0.5rem;
-        right: 0.5rem;
-        min-width: 20px;
-        height: 20px;
-        padding: 0 6px;
+        top: -4px;
+        right: -4px;
+        min-width: 18px;
+        height: 18px;
+        padding: 0 5px;
         background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        border-radius: 10px;
+        border-radius: 9px;
+        border: 2px solid #2d3748;
         color: #fff;
-        font-size: 0.7rem;
+        font-size: 0.65rem;
         font-weight: 700;
         display: flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 2px 8px rgb(239 68 68 / 40%);
-        animation: pulse-badge 2s infinite;
+        box-shadow: 0 2px 8px rgba(239, 68, 68, 0.5);
     }
 
     // Responsive design
     @media (width <= 1024px) {
+        padding: 0.5rem 0.75rem;
+
         .dc-tabs__list {
-            gap: 0.25rem;
-            padding: 0.5rem;
+            gap: 0.4rem;
         }
 
         .dc-tabs__item {
-            padding: 0.263rem 0.85rem !important;
-            font-size: 0.85rem;
-            gap: 0.5rem;
+            padding: 0.715rem 1.3rem !important;
+            font-size: 1.423rem;
+            gap: 0.4rem;
 
             svg {
-                width: 20px;
-                height: 20px;
+                width: 18px;
+                height: 18px;
             }
         }
     }
 
     @media (width <= 768px) {
-        .dc-tabs__list {
-            overflow-x: auto;
-            justify-content: flex-start;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
+        padding: 0.5rem;
 
-            &::-webkit-scrollbar {
-                display: none;
-            }
+        .dc-tabs__list {
+            gap: 0.3rem;
         }
 
         .dc-tabs__item {
-            padding: 0.21rem 0.68rem !important;
-            font-size: 0.8rem;
-            flex-shrink: 0;
+            padding: 0.65rem 1.105rem !important;
+            font-size: 1.339rem;
 
             span:not(.tab-badge) {
                 display: none;
             }
 
             svg {
-                width: 22px;
-                height: 22px;
+                width: 20px;
+                height: 20px;
             }
         }
     }

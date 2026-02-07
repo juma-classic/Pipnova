@@ -27,32 +27,15 @@ const Tutorial = lazy(() => import('../tutorials'));
 
 const DashboardIcon = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
-        {/* Modern holographic dashboard with 3D effect */}
         <defs>
             <linearGradient id='dashGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
-                <stop offset='0%' stopColor='#ffd700' />
-                <stop offset='100%' stopColor='#ffed4e' />
+                <stop offset='0%' stopColor='#ffffff' />
+                <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
         </defs>
-        {/* Main dashboard grid */}
-        <rect x='2' y='3' width='9' height='7' rx='2' fill='url(#dashGrad)' opacity='0.8' />
-        <rect x='13' y='3' width='9' height='4' rx='1.5' fill='currentColor' opacity='0.6' />
-        <rect x='2' y='12' width='6' height='9' rx='1.5' fill='currentColor' opacity='0.7' />
-        <rect x='10' y='12' width='12' height='9' rx='2.5' fill='url(#dashGrad)' opacity='0.9' />
-
-        {/* Holographic data points */}
-        <circle cx='16.5' cy='16.5' r='1.5' fill='#ffd700' />
-        <circle cx='19' cy='18' r='1' fill='#ffed4e' />
-        <circle cx='17' cy='19' r='0.8' fill='#e6c200' />
-
-        {/* Data streams with glow */}
-        <path d='M6 6 L8 8 M6 8 L8 6' stroke='#ffd700' strokeWidth='2' strokeLinecap='round' />
-        <path d='M17 5 L19 6 M17 6 L19 5' stroke='#ffed4e' strokeWidth='2' strokeLinecap='round' />
-
-        {/* Pulse indicators */}
-        <circle cx='5' cy='15' r='1' fill='#ffd700'>
-            <animate attributeName='opacity' values='0.3;1;0.3' dur='2s' repeatCount='indefinite' />
-        </circle>
+        {/* Simple dashboard/home icon */}
+        <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z' stroke='url(#dashGrad)' strokeWidth='2' fill='none' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <path d='M9 22V12h6v10' stroke='url(#dashGrad)' strokeWidth='2' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
     </svg>
 );
 
@@ -60,91 +43,28 @@ const BotBuilderIcon = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <defs>
             <linearGradient id='botGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
-                <stop offset='0%' stopColor='#ffd700' />
-                <stop offset='100%' stopColor='#ffed4e' />
+                <stop offset='0%' stopColor='#ffffff' />
+                <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
         </defs>
-        {/* Robot head */}
-        <rect x='6' y='4' width='12' height='8' rx='3' fill='url(#botGrad)' />
-        <rect x='6' y='14' width='12' height='6' rx='2' fill='currentColor' opacity='0.8' />
-
-        {/* Robot eyes with glow */}
-        <circle cx='9.5' cy='8' r='1.5' fill='#ffd700' />
-        <circle cx='14.5' cy='8' r='1.5' fill='#ffd700' />
-        <circle cx='9.5' cy='8' r='0.8' fill='#ffffff' />
-        <circle cx='14.5' cy='8' r='0.8' fill='#ffffff' />
-
-        {/* Connection ports */}
-        <rect x='4' y='7' width='2' height='2' rx='1' fill='#ffed4e' />
-        <rect x='18' y='7' width='2' height='2' rx='1' fill='#ffed4e' />
-
-        {/* Antenna */}
-        <path d='M12 4V2M10 2h4' stroke='#ffd700' strokeWidth='2' strokeLinecap='round' />
-        <circle cx='12' cy='2' r='1' fill='#ffd700'>
-            <animate attributeName='r' values='1;1.5;1' dur='1.5s' repeatCount='indefinite' />
-        </circle>
-
-        {/* Body segments */}
-        <rect x='9' y='16' width='2' height='2' rx='0.5' fill='#ffd700' />
-        <rect x='13' y='16' width='2' height='2' rx='0.5' fill='#ffd700' />
-
-        {/* Arms */}
-        <rect x='3' y='15' width='3' height='2' rx='1' fill='currentColor' opacity='0.6' />
-        <rect x='18' y='15' width='3' height='2' rx='1' fill='currentColor' opacity='0.6' />
+        {/* Simple gear/settings icon */}
+        <circle cx='12' cy='12' r='3' stroke='url(#botGrad)' strokeWidth='2' fill='none' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <path d='M12 2v3M12 19v3M22 12h-3M5 12H2M19.07 4.93l-2.12 2.12M7.05 16.95l-2.12 2.12M19.07 19.07l-2.12-2.12M7.05 7.05L4.93 4.93' 
+              stroke='url(#botGrad)' strokeWidth='2' strokeLinecap='round' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
     </svg>
 );
 
 const ChartsIcon = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <defs>
-            <linearGradient id='chartGrad' x1='0%' y1='100%' x2='100%' y2='0%'>
-                <stop offset='0%' stopColor='#ffd700' />
-                <stop offset='100%' stopColor='#ffed4e' />
+            <linearGradient id='chartGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                <stop offset='0%' stopColor='#ffffff' />
+                <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
         </defs>
-        {/* Chart background */}
-        <rect
-            x='3'
-            y='3'
-            width='18'
-            height='16'
-            rx='2'
-            fill='currentColor'
-            opacity='0.1'
-            stroke='currentColor'
-            strokeWidth='1'
-        />
-
-        {/* Trending line with gradient */}
-        <path
-            d='M6 15l3-4 3 2 4-6 2 1'
-            stroke='url(#chartGrad)'
-            strokeWidth='3'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            fill='none'
-        />
-
-        {/* Data points with pulse */}
-        <circle cx='6' cy='15' r='2' fill='#ffd700'>
-            <animate attributeName='r' values='2;3;2' dur='2s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='9' cy='11' r='2' fill='#ffed4e'>
-            <animate attributeName='r' values='2;3;2' dur='2s' begin='0.5s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='12' cy='13' r='2' fill='#ffd700'>
-            <animate attributeName='r' values='2;3;2' dur='2s' begin='1s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='16' cy='7' r='2' fill='#ffed4e'>
-            <animate attributeName='r' values='2;3;2' dur='2s' begin='1.5s' repeatCount='indefinite' />
-        </circle>
-
-        {/* Grid lines */}
-        <path d='M3 7h18M3 11h18M3 15h18' stroke='currentColor' strokeWidth='0.5' opacity='0.3' />
-        <path d='M7 3v16M11 3v16M15 3v16' stroke='currentColor' strokeWidth='0.5' opacity='0.3' />
-
-        {/* Profit indicator */}
-        <path d='M18 6l2 2-2 2' stroke='#ffd700' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
+        {/* Simple chart icon matching screenshot */}
+        <rect x='3' y='3' width='18' height='18' rx='2' stroke='url(#chartGrad)' strokeWidth='2' fill='none' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <path d='M7 15l3-4 3 3 4-6' stroke='url(#chartGrad)' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
     </svg>
 );
 
@@ -152,150 +72,43 @@ const TutorialsIcon = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <defs>
             <linearGradient id='tutGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
-                <stop offset='0%' stopColor='#ffd700' />
-                <stop offset='100%' stopColor='#ffed4e' />
+                <stop offset='0%' stopColor='#ffffff' />
+                <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
         </defs>
-        {/* Video player frame */}
-        <rect x='2' y='4' width='20' height='14' rx='3' fill='url(#tutGrad)' opacity='0.8' />
-        <rect x='3' y='5' width='18' height='12' rx='2' fill='currentColor' opacity='0.2' />
-
-        {/* Play button with glow */}
-        <circle cx='12' cy='12' r='4' fill='#ffffff' opacity='0.9' />
-        <path d='M10 9l6 3-6 3V9z' fill='#ffd700' />
-
-        {/* Progress bar */}
-        <rect x='4' y='19' width='16' height='2' rx='1' fill='currentColor' opacity='0.3' />
-        <rect x='4' y='19' width='8' height='2' rx='1' fill='#ffd700' />
-
-        {/* Knowledge indicators */}
-        <circle cx='6' cy='7' r='1' fill='#ffed4e'>
-            <animate attributeName='opacity' values='0.5;1;0.5' dur='3s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='18' cy='7' r='1' fill='#ffed4e'>
-            <animate attributeName='opacity' values='0.5;1;0.5' dur='3s' begin='1s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='6' cy='15' r='1' fill='#ffed4e'>
-            <animate attributeName='opacity' values='0.5;1;0.5' dur='3s' begin='2s' repeatCount='indefinite' />
-        </circle>
-
-        {/* Graduation cap */}
-        <path d='M12 2l8 3-8 3-8-3 8-3z' fill='#ffd700' opacity='0.7' />
-        <path d='M20 8v4l-8 3-8-3V8' stroke='#ffd700' strokeWidth='1.5' fill='none' />
+        {/* Simple book/document icon matching screenshot */}
+        <rect x='5' y='3' width='14' height='18' rx='2' stroke='url(#tutGrad)' strokeWidth='2' fill='none' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <path d='M9 8h6M9 12h6M9 16h4' stroke='url(#tutGrad)' strokeWidth='2' strokeLinecap='round' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
     </svg>
 );
 
 const AnalysisToolIcon = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <defs>
-            <linearGradient id='analysisGrad' x1='0%' y1='100%' x2='100%' y2='0%'>
-                <stop offset='0%' stopColor='#ffd700' />
-                <stop offset='50%' stopColor='#ffed4e' />
-                <stop offset='100%' stopColor='#e6c200' />
+            <linearGradient id='analysisGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                <stop offset='0%' stopColor='#ffffff' />
+                <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
         </defs>
-        {/* Analysis bars with gradient */}
-        <rect x='4' y='8' width='3' height='12' rx='1.5' fill='url(#analysisGrad)' />
-        <rect x='8.5' y='5' width='3' height='15' rx='1.5' fill='url(#analysisGrad)' />
-        <rect x='13' y='10' width='3' height='10' rx='1.5' fill='url(#analysisGrad)' />
-        <rect x='17.5' y='3' width='3' height='17' rx='1.5' fill='url(#analysisGrad)' />
-
-        {/* Magnifying glass overlay */}
-        <circle cx='15' cy='9' r='4' stroke='#ffd700' strokeWidth='2' fill='none' opacity='0.7' />
-        <path d='M18 12l3 3' stroke='#ffd700' strokeWidth='2' strokeLinecap='round' />
-
-        {/* Data points with animation */}
-        <circle cx='5.5' cy='14' r='1' fill='#ffffff'>
-            <animate attributeName='cy' values='14;12;14' dur='2s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='10' cy='12' r='1' fill='#ffffff'>
-            <animate attributeName='cy' values='12;8;12' dur='2s' begin='0.5s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='14.5' cy='15' r='1' fill='#ffffff'>
-            <animate attributeName='cy' values='15;13;15' dur='2s' begin='1s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='19' cy='11' r='1' fill='#ffffff'>
-            <animate attributeName='cy' values='11;7;11' dur='2s' begin='1.5s' repeatCount='indefinite' />
-        </circle>
-
-        {/* Trend arrows */}
-        <path d='M2 6l2-2 2 2' stroke='#ffd700' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' />
-        <path d='M2 18l2 2 2-2' stroke='#ef4444' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' />
+        {/* Simple bar chart icon matching screenshot */}
+        <rect x='4' y='12' width='3' height='8' rx='1' fill='url(#analysisGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <rect x='10' y='8' width='3' height='12' rx='1' fill='url(#analysisGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <rect x='16' y='4' width='3' height='16' rx='1' fill='url(#analysisGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
     </svg>
 );
 
 const SignalsIcon = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <defs>
-            <linearGradient id='signalGrad' x1='0%' y1='0%' x2='100%' y2='0%'>
-                <stop offset='0%' stopColor='#ffd700' />
-                <stop offset='50%' stopColor='#ffed4e' />
-                <stop offset='100%' stopColor='#ffd700' />
+            <linearGradient id='signalGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                <stop offset='0%' stopColor='#ffffff' />
+                <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
         </defs>
-        {/* Signal tower */}
-        <rect x='11' y='15' width='2' height='7' fill='currentColor' opacity='0.6' />
-        <rect x='10' y='21' width='4' height='1' fill='currentColor' />
-
-        {/* Signal waves with animation */}
-        <path
-            d='M12 15c-3 0-5-2-5-5s2-5 5-5 5 2 5 5-2 5-5 5z'
-            stroke='url(#signalGrad)'
-            strokeWidth='2'
-            fill='none'
-            opacity='0.8'
-        >
-            <animate attributeName='opacity' values='0.8;0.3;0.8' dur='2s' repeatCount='indefinite' />
-        </path>
-        <path
-            d='M12 13c-2 0-3-1-3-3s1-3 3-3 3 1 3 3-1 3-3 3z'
-            stroke='url(#signalGrad)'
-            strokeWidth='2'
-            fill='none'
-            opacity='0.6'
-        >
-            <animate attributeName='opacity' values='0.6;0.2;0.6' dur='2s' begin='0.5s' repeatCount='indefinite' />
-        </path>
-        <path
-            d='M12 11c-1 0-1-0.5-1-1s0-1 1-1 1 0.5 1 1 0 1-1 1z'
-            stroke='url(#signalGrad)'
-            strokeWidth='2'
-            fill='none'
-            opacity='0.4'
-        >
-            <animate attributeName='opacity' values='0.4;0.1;0.4' dur='2s' begin='1s' repeatCount='indefinite' />
-        </path>
-
-        {/* Signal strength bars */}
-        <rect x='3' y='18' width='2' height='4' rx='1' fill='#ffd700' />
-        <rect x='6' y='16' width='2' height='6' rx='1' fill='#ffd700' />
-        <rect x='16' y='16' width='2' height='6' rx='1' fill='#ffd700' />
-        <rect x='19' y='18' width='2' height='4' rx='1' fill='#ffd700' />
-
-        {/* Central transmitter */}
-        <circle cx='12' cy='10' r='2' fill='#ffed4e' />
-        <circle cx='12' cy='10' r='1' fill='#ffffff' />
-
-        {/* Data packets */}
-        <circle cx='6' cy='8' r='1' fill='#ffd700'>
-            <animateTransform
-                attributeName='transform'
-                type='translate'
-                values='0,0; 6,2; 0,0'
-                dur='3s'
-                repeatCount='indefinite'
-            />
-        </circle>
-        <circle cx='18' cy='8' r='1' fill='#ffd700'>
-            <animateTransform
-                attributeName='transform'
-                type='translate'
-                values='0,0; -6,2; 0,0'
-                dur='3s'
-                begin='1.5s'
-                repeatCount='indefinite'
-            />
-        </circle>
+        {/* Simple signal/wifi icon */}
+        <path d='M5 12.55a11 11 0 0 1 14.08 0' stroke='url(#signalGrad)' strokeWidth='2' strokeLinecap='round' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <path d='M8.5 16.5a6 6 0 0 1 7 0' stroke='url(#signalGrad)' strokeWidth='2' strokeLinecap='round' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <circle cx='12' cy='20' r='1.5' fill='url(#signalGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
     </svg>
 );
 
@@ -303,51 +116,15 @@ const FreeBotsIcon = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
         <defs>
             <linearGradient id='freeGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
-                <stop offset='0%' stopColor='#10b981' />
-                <stop offset='50%' stopColor='#059669' />
-                <stop offset='100%' stopColor='#047857' />
+                <stop offset='0%' stopColor='#ffffff' />
+                <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
         </defs>
-        {/* Bot grid layout */}
-        <rect x='2' y='2' width='8' height='8' rx='2' fill='url(#freeGrad)' opacity='0.8' />
-        <rect x='14' y='2' width='8' height='6' rx='2' fill='currentColor' opacity='0.6' />
-        <rect x='2' y='14' width='6' height='8' rx='2' fill='currentColor' opacity='0.7' />
-        <rect x='12' y='12' width='10' height='10' rx='2' fill='url(#freeGrad)' opacity='0.9' />
-
-        {/* Robot faces */}
-        <circle cx='6' cy='6' r='1' fill='#ffffff' />
-        <circle cx='18' cy='5' r='0.8' fill='#10b981' />
-        <circle cx='5' cy='18' r='0.8' fill='#10b981' />
-        <circle cx='17' cy='17' r='1.2' fill='#ffffff' />
-
-        {/* Free badge */}
-        <circle cx='20' cy='4' r='3' fill='#10b981' />
-        <text x='20' y='6' textAnchor='middle' fontSize='5' fill='#ffffff' fontWeight='bold'>
-            F
-        </text>
-
-        {/* Connection lines */}
-        <path
-            d='M10 6h4M6 10v4M10 18h2M17 10v2'
-            stroke='#10b981'
-            strokeWidth='1.5'
-            strokeLinecap='round'
-            opacity='0.6'
-        />
-
-        {/* Activity indicators */}
-        <circle cx='4' cy='4' r='0.5' fill='#10b981'>
-            <animate attributeName='opacity' values='1;0.3;1' dur='2s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='16' cy='4' r='0.5' fill='#10b981'>
-            <animate attributeName='opacity' values='1;0.3;1' dur='2s' begin='0.5s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='4' cy='16' r='0.5' fill='#10b981'>
-            <animate attributeName='opacity' values='1;0.3;1' dur='2s' begin='1s' repeatCount='indefinite' />
-        </circle>
-        <circle cx='20' cy='20' r='0.5' fill='#10b981'>
-            <animate attributeName='opacity' values='1;0.3;1' dur='2s' begin='1.5s' repeatCount='indefinite' />
-        </circle>
+        {/* Simple grid icon matching screenshot */}
+        <rect x='4' y='4' width='6' height='6' rx='1' fill='url(#freeGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <rect x='14' y='4' width='6' height='6' rx='1' fill='url(#freeGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <rect x='4' y='14' width='6' height='6' rx='1' fill='url(#freeGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <rect x='14' y='14' width='6' height='6' rx='1' fill='url(#freeGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
     </svg>
 );
 
@@ -359,22 +136,28 @@ const RichMotherIcon = () => (
                 <stop offset='50%' stopColor='#ffed4e' />
                 <stop offset='100%' stopColor='#e6c200' />
             </linearGradient>
+            <linearGradient id='richStrokeGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                <stop offset='0%' stopColor='#ffffff' />
+                <stop offset='100%' stopColor='#fbbf24' />
+            </linearGradient>
         </defs>
         {/* Diamond shape */}
         <path
             d='M12 2L16 8H8L12 2Z'
             fill='url(#richGrad)'
-            stroke='currentColor'
+            stroke='url(#richStrokeGrad)'
             strokeWidth='1.5'
             strokeLinejoin='round'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
         />
         <path
             d='M8 8L12 22L16 8H8Z'
             fill='url(#richGrad)'
-            stroke='currentColor'
+            stroke='url(#richStrokeGrad)'
             strokeWidth='1.5'
             strokeLinejoin='round'
             opacity='0.8'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
         />
 
         {/* Inner diamond facets */}
@@ -2032,105 +1815,11 @@ const AppWrapper = observer(() => {
                 <div className='main__container'>
                     <Tabs
                         active_index={active_tab}
-                        className='main__tabs dc-tabs--enhanced pipnova-nav'
+                        className='main__tabs dc-tabs--enhanced'
                         onTabItemChange={onEntered}
                         onTabItemClick={setActiveTab}
                         top
                     >
-                        <style>
-                            {`
-                                /* PIPNOVA Modern Navigation Menu */
-                                .dc-tabs--pipnova-nav {
-                                    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
-                                }
-                                
-                                .dc-tabs__list--pipnova-nav {
-                                    background: transparent !important;
-                                    border: none !important;
-                                    padding: 6px 12px !important;
-                                    gap: 6px !important;
-                                    display: flex !important;
-                                    flex-wrap: nowrap !important;
-                                    overflow-x: auto !important;
-                                    scrollbar-width: none !important;
-                                }
-                                
-                                .dc-tabs__list--pipnova-nav::-webkit-scrollbar {
-                                    display: none !important;
-                                }
-                                
-                                .dc-tabs__item--pipnova-nav {
-                                    background: rgba(52, 73, 94, 0.7) !important;
-                                    border: none !important;
-                                    border-radius: 8px !important;
-                                    padding: 12px 24px !important;
-                                    margin: 0 !important;
-                                    color: #ecf0f1 !important;
-                                    font-weight: 600 !important;
-                                    font-size: 14px !important;
-                                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-                                    display: flex !important;
-                                    align-items: center !important;
-                                    gap: 10px !important;
-                                    white-space: nowrap !important;
-                                    cursor: pointer !important;
-                                    min-width: auto !important;
-                                    flex-shrink: 0 !important;
-                                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
-                                }
-                                
-                                .dc-tabs__item--pipnova-nav:hover {
-                                    background: rgba(52, 152, 219, 0.4) !important;
-                                    transform: translateY(-2px) !important;
-                                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
-                                }
-                                
-                                .dc-tabs__active--pipnova-nav {
-                                    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important;
-                                    color: #ffffff !important;
-                                    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.5) !important;
-                                    transform: translateY(-1px) !important;
-                                }
-                                
-                                .dc-tabs__item--pipnova-nav svg {
-                                    width: 22px !important;
-                                    height: 22px !important;
-                                    flex-shrink: 0 !important;
-                                    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2)) !important;
-                                }
-                                
-                                /* Active tab icon glow */
-                                .dc-tabs__active--pipnova-nav svg {
-                                    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) !important;
-                                }
-                                
-                                /* Mobile responsive */
-                                @media (max-width: 768px) {
-                                    .dc-tabs__list--pipnova-nav {
-                                        padding: 4px 8px !important;
-                                        gap: 4px !important;
-                                    }
-                                    
-                                    .dc-tabs__item--pipnova-nav {
-                                        padding: 10px 18px !important;
-                                        font-size: 13px !important;
-                                    }
-                                    
-                                    .dc-tabs__item--pipnova-nav svg {
-                                        width: 20px !important;
-                                        height: 20px !important;
-                                    }
-                                }
-                                
-                                @media (max-width: 480px) {
-                                    .dc-tabs__item--pipnova-nav {
-                                        padding: 8px 14px !important;
-                                        font-size: 12px !important;
-                                        gap: 6px !important;
-                                    }
-                                }
-                            `}
-                        </style>
                         {/* DASHBOARD TAB */}
                         <div
                             label={

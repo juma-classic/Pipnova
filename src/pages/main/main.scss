@@ -2,22 +2,23 @@
 @use 'components/shared/styles/mixins' as *;
 
 :root {
-    // Teal Gradient Theme
-    --main-theme: #0f766e; // Deep teal
-    --bg-gradient: linear-gradient(135deg, #0f766e 0%, #14b8a6 50%, #2dd4bf 100%);
-    --card-bg: rgb(15 118 110 / 10%); // Teal with transparency
-    --accent: #14b8a6; // Bright teal accent
-    --accent2: #2dd4bf; // Lighter teal accent
-    --text-primary: #fff; // Pure white for main text
-    --text-secondary: #f1f5f9; // Very light grey-white
-    --border-normal: rgb(20 184 166 / 20%); // Teal border with transparency
-    --general-main-1: #0f766e; // Teal background
-    --general-section-1: #134e4a; // Medium teal for sections
-    --purchase-main-1: #14b8a6; // Bright teal for purchase actions
-    --button-primary-hover: #2dd4bf; // Light teal for hover states
-    --brand-red-coral: #0f766e; // Teal for danger/alerts (changed from red)
-    --text-prominent: #fff; // White for prominent text
-    --text-accent: #fbbf24; // Vibrant amber for accents
+    // Clean Professional Theme - Blue, Gold, White
+    --main-theme: #2563eb; // Blue
+    --bg-gradient: #ffffff; // White background
+    --card-bg: #ffffff; // White cards
+    --accent: #2563eb; // Blue accent
+    --accent2: #1d4ed8; // Darker blue accent
+    --text-primary: #1f2937; // Dark gray for main text
+    --text-secondary: #6b7280; // Medium gray for secondary text
+    --border-normal: rgb(229 231 235); // Light gray border
+    --general-main-1: #ffffff; // White background
+    --general-section-1: #ffffff; // White for sections (was light gray)
+    --general-section-2: rgb(243 244 246); // Very light gray for subtle sections
+    --purchase-main-1: #2563eb; // Blue for purchase actions
+    --button-primary-hover: #1d4ed8; // Darker blue for hover states
+    --brand-red-coral: #ef4444; // Red for danger/alerts
+    --text-prominent: #111827; // Very dark gray for prominent text
+    --text-accent: #fbbf24; // Gold/amber for accents and icons
 }
 
 // The rest of your SCSS code remains exactly the same...
@@ -123,7 +124,7 @@
     padding: 0;
     height: 100%;
     min-height: 100%;
-    background: var(--bg-gradient);
+    background: #ffffff;
     color: var(--text-primary);
     overflow-x: hidden;
     overflow-y: auto;
@@ -527,13 +528,13 @@
         width: 100%;
         transition: all 0.4s;
         overflow: hidden;
-        background: var(--card-bg);
+        background: #ffffff;
         border: 1px solid var(--border-normal);
         border-radius: 16px;
 
         @include mobile-or-tablet-screen {
             height: var(--tab-content-height-mobile);
-            background: var(--general-main-1);
+            background: #ffffff;
 
             .smartcharts {
                 height: calc(100% - 4rem);
@@ -558,7 +559,7 @@
             display: block;
             width: 100%;
             border: none;
-            background: var(--general-main-1);
+            background: #ffffff;
             transition: width 0.4s ease;
             overflow-y: scroll !important;
             max-height: none;
