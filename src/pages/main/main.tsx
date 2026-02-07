@@ -2032,11 +2032,105 @@ const AppWrapper = observer(() => {
                 <div className='main__container'>
                     <Tabs
                         active_index={active_tab}
-                        className='main__tabs dc-tabs--enhanced'
+                        className='main__tabs dc-tabs--enhanced pipnova-nav'
                         onTabItemChange={onEntered}
                         onTabItemClick={setActiveTab}
                         top
                     >
+                        <style>
+                            {`
+                                /* PIPNOVA Modern Navigation Menu */
+                                .dc-tabs--pipnova-nav {
+                                    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
+                                }
+                                
+                                .dc-tabs__list--pipnova-nav {
+                                    background: transparent !important;
+                                    border: none !important;
+                                    padding: 6px 12px !important;
+                                    gap: 6px !important;
+                                    display: flex !important;
+                                    flex-wrap: nowrap !important;
+                                    overflow-x: auto !important;
+                                    scrollbar-width: none !important;
+                                }
+                                
+                                .dc-tabs__list--pipnova-nav::-webkit-scrollbar {
+                                    display: none !important;
+                                }
+                                
+                                .dc-tabs__item--pipnova-nav {
+                                    background: rgba(52, 73, 94, 0.7) !important;
+                                    border: none !important;
+                                    border-radius: 8px !important;
+                                    padding: 12px 24px !important;
+                                    margin: 0 !important;
+                                    color: #ecf0f1 !important;
+                                    font-weight: 600 !important;
+                                    font-size: 14px !important;
+                                    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+                                    display: flex !important;
+                                    align-items: center !important;
+                                    gap: 10px !important;
+                                    white-space: nowrap !important;
+                                    cursor: pointer !important;
+                                    min-width: auto !important;
+                                    flex-shrink: 0 !important;
+                                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+                                }
+                                
+                                .dc-tabs__item--pipnova-nav:hover {
+                                    background: rgba(52, 152, 219, 0.4) !important;
+                                    transform: translateY(-2px) !important;
+                                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+                                }
+                                
+                                .dc-tabs__active--pipnova-nav {
+                                    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%) !important;
+                                    color: #ffffff !important;
+                                    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.5) !important;
+                                    transform: translateY(-1px) !important;
+                                }
+                                
+                                .dc-tabs__item--pipnova-nav svg {
+                                    width: 22px !important;
+                                    height: 22px !important;
+                                    flex-shrink: 0 !important;
+                                    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2)) !important;
+                                }
+                                
+                                /* Active tab icon glow */
+                                .dc-tabs__active--pipnova-nav svg {
+                                    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.5)) !important;
+                                }
+                                
+                                /* Mobile responsive */
+                                @media (max-width: 768px) {
+                                    .dc-tabs__list--pipnova-nav {
+                                        padding: 4px 8px !important;
+                                        gap: 4px !important;
+                                    }
+                                    
+                                    .dc-tabs__item--pipnova-nav {
+                                        padding: 10px 18px !important;
+                                        font-size: 13px !important;
+                                    }
+                                    
+                                    .dc-tabs__item--pipnova-nav svg {
+                                        width: 20px !important;
+                                        height: 20px !important;
+                                    }
+                                }
+                                
+                                @media (max-width: 480px) {
+                                    .dc-tabs__item--pipnova-nav {
+                                        padding: 8px 14px !important;
+                                        font-size: 12px !important;
+                                        gap: 6px !important;
+                                    }
+                                }
+                            `}
+                        </style>
                         {/* DASHBOARD TAB */}
                         <div
                             label={
