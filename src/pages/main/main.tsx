@@ -34,8 +34,19 @@ const DashboardIcon = () => (
             </linearGradient>
         </defs>
         {/* Simple dashboard/home icon */}
-        <path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z' stroke='url(#dashGrad)' strokeWidth='2' fill='none' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
-        <path d='M9 22V12h6v10' stroke='url(#dashGrad)' strokeWidth='2' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <path
+            d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'
+            stroke='url(#dashGrad)'
+            strokeWidth='2'
+            fill='none'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
+        <path
+            d='M9 22V12h6v10'
+            stroke='url(#dashGrad)'
+            strokeWidth='2'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
     </svg>
 );
 
@@ -48,9 +59,22 @@ const BotBuilderIcon = () => (
             </linearGradient>
         </defs>
         {/* Simple gear/settings icon */}
-        <circle cx='12' cy='12' r='3' stroke='url(#botGrad)' strokeWidth='2' fill='none' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
-        <path d='M12 2v3M12 19v3M22 12h-3M5 12H2M19.07 4.93l-2.12 2.12M7.05 16.95l-2.12 2.12M19.07 19.07l-2.12-2.12M7.05 7.05L4.93 4.93' 
-              stroke='url(#botGrad)' strokeWidth='2' strokeLinecap='round' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <circle
+            cx='12'
+            cy='12'
+            r='3'
+            stroke='url(#botGrad)'
+            strokeWidth='2'
+            fill='none'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
+        <path
+            d='M12 2v3M12 19v3M22 12h-3M5 12H2M19.07 4.93l-2.12 2.12M7.05 16.95l-2.12 2.12M19.07 19.07l-2.12-2.12M7.05 7.05L4.93 4.93'
+            stroke='url(#botGrad)'
+            strokeWidth='2'
+            strokeLinecap='round'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
     </svg>
 );
 
@@ -63,8 +87,25 @@ const ChartsIcon = () => (
             </linearGradient>
         </defs>
         {/* Simple chart icon matching screenshot */}
-        <rect x='3' y='3' width='18' height='18' rx='2' stroke='url(#chartGrad)' strokeWidth='2' fill='none' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
-        <path d='M7 15l3-4 3 3 4-6' stroke='url(#chartGrad)' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <rect
+            x='3'
+            y='3'
+            width='18'
+            height='18'
+            rx='2'
+            stroke='url(#chartGrad)'
+            strokeWidth='2'
+            fill='none'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
+        <path
+            d='M7 15l3-4 3 3 4-6'
+            stroke='url(#chartGrad)'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
     </svg>
 );
 
@@ -77,8 +118,24 @@ const TutorialsIcon = () => (
             </linearGradient>
         </defs>
         {/* Simple book/document icon matching screenshot */}
-        <rect x='5' y='3' width='14' height='18' rx='2' stroke='url(#tutGrad)' strokeWidth='2' fill='none' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
-        <path d='M9 8h6M9 12h6M9 16h4' stroke='url(#tutGrad)' strokeWidth='2' strokeLinecap='round' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <rect
+            x='5'
+            y='3'
+            width='14'
+            height='18'
+            rx='2'
+            stroke='url(#tutGrad)'
+            strokeWidth='2'
+            fill='none'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
+        <path
+            d='M9 8h6M9 12h6M9 16h4'
+            stroke='url(#tutGrad)'
+            strokeWidth='2'
+            strokeLinecap='round'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
     </svg>
 );
 
@@ -91,9 +148,33 @@ const AnalysisToolIcon = () => (
             </linearGradient>
         </defs>
         {/* Simple bar chart icon matching screenshot */}
-        <rect x='4' y='12' width='3' height='8' rx='1' fill='url(#analysisGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
-        <rect x='10' y='8' width='3' height='12' rx='1' fill='url(#analysisGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
-        <rect x='16' y='4' width='3' height='16' rx='1' fill='url(#analysisGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <rect
+            x='4'
+            y='12'
+            width='3'
+            height='8'
+            rx='1'
+            fill='url(#analysisGrad)'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
+        <rect
+            x='10'
+            y='8'
+            width='3'
+            height='12'
+            rx='1'
+            fill='url(#analysisGrad)'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
+        <rect
+            x='16'
+            y='4'
+            width='3'
+            height='16'
+            rx='1'
+            fill='url(#analysisGrad)'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
     </svg>
 );
 
@@ -106,8 +187,20 @@ const SignalsIcon = () => (
             </linearGradient>
         </defs>
         {/* Simple signal/wifi icon */}
-        <path d='M5 12.55a11 11 0 0 1 14.08 0' stroke='url(#signalGrad)' strokeWidth='2' strokeLinecap='round' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
-        <path d='M8.5 16.5a6 6 0 0 1 7 0' stroke='url(#signalGrad)' strokeWidth='2' strokeLinecap='round' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <path
+            d='M5 12.55a11 11 0 0 1 14.08 0'
+            stroke='url(#signalGrad)'
+            strokeWidth='2'
+            strokeLinecap='round'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
+        <path
+            d='M8.5 16.5a6 6 0 0 1 7 0'
+            stroke='url(#signalGrad)'
+            strokeWidth='2'
+            strokeLinecap='round'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
         <circle cx='12' cy='20' r='1.5' fill='url(#signalGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
     </svg>
 );
@@ -121,10 +214,42 @@ const FreeBotsIcon = () => (
             </linearGradient>
         </defs>
         {/* Simple grid icon matching screenshot */}
-        <rect x='4' y='4' width='6' height='6' rx='1' fill='url(#freeGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
-        <rect x='14' y='4' width='6' height='6' rx='1' fill='url(#freeGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
-        <rect x='4' y='14' width='6' height='6' rx='1' fill='url(#freeGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
-        <rect x='14' y='14' width='6' height='6' rx='1' fill='url(#freeGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <rect
+            x='4'
+            y='4'
+            width='6'
+            height='6'
+            rx='1'
+            fill='url(#freeGrad)'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
+        <rect
+            x='14'
+            y='4'
+            width='6'
+            height='6'
+            rx='1'
+            fill='url(#freeGrad)'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
+        <rect
+            x='4'
+            y='14'
+            width='6'
+            height='6'
+            rx='1'
+            fill='url(#freeGrad)'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
+        <rect
+            x='14'
+            y='14'
+            width='6'
+            height='6'
+            rx='1'
+            fill='url(#freeGrad)'
+            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+        />
     </svg>
 );
 
@@ -2464,7 +2589,7 @@ const AppWrapper = observer(() => {
                             id='id-free-bots'
                         >
                             <div
-                                className='free-bots'
+                                className='free-bots-container'
                                 style={{
                                     background: '#ffffff',
                                     position: 'fixed',
@@ -2473,205 +2598,705 @@ const AppWrapper = observer(() => {
                                     right: 0,
                                     bottom: '100px',
                                     width: '100%',
-                                    padding: '2rem',
+                                    padding: '1.5rem 2rem',
                                     margin: 0,
                                     display: 'flex',
                                     flexDirection: 'column',
                                     overflowY: 'auto',
                                     overflowX: 'hidden',
-                                    boxShadow: 'inset 0 0 10px rgba(0, 0, 0, 0.05)',
                                 }}
                             >
-                                <h2
+                                {/* Social Media Icons */}
+                                <div
                                     style={{
-                                        color: '#1a1a2e',
-                                        fontSize: '2rem',
-                                        fontWeight: '700',
-                                        marginBottom: '1.5rem',
-                                        textAlign: 'center',
-                                        borderBottom: '3px solid #0d9488',
-                                        paddingBottom: '1rem',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        gap: '0.6rem',
+                                        marginBottom: '1.2rem',
                                         flexShrink: 0,
                                     }}
                                 >
-                                    🤖 Free Trading Bots
-                                </h2>
-                                <ul
-                                    className='free-bots__list'
+                                    <a
+                                        href='https://youtube.com/@pipnova'
+                                        target='_blank'
+                                        rel='noopener noreferrer'
+                                        style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            borderRadius: '50%',
+                                            background: '#FF0000',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: '#fff',
+                                            fontSize: '20px',
+                                            textDecoration: 'none',
+                                            transition: 'transform 0.2s ease',
+                                        }}
+                                        onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.1)')}
+                                        onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                                    >
+                                        ▶
+                                    </a>
+                                    <a
+                                        href='https://instagram.com/pipnova'
+                                        target='_blank'
+                                        rel='noopener noreferrer'
+                                        style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            borderRadius: '50%',
+                                            background:
+                                                'linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: '#fff',
+                                            fontSize: '20px',
+                                            textDecoration: 'none',
+                                            transition: 'transform 0.2s ease',
+                                        }}
+                                        onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.1)')}
+                                        onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                                    >
+                                        📷
+                                    </a>
+                                    <a
+                                        href='https://wa.me/1234567890'
+                                        target='_blank'
+                                        rel='noopener noreferrer'
+                                        style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            borderRadius: '50%',
+                                            background: '#25D366',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: '#fff',
+                                            fontSize: '20px',
+                                            textDecoration: 'none',
+                                            transition: 'transform 0.2s ease',
+                                        }}
+                                        onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.1)')}
+                                        onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                                    >
+                                        💬
+                                    </a>
+                                    <a
+                                        href='https://tiktok.com/@pipnova'
+                                        target='_blank'
+                                        rel='noopener noreferrer'
+                                        style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            borderRadius: '50%',
+                                            background: '#000000',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: '#fff',
+                                            fontSize: '20px',
+                                            textDecoration: 'none',
+                                            transition: 'transform 0.2s ease',
+                                        }}
+                                        onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.1)')}
+                                        onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                                    >
+                                        🎵
+                                    </a>
+                                    <a
+                                        href='https://t.me/pipnova'
+                                        target='_blank'
+                                        rel='noopener noreferrer'
+                                        style={{
+                                            width: '40px',
+                                            height: '40px',
+                                            borderRadius: '50%',
+                                            background: '#0088cc',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            color: '#fff',
+                                            fontSize: '20px',
+                                            textDecoration: 'none',
+                                            transition: 'transform 0.2s ease',
+                                        }}
+                                        onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.1)')}
+                                        onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
+                                    >
+                                        ✈️
+                                    </a>
+                                </div>
+
+                                {/* FREE BOTS SECTION */}
+                                <h2
                                     style={{
-                                        listStyle: 'none',
-                                        padding: 0,
-                                        margin: 0,
-                                        display: 'grid',
-                                        gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-                                        gap: '1.5rem',
-                                        width: '100%',
-                                        gridAutoRows: 'min-content',
-                                        flex: 1,
-                                        overflowY: 'auto',
-                                        paddingBottom: '8rem',
+                                        color: '#1f2937',
+                                        fontSize: '1.5rem',
+                                        fontWeight: '700',
+                                        marginBottom: '0.5rem',
+                                        textAlign: 'left',
+                                        flexShrink: 0,
                                     }}
                                 >
-                                    {bots.length === 0 ? (
-                                        <li
-                                            style={{
-                                                textAlign: 'center',
-                                                padding: '3rem',
-                                                color: '#6c757d',
-                                                fontSize: '1.1rem',
-                                                gridColumn: '1 / -1',
-                                            }}
-                                        >
-                                            <Localize i18n_default_text='No free bots available.' />
-                                        </li>
-                                    ) : (
-                                        bots.map((bot, index) => (
-                                            <li
-                                                key={index}
-                                                className='free-bot-item'
-                                                style={{
-                                                    background: '#f8f9fa',
-                                                    borderRadius: '16px',
-                                                    padding: '1.5rem',
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    gap: '1rem',
-                                                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-                                                    transition: 'all 0.3s ease',
-                                                    cursor: 'pointer',
-                                                    border: '2px solid #e0e0e0',
-                                                }}
-                                                onMouseEnter={e => {
-                                                    e.currentTarget.style.transform = 'translateY(-8px) scale(1.02)';
-                                                    e.currentTarget.style.boxShadow =
-                                                        '0 12px 24px rgba(13, 148, 136, 0.2)';
-                                                    e.currentTarget.style.borderColor = '#0d9488';
-                                                    e.currentTarget.style.background = '#ffffff';
-                                                }}
-                                                onMouseLeave={e => {
-                                                    e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                                                    e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
-                                                    e.currentTarget.style.borderColor = '#e0e0e0';
-                                                    e.currentTarget.style.background = '#f8f9fa';
-                                                }}
-                                                onClick={() => handleBotClick(bot)}
-                                            >
+                                    Bot Collection
+                                </h2>
+                                <p
+                                    style={{
+                                        color: '#6b7280',
+                                        fontSize: '14px',
+                                        marginBottom: '1.5rem',
+                                        textAlign: 'left',
+                                    }}
+                                >
+                                    Premium bots and advanced trading strategies
+                                </p>
+                                <div
+                                    className='free-bots-grid'
+                                    style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+                                        gap: '1.2rem',
+                                        marginBottom: '2rem',
+                                    }}
+                                >
+                                    {bots
+                                        .filter(bot => !bot.title.includes('PREMIUM'))
+                                        .map((bot, index) => {
+                                            // Function to get icon and description based on bot name
+                                            const getBotInfo = name => {
+                                                const lowerName = name.toLowerCase();
+
+                                                // Icon selection based on keywords
+                                                let icon = '🤖';
+                                                let description =
+                                                    'Advanced automated trading strategy with optimized entry and exit points';
+
+                                                if (lowerName.includes('patel')) {
+                                                    icon = '👨‍💼';
+                                                    description =
+                                                        'Professional trading strategy with precise entry points and risk management';
+                                                } else if (
+                                                    lowerName.includes('game changer') ||
+                                                    lowerName.includes('gamechanger')
+                                                ) {
+                                                    icon = '🎮';
+                                                    description =
+                                                        'Revolutionary AI-powered strategy that adapts to market conditions';
+                                                } else if (lowerName.includes('cfx')) {
+                                                    icon = '⚡';
+                                                    description =
+                                                        'High-speed CFX trading with advanced pattern recognition';
+                                                } else if (
+                                                    lowerName.includes('digit') &&
+                                                    lowerName.includes('hunter')
+                                                ) {
+                                                    icon = '🎯';
+                                                    description =
+                                                        'Precision digit prediction with advanced hunting algorithms';
+                                                } else if (
+                                                    lowerName.includes('matches') ||
+                                                    lowerName.includes('match')
+                                                ) {
+                                                    icon = '🔥';
+                                                    description =
+                                                        'Pattern matching strategy for consistent winning trades';
+                                                } else if (
+                                                    lowerName.includes('market') &&
+                                                    lowerName.includes('maker')
+                                                ) {
+                                                    icon = '📊';
+                                                    description = 'Market maker strategy with liquidity optimization';
+                                                } else if (
+                                                    lowerName.includes('deriv') &&
+                                                    lowerName.includes('killer')
+                                                ) {
+                                                    icon = '💀';
+                                                    description =
+                                                        'Aggressive trading strategy designed for maximum profits';
+                                                } else if (lowerName.includes('speed')) {
+                                                    icon = '🚀';
+                                                    description =
+                                                        'Lightning-fast execution with rapid trade processing';
+                                                } else if (lowerName.includes('elvis')) {
+                                                    icon = '👑';
+                                                    description =
+                                                        'Premium Elvis strategy with risk-based martingale system';
+                                                } else if (lowerName.includes('over') || lowerName.includes('under')) {
+                                                    icon = '📈';
+                                                    description =
+                                                        'Over/Under prediction strategy with statistical analysis';
+                                                } else if (lowerName.includes('ghost')) {
+                                                    icon = '👻';
+                                                    description =
+                                                        'Stealth trading strategy with invisible market entry';
+                                                } else if (lowerName.includes('flip')) {
+                                                    icon = '🔄';
+                                                    description = 'Dynamic flipping strategy for volatile markets';
+                                                } else if (
+                                                    lowerName.includes('dexterator') ||
+                                                    lowerName.includes('dexter')
+                                                ) {
+                                                    icon = '🧠';
+                                                    description =
+                                                        'Intelligent AI-powered trading with neural network analysis';
+                                                } else if (lowerName.includes('even') || lowerName.includes('odd')) {
+                                                    icon = '🎲';
+                                                    description =
+                                                        'Even/Odd digit strategy with probability optimization';
+                                                } else if (lowerName.includes('raziel')) {
+                                                    icon = '😇';
+                                                    description = 'Divine trading strategy with heavenly accuracy';
+                                                } else if (
+                                                    lowerName.includes('noloss') ||
+                                                    lowerName.includes('no loss')
+                                                ) {
+                                                    icon = '🛡️';
+                                                    description =
+                                                        'Protected trading strategy with loss prevention system';
+                                                } else if (lowerName.includes('diff')) {
+                                                    icon = '🔢';
+                                                    description = 'Digit difference strategy with smart martingale';
+                                                } else if (lowerName.includes('auto') && lowerName.includes('c4')) {
+                                                    icon = '💣';
+                                                    description =
+                                                        'Explosive automated strategy with AI premium features';
+                                                } else if (
+                                                    lowerName.includes('dollar') ||
+                                                    lowerName.includes('printer')
+                                                ) {
+                                                    icon = '💵';
+                                                    description =
+                                                        'Money-making machine with consistent profit generation';
+                                                } else if (lowerName.includes('m27') || lowerName.includes('switch')) {
+                                                    icon = '🔀';
+                                                    description =
+                                                        'Auto-switching strategy that adapts to market changes';
+                                                } else if (lowerName.includes('green') || lowerName.includes('light')) {
+                                                    icon = '🟢';
+                                                    description = 'Green light strategy for safe and profitable trades';
+                                                } else if (lowerName.includes('odin')) {
+                                                    icon = '⚔️';
+                                                    description =
+                                                        'Powerful Norse-inspired strategy with warrior precision';
+                                                } else if (lowerName.includes('random') && lowerName.includes('ldp')) {
+                                                    icon = '🎰';
+                                                    description =
+                                                        'Random LDP strategy with state-based decision making';
+                                                } else if (lowerName.includes('rise') || lowerName.includes('fall')) {
+                                                    icon = '📉';
+                                                    description = 'Rise/Fall prediction with trend analysis';
+                                                } else if (lowerName.includes('delirium')) {
+                                                    icon = '🌀';
+                                                    description = 'Advanced Over 3 strategy with complex algorithms';
+                                                }
+
+                                                return { icon, description };
+                                            };
+
+                                            const botInfo = getBotInfo(bot.title);
+                                            // Generate a random success rate for demo
+                                            const successRate = Math.floor(Math.random() * 20) + 80;
+                                            // Determine if featured (random for demo)
+                                            const isFeatured = Math.random() > 0.7;
+
+                                            return (
                                                 <div
+                                                    key={index}
+                                                    onClick={() => handleBotClick(bot)}
                                                     style={{
+                                                        background: '#ffffff',
+                                                        borderRadius: '12px',
+                                                        padding: '1.2rem',
                                                         display: 'flex',
-                                                        alignItems: 'center',
-                                                        gap: '1rem',
-                                                        width: '100%',
-                                                        pointerEvents: 'none',
+                                                        flexDirection: 'column',
+                                                        gap: '0.8rem',
+                                                        cursor: 'pointer',
+                                                        transition: 'all 0.2s ease',
+                                                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                                                        border: '1px solid #e5e7eb',
+                                                        position: 'relative',
+                                                    }}
+                                                    onMouseEnter={e => {
+                                                        e.currentTarget.style.transform = 'translateY(-4px)';
+                                                        e.currentTarget.style.boxShadow =
+                                                            '0 8px 16px rgba(0, 0, 0, 0.12)';
+                                                    }}
+                                                    onMouseLeave={e => {
+                                                        e.currentTarget.style.transform = 'translateY(0)';
+                                                        e.currentTarget.style.boxShadow =
+                                                            '0 2px 8px rgba(0, 0, 0, 0.08)';
                                                     }}
                                                 >
+                                                    {isFeatured && (
+                                                        <span
+                                                            style={{
+                                                                position: 'absolute',
+                                                                top: '0.8rem',
+                                                                right: '0.8rem',
+                                                                background: '#f97316',
+                                                                color: '#ffffff',
+                                                                fontSize: '10px',
+                                                                fontWeight: '600',
+                                                                padding: '0.25rem 0.5rem',
+                                                                borderRadius: '4px',
+                                                                textTransform: 'uppercase',
+                                                            }}
+                                                        >
+                                                            Featured
+                                                        </span>
+                                                    )}
+
+                                                    {/* Bot Icon */}
                                                     <div
                                                         style={{
-                                                            width: '40px',
-                                                            height: '40px',
-                                                            borderRadius: '8px',
+                                                            width: '48px',
+                                                            height: '48px',
+                                                            borderRadius: '12px',
                                                             background:
-                                                                'linear-gradient(135deg, #0d9488 0%, #14b8a6 100%)',
+                                                                'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                                                             display: 'flex',
                                                             alignItems: 'center',
                                                             justifyContent: 'center',
-                                                            fontSize: '1.5rem',
-                                                            flexShrink: 0,
+                                                            fontSize: '24px',
+                                                            color: '#ffffff',
                                                         }}
                                                     >
-                                                        🤖
+                                                        {botInfo.icon}
                                                     </div>
+
+                                                    {/* Bot Name */}
                                                     <h3
                                                         style={{
                                                             margin: 0,
-                                                            color: '#1a1a2e',
-                                                            fontSize: '1.1rem',
+                                                            color: '#1f2937',
+                                                            fontSize: '14px',
                                                             fontWeight: '600',
-                                                            flex: 1,
-                                                            whiteSpace: 'nowrap',
-                                                            overflow: 'hidden',
-                                                            textOverflow: 'ellipsis',
+                                                            lineHeight: '1.4',
+                                                            minHeight: '2.8rem',
                                                         }}
                                                     >
-                                                        {bot.title || 'Untitled Bot'}
+                                                        {bot.title.replace('.xml', '')}
                                                     </h3>
+
+                                                    {/* Description */}
+                                                    <p
+                                                        style={{
+                                                            margin: 0,
+                                                            color: '#6b7280',
+                                                            fontSize: '12px',
+                                                            lineHeight: '1.5',
+                                                            minHeight: '3rem',
+                                                        }}
+                                                    >
+                                                        {botInfo.description}
+                                                    </p>
+
+                                                    {/* Success Rate */}
+                                                    <div style={{ marginTop: '0.5rem' }}>
+                                                        <div
+                                                            style={{
+                                                                display: 'flex',
+                                                                justifyContent: 'space-between',
+                                                                marginBottom: '0.4rem',
+                                                            }}
+                                                        >
+                                                            <span
+                                                                style={{
+                                                                    fontSize: '11px',
+                                                                    color: '#6b7280',
+                                                                    fontWeight: '500',
+                                                                }}
+                                                            >
+                                                                Success Rate
+                                                            </span>
+                                                            <span
+                                                                style={{
+                                                                    fontSize: '11px',
+                                                                    color: '#1f2937',
+                                                                    fontWeight: '600',
+                                                                }}
+                                                            >
+                                                                {successRate}%
+                                                            </span>
+                                                        </div>
+                                                        <div
+                                                            style={{
+                                                                width: '100%',
+                                                                height: '6px',
+                                                                background: '#e5e7eb',
+                                                                borderRadius: '3px',
+                                                                overflow: 'hidden',
+                                                            }}
+                                                        >
+                                                            <div
+                                                                style={{
+                                                                    width: `${successRate}%`,
+                                                                    height: '100%',
+                                                                    background:
+                                                                        'linear-gradient(90deg, #3b82f6 0%, #2563eb 100%)',
+                                                                    borderRadius: '3px',
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    {/* Load Bot Button */}
+                                                    <button
+                                                        style={{
+                                                            background:
+                                                                'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
+                                                            color: '#ffffff',
+                                                            border: 'none',
+                                                            borderRadius: '8px',
+                                                            padding: '0.7rem 1rem',
+                                                            fontSize: '13px',
+                                                            fontWeight: '600',
+                                                            cursor: 'pointer',
+                                                            transition: 'all 0.2s ease',
+                                                            width: '100%',
+                                                            marginTop: '0.5rem',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '0.5rem',
+                                                        }}
+                                                        onMouseEnter={e => {
+                                                            e.currentTarget.style.transform = 'scale(1.02)';
+                                                        }}
+                                                        onMouseLeave={e => {
+                                                            e.currentTarget.style.transform = 'scale(1)';
+                                                        }}
+                                                    >
+                                                        Load Bot →
+                                                    </button>
                                                 </div>
-                                                <p
-                                                    style={{
-                                                        margin: 0,
-                                                        color: '#6c757d',
-                                                        fontSize: '0.9rem',
-                                                        lineHeight: '1.5',
-                                                        display: '-webkit-box',
-                                                        WebkitLineClamp: 2,
-                                                        WebkitBoxOrient: 'vertical',
-                                                        overflow: 'hidden',
-                                                        pointerEvents: 'none',
-                                                    }}
-                                                >
-                                                    Click to load this bot into your workspace
-                                                </p>
+                                            );
+                                        })}
+                                </div>
+
+                                {/* PREMIUM BOTS SECTION */}
+                                <h2
+                                    style={{
+                                        color: '#1f2937',
+                                        fontSize: '1.5rem',
+                                        fontWeight: '700',
+                                        marginBottom: '0.5rem',
+                                        textAlign: 'left',
+                                        flexShrink: 0,
+                                        marginTop: '1rem',
+                                    }}
+                                >
+                                    Premium Bots
+                                </h2>
+                                <p
+                                    style={{
+                                        color: '#6b7280',
+                                        fontSize: '14px',
+                                        marginBottom: '1.5rem',
+                                        textAlign: 'left',
+                                    }}
+                                >
+                                    Exclusive premium strategies with advanced features
+                                </p>
+                                <div
+                                    className='premium-bots-grid'
+                                    style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+                                        gap: '1.2rem',
+                                        paddingBottom: '1.5rem',
+                                    }}
+                                >
+                                    {[
+                                        { name: 'Premium Bot Alpha', icon: '⭐', rate: 95 },
+                                        { name: 'Premium Bot Beta', icon: '💎', rate: 92 },
+                                        { name: 'Premium Bot Gamma', icon: '🚀', rate: 97 },
+                                    ].map((bot, index) => (
+                                        <div
+                                            key={index}
+                                            style={{
+                                                background: '#ffffff',
+                                                borderRadius: '12px',
+                                                padding: '1.2rem',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                gap: '0.8rem',
+                                                cursor: 'pointer',
+                                                transition: 'all 0.2s ease',
+                                                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                                                border: '1px solid #e5e7eb',
+                                                position: 'relative',
+                                            }}
+                                            onMouseEnter={e => {
+                                                e.currentTarget.style.transform = 'translateY(-4px)';
+                                                e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.12)';
+                                            }}
+                                            onMouseLeave={e => {
+                                                e.currentTarget.style.transform = 'translateY(0)';
+                                                e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.08)';
+                                            }}
+                                        >
+                                            <span
+                                                style={{
+                                                    position: 'absolute',
+                                                    top: '0.8rem',
+                                                    right: '0.8rem',
+                                                    background: '#f97316',
+                                                    color: '#ffffff',
+                                                    fontSize: '10px',
+                                                    fontWeight: '600',
+                                                    padding: '0.25rem 0.5rem',
+                                                    borderRadius: '4px',
+                                                    textTransform: 'uppercase',
+                                                }}
+                                            >
+                                                Premium
+                                            </span>
+
+                                            <div
+                                                style={{
+                                                    width: '48px',
+                                                    height: '48px',
+                                                    borderRadius: '12px',
+                                                    background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    fontSize: '24px',
+                                                    color: '#ffffff',
+                                                }}
+                                            >
+                                                {bot.icon}
+                                            </div>
+
+                                            <h3
+                                                style={{
+                                                    margin: 0,
+                                                    color: '#1f2937',
+                                                    fontSize: '14px',
+                                                    fontWeight: '600',
+                                                    lineHeight: '1.4',
+                                                    minHeight: '2.8rem',
+                                                }}
+                                            >
+                                                {bot.name}
+                                            </h3>
+
+                                            <p
+                                                style={{
+                                                    margin: 0,
+                                                    color: '#6b7280',
+                                                    fontSize: '12px',
+                                                    lineHeight: '1.5',
+                                                    minHeight: '3rem',
+                                                }}
+                                            >
+                                                Elite trading strategy with AI-powered analysis and premium support
+                                            </p>
+
+                                            <div style={{ marginTop: '0.5rem' }}>
                                                 <div
                                                     style={{
                                                         display: 'flex',
                                                         justifyContent: 'space-between',
-                                                        alignItems: 'center',
-                                                        marginTop: 'auto',
-                                                        paddingTop: '0.5rem',
-                                                        borderTop: '1px solid #e0e0e0',
-                                                        pointerEvents: 'none',
+                                                        marginBottom: '0.4rem',
                                                     }}
                                                 >
                                                     <span
                                                         style={{
-                                                            fontSize: '0.75rem',
-                                                            color: '#0d9488',
-                                                            fontWeight: '600',
-                                                            textTransform: 'uppercase',
-                                                            letterSpacing: '0.5px',
-                                                        }}
-                                                    >
-                                                        Free
-                                                    </span>
-                                                    <span
-                                                        style={{
-                                                            fontSize: '0.85rem',
-                                                            color: '#0d9488',
+                                                            fontSize: '11px',
+                                                            color: '#6b7280',
                                                             fontWeight: '500',
                                                         }}
                                                     >
-                                                        Load →
+                                                        Success Rate
+                                                    </span>
+                                                    <span
+                                                        style={{
+                                                            fontSize: '11px',
+                                                            color: '#1f2937',
+                                                            fontWeight: '600',
+                                                        }}
+                                                    >
+                                                        {bot.rate}%
                                                     </span>
                                                 </div>
-                                            </li>
-                                        ))
-                                    )}
-                                </ul>
+                                                <div
+                                                    style={{
+                                                        width: '100%',
+                                                        height: '6px',
+                                                        background: '#e5e7eb',
+                                                        borderRadius: '3px',
+                                                        overflow: 'hidden',
+                                                    }}
+                                                >
+                                                    <div
+                                                        style={{
+                                                            width: `${bot.rate}%`,
+                                                            height: '100%',
+                                                            background:
+                                                                'linear-gradient(90deg, #fbbf24 0%, #f59e0b 100%)',
+                                                            borderRadius: '3px',
+                                                        }}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <p
+                                                style={{
+                                                    margin: '0.5rem 0 0 0',
+                                                    color: '#6b7280',
+                                                    fontSize: '11px',
+                                                    textDecoration: 'line-through',
+                                                }}
+                                            >
+                                                ORIGINAL $299
+                                            </p>
+
+                                            <a
+                                                href={`https://wa.me/1234567890?text=I%20want%20to%20buy%20${bot.name}`}
+                                                target='_blank'
+                                                rel='noopener noreferrer'
+                                                style={{
+                                                    background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
+                                                    color: '#1f2937',
+                                                    border: 'none',
+                                                    borderRadius: '8px',
+                                                    padding: '0.7rem 1rem',
+                                                    fontSize: '13px',
+                                                    fontWeight: '600',
+                                                    cursor: 'pointer',
+                                                    transition: 'all 0.2s ease',
+                                                    textDecoration: 'none',
+                                                    textAlign: 'center',
+                                                    width: '100%',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    gap: '0.5rem',
+                                                }}
+                                                onMouseEnter={e => {
+                                                    e.currentTarget.style.transform = 'scale(1.02)';
+                                                }}
+                                                onMouseLeave={e => {
+                                                    e.currentTarget.style.transform = 'scale(1)';
+                                                }}
+                                            >
+                                                Buy Now →
+                                            </a>
+                                        </div>
+                                    ))}
+                                </div>
+
                                 <style>
                                     {`
                                         /* Responsive adjustments */
                                         @media (max-width: 768px) {
-                                            .free-bots__list {
+                                            .free-bots-grid,
+                                            .premium-bots-grid {
                                                 grid-template-columns: 1fr !important;
-                                                padding: 1rem !important;
-                                            }
-                                            .free-bot-item h3 {
-                                                font-size: 0.95rem !important;
-                                                white-space: normal !important;
-                                            }
-                                            .free-bot-item p {
-                                                font-size: 0.8rem !important;
-                                            }
-                                        }
-
-                                        /* Extra small screens */
-                                        @media (max-width: 480px) {
-                                            .free-bots__list {
-                                                padding: 0.75rem !important;
-                                                gap: 0.5rem !important;
-                                            }
-                                            .free-bot-item {
-                                                padding: 0.75rem !important;
                                             }
                                         }
                                     `}
