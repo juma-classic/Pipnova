@@ -51,7 +51,7 @@ const useMobileMenuConfig = (client?: RootStore['client']) => {
                 cs_chat_whatsapp
                     ? {
                           as: 'a',
-                          href: 'https://wa.link/2xcwcb',
+                          href: 'https://wa.me/254799094649',
                           label: localize('WhatsApp'),
                           LeftComponent: LegacyWhatsappIcon,
                           target: '_blank',
@@ -59,7 +59,7 @@ const useMobileMenuConfig = (client?: RootStore['client']) => {
                     : null,
                 {
                     as: 'a',
-                    href: 'https://t.me/YOUR_TELEGRAM_USERNAME',
+                    href: 'https://t.me/Binovate',
                     label: localize('Telegram'),
                     LeftComponent: () => (
                         <svg width='16' height='16' viewBox='0 0 24 24' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
@@ -70,7 +70,7 @@ const useMobileMenuConfig = (client?: RootStore['client']) => {
                 },
                 {
                     as: 'a',
-                    href: 'https://www.tiktok.com/@YOUR_TIKTOK_USERNAME',
+                    href: 'https://tiktok.com/@bonniemurigi',
                     label: localize('TikTok'),
                     LeftComponent: () => (
                         <svg width='16' height='16' viewBox='0 0 24 24' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>

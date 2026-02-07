@@ -2609,7 +2609,7 @@ const AppWrapper = observer(() => {
                                     }}
                                 >
                                     <a
-                                        href='https://youtube.com/@pipnova'
+                                        href='https://www.youtube.com/@bonniemurigi'
                                         target='_blank'
                                         rel='noopener noreferrer'
                                         style={{
@@ -2631,7 +2631,7 @@ const AppWrapper = observer(() => {
                                         ▶
                                     </a>
                                     <a
-                                        href='https://instagram.com/pipnova'
+                                        href='https://www.instagram.com/bonnie_binary?igsh=cHAwNGJiNXoxNGo='
                                         target='_blank'
                                         rel='noopener noreferrer'
                                         style={{
@@ -2654,7 +2654,7 @@ const AppWrapper = observer(() => {
                                         📷
                                     </a>
                                     <a
-                                        href='https://wa.me/1234567890'
+                                        href='https://wa.me/254799094649'
                                         target='_blank'
                                         rel='noopener noreferrer'
                                         style={{
@@ -2676,7 +2676,7 @@ const AppWrapper = observer(() => {
                                         💬
                                     </a>
                                     <a
-                                        href='https://tiktok.com/@pipnova'
+                                        href='https://tiktok.com/@bonniemurigi'
                                         target='_blank'
                                         rel='noopener noreferrer'
                                         style={{
@@ -2698,7 +2698,7 @@ const AppWrapper = observer(() => {
                                         🎵
                                     </a>
                                     <a
-                                        href='https://t.me/pipnova'
+                                        href='https://t.me/Binovate'
                                         target='_blank'
                                         rel='noopener noreferrer'
                                         style={{
