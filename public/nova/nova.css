@@ -170,7 +170,7 @@ body {
     fill: none;
     stroke-width: 6;
     stroke-linecap: round;
-    transition: stroke-dashoffset 0.5s ease;
+    transition: stroke-dashoffset 0.5s ease, stroke 0.5s ease;
 }
 
 .digit-number {
@@ -186,18 +186,6 @@ body {
     z-index: 1;
     margin-top: 0.25rem;
 }
-
-/* Digit circle colors */
-.digit-circle[data-digit="0"] .circle-progress { stroke: #6b8aff; }
-.digit-circle[data-digit="1"] .circle-progress { stroke: #7b8aff; }
-.digit-circle[data-digit="2"] .circle-progress { stroke: #8b8aff; }
-.digit-circle[data-digit="3"] .circle-progress { stroke: #9b8aff; }
-.digit-circle[data-digit="4"] .circle-progress { stroke: #ab8aff; }
-.digit-circle[data-digit="5"] .circle-progress { stroke: #ff6b8a; }
-.digit-circle[data-digit="6"] .circle-progress { stroke: #ff7b8a; }
-.digit-circle[data-digit="7"] .circle-progress { stroke: #ff8b8a; }
-.digit-circle[data-digit="8"] .circle-progress { stroke: #4ade80; }
-.digit-circle[data-digit="9"] .circle-progress { stroke: #8b8aff; }
 
 /* Digit Stats */
 .digit-stats {

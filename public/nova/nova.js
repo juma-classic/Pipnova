@@ -330,6 +330,18 @@ function updateDigitCircles(digitCounts) {
     let highestCount = digitCounts[0];
     let lowestCount = digitCounts[0];
 
+    // Find highest and lowest counts first
+    digitCounts.forEach((count, digit) => {
+        if (count > highestCount) {
+            highestCount = count;
+            highestDigit = digit;
+        }
+        if (count < lowestCount) {
+            lowestCount = count;
+            lowestDigit = digit;
+        }
+    });
+
     // Get current last digit
     const currentLastDigit = tickHistory.length > 0 ? getLastDigit(tickHistory[tickHistory.length - 1]) : null;
 
@@ -350,22 +362,23 @@ function updateDigitCircles(digitCounts) {
             const percentageEl = circle.querySelector('.digit-percentage');
             percentageEl.textContent = `${percentage}%`;
 
-            // Update progress ring
+            // Update progress ring with color based on frequency
             const progressCircle = circle.querySelector('.circle-progress');
             const radius = 34;
             const circumference = 2 * Math.PI * radius;
             const offset = circumference - (percentage / 100) * circumference;
             progressCircle.style.strokeDashoffset = offset;
-        }
 
-        // Track highest and lowest
-        if (count > highestCount) {
-            highestCount = count;
-            highestDigit = digit;
-        }
-        if (count < lowestCount) {
-            lowestCount = count;
-            lowestDigit = digit;
+            // Set ring color: green for highest, red for lowest, purple for rest
+            let ringColor;
+            if (digit === highestDigit) {
+                ringColor = '#10b981'; // Green
+            } else if (digit === lowestDigit) {
+                ringColor = '#ef4444'; // Red
+            } else {
+                ringColor = '#a855f7'; // Purple
+            }
+            progressCircle.style.stroke = ringColor;
         }
     });
 
