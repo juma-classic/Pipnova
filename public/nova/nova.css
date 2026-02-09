@@ -374,7 +374,7 @@ body {
 }
 
 .comparison-label-text {
-    font-size: 0.875rem;
+    font-size: 1.27rem; /* Increased by 45%: 0.875 * 1.45 */
     color: #8892b0;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -635,21 +635,21 @@ body {
 
     /* Reduce comparison cards by 70% */
     .comparison-cards {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
+        grid-template-columns: repeat(3, 1fr); /* Side by side in one row */
+        gap: 0.3rem; /* Minimal gap */
     }
 
     .comparison-card {
-        padding: 0.6rem;
+        padding: 0.4rem 0.2rem; /* Very reduced padding */
     }
 
     .comparison-value {
-        font-size: 1.4rem;
-        margin-bottom: 0.3rem;
+        font-size: 1rem; /* 30% smaller: 1.4 * 0.7 */
+        margin-bottom: 0.2rem;
     }
 
     .comparison-label-text {
-        font-size: 0.6rem;
+        font-size: 0.61rem; /* 45% larger than before: 0.42 * 1.45 */
     }
 
     /* Reduce pattern cards (Even/Odd, Rise/Fall) by 70% */
@@ -726,12 +726,21 @@ body {
     }
 
     /* Further reduce comparison values */
+    .comparison-cards {
+        grid-template-columns: repeat(3, 1fr); /* Keep side by side */
+        gap: 0.25rem;
+    }
+
+    .comparison-card {
+        padding: 0.35rem 0.15rem;
+    }
+
     .comparison-value {
-        font-size: 1.2rem;
+        font-size: 0.85rem;
     }
 
     .comparison-label-text {
-        font-size: 0.55rem;
+        font-size: 0.55rem; /* 45% larger than before: 0.38 * 1.45 */
     }
 
     /* Further reduce pattern values */
