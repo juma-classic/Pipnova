@@ -11,6 +11,18 @@ document.addEventListener('DOMContentLoaded', function () {
     startWebSocket();
 });
 
+// Re-render circles on window resize for responsive sizing
+let resizeTimeout;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+        renderDigitCircles();
+        if (tickHistory.length > 0) {
+            updateUI();
+        }
+    }, 250);
+});
+
 // Initialize UI
 function initializeUI() {
     renderDigitCircles();
@@ -80,13 +92,32 @@ function createDigitCircle(digit) {
     div.className = 'digit-circle';
     div.setAttribute('data-digit', digit);
 
-    const radius = 34;
+    // Responsive sizing based on screen width
+    const isMobile = window.innerWidth <= 768;
+    const isSmallMobile = window.innerWidth <= 480;
+    
+    let size, radius, center;
+    if (isSmallMobile) {
+        size = 45; // 35 * 1.3
+        radius = 19.5; // 15 * 1.3
+        center = 22.5;
+    } else if (isMobile) {
+        size = 52; // 40 * 1.3
+        radius = 22; // 17 * 1.3
+        center = 26;
+    } else {
+        // Desktop: radius 65 (50 * 1.3)
+        size = 143; // 110 * 1.3
+        radius = 65; // 50 * 1.3
+        center = 71.5;
+    }
+
     const circumference = 2 * Math.PI * radius;
 
     div.innerHTML = `
-        <svg class="circle-svg" width="80" height="80">
-            <circle class="circle-bg" cx="40" cy="40" r="${radius}"></circle>
-            <circle class="circle-progress" cx="40" cy="40" r="${radius}"
+        <svg class="circle-svg" width="${size}" height="${size}">
+            <circle class="circle-bg" cx="${center}" cy="${center}" r="${radius}"></circle>
+            <circle class="circle-progress" cx="${center}" cy="${center}" r="${radius}"
                     stroke-dasharray="${circumference}"
                     stroke-dashoffset="${circumference}"></circle>
         </svg>
@@ -394,20 +425,30 @@ function updateDigitCircles(digitCounts) {
 
             // Update progress ring with color based on frequency
             const progressCircle = circle.querySelector('.circle-progress');
-            const radius = 34;
+            
+            // Get radius from the actual SVG circle element
+            const svgCircle = circle.querySelector('.circle-progress');
+            const radius = parseFloat(svgCircle.getAttribute('r')) || 34;
+            
             const circumference = 2 * Math.PI * radius;
-            const offset = circumference - (percentage / 100) * circumference;
-            progressCircle.style.strokeDashoffset = offset;
-
-            // Set ring color: green for highest, red for lowest, purple for rest
+            
+            // Set fixed ring lengths for highest and lowest
+            let displayPercentage = parseFloat(percentage);
             let ringColor;
+            
             if (digit === highestDigit) {
                 ringColor = '#10b981'; // Green
+                displayPercentage = 75; // Fixed at 75% of circumference
             } else if (digit === lowestDigit) {
                 ringColor = '#ef4444'; // Red
+                displayPercentage = 60; // Fixed at 60% of circumference
             } else {
                 ringColor = '#a855f7'; // Purple
+                // Keep actual percentage for purple rings
             }
+            
+            const offset = circumference - (displayPercentage / 100) * circumference;
+            progressCircle.style.strokeDashoffset = offset;
             progressCircle.style.stroke = ringColor;
         }
     });

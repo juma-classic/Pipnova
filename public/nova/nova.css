@@ -149,17 +149,19 @@ body {
 
 /* Digit Circles */
 .digit-circles {
-    display: flex;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(2, 1fr);
+    justify-items: center;
     align-items: center;
     margin-bottom: 1.5rem;
-    gap: 0.5rem;
+    gap: 1rem;
 }
 
 .digit-circle {
     position: relative;
-    width: 80px;
-    height: 80px;
+    width: 143px;
+    height: 143px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -173,16 +175,16 @@ body {
 }
 
 .digit-circle.active {
-    transform: scale(1.15);
+    /* Remove scale animation - keep same size */
 }
 
 .digit-circle.active::before {
     content: '▼';
     position: absolute;
-    top: -20px;
+    top: -30px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 1.2rem;
+    font-size: 1.8rem;
     color: #fbbf24;
     animation: bounce 0.6s ease-in-out infinite;
 }
@@ -203,7 +205,7 @@ body {
 
 .digit-circle.active .digit-number {
     color: #fbbf24;
-    font-size: 1.75rem;
+    font-size: 2.8rem;
     text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
 }
 
@@ -230,14 +232,14 @@ body {
 }
 
 .digit-number {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     font-weight: 700;
     color: #e0e6ed;
     z-index: 1;
 }
 
 .digit-percentage {
-    font-size: 0.75rem;
+    font-size: 1.1rem;
     color: #8892b0;
     z-index: 1;
     margin-top: 0.25rem;
@@ -583,35 +585,149 @@ body {
     }
 
     .digit-circles {
-        flex-wrap: wrap;
-        justify-content: center;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.5rem;
     }
 
+    /* Reduce digit circles by 50% */
     .digit-circle {
-        width: 70px;
-        height: 70px;
+        width: 52px;
+        height: 52px;
     }
 
+    .digit-circle.active::before {
+        top: -14px;
+        font-size: 0.85rem;
+    }
+
+    .digit-circle.active .digit-number {
+        font-size: 1.2rem;
+    }
+
+    .circle-svg {
+        width: 52px;
+        height: 52px;
+    }
+
+    .circle-bg {
+        stroke-width: 3;
+    }
+
+    .circle-progress {
+        stroke-width: 3;
+    }
+
+    .digit-number {
+        font-size: 0.95rem;
+    }
+
+    .digit-percentage {
+        font-size: 0.55rem;
+    }
+
+    /* Reduce comparison cards by 70% */
     .comparison-cards {
         grid-template-columns: 1fr;
+        gap: 0.5rem;
+    }
+
+    .comparison-card {
+        padding: 0.6rem;
+    }
+
+    .comparison-value {
+        font-size: 1.4rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .comparison-label-text {
+        font-size: 0.6rem;
+    }
+
+    /* Reduce pattern cards (Even/Odd, Rise/Fall) by 70% */
+    .pattern-cards {
+        gap: 0.5rem;
+    }
+
+    .pattern-card {
+        padding: 0.8rem;
+    }
+
+    .pattern-value {
+        font-size: 1.5rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .pattern-label {
+        font-size: 0.6rem;
     }
 
     .section-card {
         padding: 1.5rem;
     }
+
+    .section-title {
+        font-size: 1rem;
+    }
 }
 
 @media (max-width: 480px) {
+    .digit-circles {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 0.4rem;
+    }
+
+    /* Further reduce digit circles */
     .digit-circle {
-        width: 60px;
-        height: 60px;
+        width: 45px;
+        height: 45px;
+    }
+
+    .digit-circle.active::before {
+        top: -12px;
+        font-size: 0.75rem;
+    }
+
+    .digit-circle.active .digit-number {
+        font-size: 1rem;
+    }
+
+    .circle-svg {
+        width: 45px;
+        height: 45px;
+    }
+
+    .circle-bg {
+        stroke-width: 2.5;
+    }
+
+    .circle-progress {
+        stroke-width: 2.5;
     }
 
     .digit-number {
-        font-size: 1.25rem;
+        font-size: 0.8rem;
     }
 
     .digit-percentage {
-        font-size: 0.65rem;
+        font-size: 0.5rem;
+    }
+
+    /* Further reduce comparison values */
+    .comparison-value {
+        font-size: 1.2rem;
+    }
+
+    .comparison-label-text {
+        font-size: 0.55rem;
+    }
+
+    /* Further reduce pattern values */
+    .pattern-value {
+        font-size: 1.3rem;
+    }
+
+    .pattern-label {
+        font-size: 0.55rem;
     }
 }
