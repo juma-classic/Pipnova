@@ -178,20 +178,132 @@ const SignalsIcon = () => (
                 <stop offset='0%' stopColor='#ffffff' />
                 <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
+            <filter id='signalGlow'>
+                <feGaussianBlur stdDeviation='1.5' result='coloredBlur'/>
+                <feMerge>
+                    <feMergeNode in='coloredBlur'/>
+                    <feMergeNode in='SourceGraphic'/>
+                </feMerge>
+            </filter>
         </defs>
-        {/* Signals - Lightning bolt */}
-        <path d='M13 2L3 14h8l-1 8 10-12h-8l1-8z' fill='url(#signalGrad)' />
+        
+        {/* Central radar circle */}
+        <circle cx='12' cy='12' r='2' fill='url(#signalGrad)' filter='url(#signalGlow)' />
+        
+        {/* Rotating radar sweep line */}
+        <line 
+            x1='12' 
+            y1='12' 
+            x2='12' 
+            y2='5' 
+            stroke='url(#signalGrad)' 
+            strokeWidth='1.5' 
+            strokeLinecap='round'
+            opacity='0.8'
+            style={{ transformOrigin: '12px 12px' }}
+        />
+        
+        {/* Concentric signal rings - animated */}
+        <circle 
+            cx='12' 
+            cy='12' 
+            r='5' 
+            stroke='url(#signalGrad)' 
+            strokeWidth='1.5' 
+            opacity='0.6'
+            strokeDasharray='2 3'
+        />
+        <circle 
+            cx='12' 
+            cy='12' 
+            r='8' 
+            stroke='url(#signalGrad)' 
+            strokeWidth='1.5' 
+            opacity='0.4'
+            strokeDasharray='3 4'
+        />
+        <circle 
+            cx='12' 
+            cy='12' 
+            r='10.5' 
+            stroke='url(#signalGrad)' 
+            strokeWidth='1.5' 
+            opacity='0.2'
+            strokeDasharray='4 5'
+        />
+        
+        {/* Signal wave indicators - 4 corners */}
+        <path d='M4 4L6 6' stroke='url(#signalGrad)' strokeWidth='2' strokeLinecap='round' />
+        <path d='M20 4L18 6' stroke='url(#signalGrad)' strokeWidth='2' strokeLinecap='round' />
+        <path d='M4 20L6 18' stroke='url(#signalGrad)' strokeWidth='2' strokeLinecap='round' />
+        <path d='M20 20L18 18' stroke='url(#signalGrad)' strokeWidth='2' strokeLinecap='round' />
+        
+        {/* Data nodes - pulsing dots */}
+        <circle cx='12' cy='5' r='1.2' fill='#fbbf24' filter='url(#signalGlow)' />
+        <circle cx='17' cy='9' r='1.2' fill='#fbbf24' filter='url(#signalGlow)' />
+        <circle cx='17' cy='15' r='1.2' fill='#fbbf24' filter='url(#signalGlow)' />
+        <circle cx='7' cy='9' r='1.2' fill='#fbbf24' filter='url(#signalGlow)' />
+        
         <style>
             {`
-                @keyframes signalFlash {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0.6; }
+                @keyframes radarSweep {
+                    0% { transform: rotate(0deg); opacity: 0.8; }
+                    100% { transform: rotate(360deg); opacity: 0.8; }
                 }
-                svg:hover path { animation: signalFlash 0.5s ease-in-out infinite; }
+                @keyframes ringPulse1 {
+                    0%, 100% { r: 5; opacity: 0.6; }
+                    50% { r: 5.5; opacity: 0.8; }
+                }
+                @keyframes ringPulse2 {
+                    0%, 100% { r: 8; opacity: 0.4; }
+                    50% { r: 8.5; opacity: 0.6; }
+                }
+                @keyframes ringPulse3 {
+                    0%, 100% { r: 10.5; opacity: 0.2; }
+                    50% { r: 11; opacity: 0.4; }
+                }
+                @keyframes nodePulse {
+                    0%, 100% { r: 1.2; opacity: 1; }
+                    50% { r: 1.5; opacity: 0.6; }
+                }
+                @keyframes cornerBlink {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.3; }
+                }
+                @keyframes dashRotate {
+                    0% { stroke-dashoffset: 0; }
+                    100% { stroke-dashoffset: 20; }
+                }
+                
+                svg:hover line:nth-of-type(1) { 
+                    animation: radarSweep 2s linear infinite; 
+                }
+                svg:hover circle:nth-of-type(2) { 
+                    animation: ringPulse1 2s ease-in-out infinite, dashRotate 3s linear infinite; 
+                }
+                svg:hover circle:nth-of-type(3) { 
+                    animation: ringPulse2 2s ease-in-out infinite 0.3s, dashRotate 4s linear infinite; 
+                }
+                svg:hover circle:nth-of-type(4) { 
+                    animation: ringPulse3 2s ease-in-out infinite 0.6s, dashRotate 5s linear infinite; 
+                }
+                svg:hover circle:nth-of-type(5),
+                svg:hover circle:nth-of-type(6),
+                svg:hover circle:nth-of-type(7),
+                svg:hover circle:nth-of-type(8) { 
+                    animation: nodePulse 1.5s ease-in-out infinite; 
+                }
+                svg:hover path:nth-of-type(2),
+                svg:hover path:nth-of-type(3),
+                svg:hover path:nth-of-type(4),
+                svg:hover path:nth-of-type(5) { 
+                    animation: cornerBlink 1s ease-in-out infinite; 
+                }
             `}
         </style>
     </svg>
 );
+
 
 const XDTraderIcon = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
