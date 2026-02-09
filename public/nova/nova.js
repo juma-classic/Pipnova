@@ -106,10 +106,10 @@ function createDigitCircle(digit) {
         radius = 22; // 17 * 1.3
         center = 26;
     } else {
-        // Desktop: radius 65 (50 * 1.3)
-        size = 143; // 110 * 1.3
-        radius = 65; // 50 * 1.3
-        center = 71.5;
+        // Desktop: increased by 20% from 57 (57 * 1.2 = 68.4)
+        size = 68;
+        radius = 31; // 26 * 1.2
+        center = 34;
     }
 
     const circumference = 2 * Math.PI * radius;
