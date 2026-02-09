@@ -61,7 +61,7 @@ export const AuthWrapper = () => {
     }, [loginInfo, paramsToDelete]);
 
     if (!isAuthComplete) {
-        return <PipnovaLoader onLoadComplete={() => {}} duration={2000} />;
+        return <PipnovaLoader onLoadComplete={() => {}} duration={3000} />;
     }
 
     return <App />;

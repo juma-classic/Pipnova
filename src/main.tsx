@@ -89,7 +89,7 @@ function AppWrapper() {
     }, []);
 
     if (isLoading) {
-        return <PipnovaLoader onLoadComplete={() => setIsLoading(false)} duration={300} />;
+        return <PipnovaLoader onLoadComplete={() => setIsLoading(false)} duration={3000} />;
     }
 
     return <AuthWrapper />;
