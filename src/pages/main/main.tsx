@@ -1902,7 +1902,19 @@ const AppWrapper = observer(() => {
                         onTabItemClick={setActiveTab}
                         top
                     >
-                        {/* DASHBOARD TAB */}
+                        {/* Note: Tab order matches DBOT_TABS indices in bot-contents.ts */}
+                        {/* 0. FREE BOTS TAB - Will be moved here from line 2557 */}
+                        {/* 1. BOT BUILDER TAB */}
+                        <div
+                            label={
+                                <>
+                                    <BotBuilderIcon />
+                                    <Localize i18n_default_text='Bot Builder' />
+                                </>
+                            }
+                            id='id-bot-builder'
+                        />
+                        {/* 2. DASHBOARD TAB */}
                         <div
                             label={
                                 <>
@@ -1915,17 +1927,7 @@ const AppWrapper = observer(() => {
                             <Dashboard handleTabChange={setActiveTab} />
                             <button onClick={handleOpen}>Load Bot</button>
                         </div>
-                        {/* BOT BUILDER TAB */}
-                        <div
-                            label={
-                                <>
-                                    <BotBuilderIcon />
-                                    <Localize i18n_default_text='Bot Builder' />
-                                </>
-                            }
-                            id='id-bot-builder'
-                        />
-                        {/* CHARTS TAB */}
+                        {/* 3. CHARTS TAB */}
                         <div
                             label={
                                 <>
@@ -1939,7 +1941,7 @@ const AppWrapper = observer(() => {
                                 <Chart show_digits_stats={false} />
                             </Suspense>
                         </div>
-                        {/* TUTORIALS TAB */}
+                        {/* 4. TUTORIALS TAB */}
                         <div
                             label={
                                 <>
