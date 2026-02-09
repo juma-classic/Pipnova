@@ -201,33 +201,34 @@
         }
 
         /* Reorder tabs using flexbox order */
+        /* Desired order: Free Bots, Bot Builder, Dashboard, Charts, Nova Analysis, xDTrader, Analysis Tool, Tutorials, Signals */
         .dc-tabs__item:nth-child(1) {
             order: 2;
-        } /* Dashboard -> 2nd */
+        } /* Bot Builder -> 2nd */
         .dc-tabs__item:nth-child(2) {
             order: 3;
-        } /* Bot Builder -> 3rd */
+        } /* Dashboard -> 3rd */
         .dc-tabs__item:nth-child(3) {
-            order: 7;
-        } /* Charts -> 7th */
+            order: 4;
+        } /* Charts -> 4th */
         .dc-tabs__item:nth-child(4) {
             order: 8;
         } /* Tutorials -> 8th */
         .dc-tabs__item:nth-child(5) {
-            order: 5;
-        } /* Analysis Tool -> 5th */
+            order: 7;
+        } /* Analysis Tool -> 7th */
         .dc-tabs__item:nth-child(6) {
             order: 9;
         } /* Signals -> 9th */
         .dc-tabs__item:nth-child(7) {
+            order: 6;
+        } /* xDTrader -> 6th */
+        .dc-tabs__item:nth-child(8) {
             order: 1;
         } /* Free Bots -> 1st */
-        .dc-tabs__item:nth-child(8) {
-            order: 4;
-        } /* Nova Analysis -> 4th */
         .dc-tabs__item:nth-child(9) {
-            order: 6;
-        } /* DTrader -> 6th */
+            order: 5;
+        } /* Nova Analysis -> 5th */
     }
 
     .dc-tabs__item {
