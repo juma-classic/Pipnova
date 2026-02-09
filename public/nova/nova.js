@@ -17,6 +17,33 @@ function initializeUI() {
     renderDigitSelector();
     updateMarketLabel();
     setupShowMoreButton();
+    setupMarketSelector();
+}
+
+// Setup market selector
+function setupMarketSelector() {
+    const selector = document.getElementById('market-selector');
+    
+    // Set initial value
+    selector.value = currentSymbol;
+    
+    // Handle market change
+    selector.addEventListener('change', (e) => {
+        const newSymbol = e.target.value;
+        if (newSymbol !== currentSymbol) {
+            currentSymbol = newSymbol;
+            tickHistory = [];
+            updateMarketLabel();
+            
+            // Close existing WebSocket and start new one
+            if (ws) {
+                ws.close();
+            }
+            startWebSocket();
+            
+            console.log('📊 Switched to market:', currentSymbol);
+        }
+    });
 }
 
 // Setup show more button
@@ -121,9 +148,12 @@ function updateMarketLabel() {
         'R_75': 'Volatility 75 Index',
         'R_100': 'Volatility 100 Index',
         '1HZ10V': 'Volatility 10 (1s) Index',
+        '1HZ15V': 'Volatility 15 (1s) Index',
         '1HZ25V': 'Volatility 25 (1s) Index',
+        '1HZ30V': 'Volatility 30 (1s) Index',
         '1HZ50V': 'Volatility 50 (1s) Index',
         '1HZ75V': 'Volatility 75 (1s) Index',
+        '1HZ90V': 'Volatility 90 (1s) Index',
         '1HZ100V': 'Volatility 100 (1s) Index',
     };
 

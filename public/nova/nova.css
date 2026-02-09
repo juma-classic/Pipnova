@@ -71,6 +71,62 @@ body {
     border: 1px solid rgba(107, 138, 255, 0.1);
 }
 
+/* Market Selector Section */
+.market-selector-section {
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.market-selector-label {
+    font-size: 0.875rem;
+    color: #8892b0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+.market-selector {
+    background: rgba(107, 138, 255, 0.1);
+    border: 2px solid rgba(107, 138, 255, 0.3);
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    color: #e0e6ed;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 250px;
+    font-family: 'Inter', sans-serif;
+}
+
+.market-selector:hover {
+    background: rgba(107, 138, 255, 0.2);
+    border-color: rgba(107, 138, 255, 0.5);
+}
+
+.market-selector:focus {
+    outline: none;
+    border-color: #6b8aff;
+    box-shadow: 0 0 0 3px rgba(107, 138, 255, 0.2);
+}
+
+.market-selector option {
+    background: #1a2332;
+    color: #e0e6ed;
+    padding: 0.5rem;
+}
+
+.market-selector optgroup {
+    background: #0f1621;
+    color: #6b8aff;
+    font-weight: 700;
+    font-size: 0.875rem;
+}
+
 .section-title {
     font-size: 1.25rem;
     font-weight: 600;
