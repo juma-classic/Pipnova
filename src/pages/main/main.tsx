@@ -32,21 +32,49 @@ const DashboardIcon = () => (
                 <stop offset='0%' stopColor='#ffffff' />
                 <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
+            <filter id='dashGlow'>
+                <feGaussianBlur stdDeviation='2' result='coloredBlur'/>
+                <feMerge>
+                    <feMergeNode in='coloredBlur'/>
+                    <feMergeNode in='SourceGraphic'/>
+                </feMerge>
+            </filter>
         </defs>
-        {/* Simple dashboard/home icon */}
-        <path
-            d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'
-            stroke='url(#dashGrad)'
-            strokeWidth='2'
-            fill='none'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
-        <path
-            d='M9 22V12h6v10'
-            stroke='url(#dashGrad)'
-            strokeWidth='2'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
+        {/* Connection lines */}
+        <path d='M7 7h4M15 7h4M7 11v6M19 11v6' stroke='url(#dashGrad)' strokeWidth='1.5' opacity='0.6' />
+        
+        {/* Top left node - green/yellow square */}
+        <rect x='3' y='3' width='8' height='8' rx='2' fill='url(#dashGrad)' filter='url(#dashGlow)' opacity='0.9' />
+        <circle cx='7' cy='7' r='1.5' fill='#ffffff' />
+        
+        {/* Top right node - gray square with green dot */}
+        <rect x='15' y='3' width='8' height='8' rx='2' fill='#9ca3af' opacity='0.7' />
+        <circle cx='19' cy='7' r='1.2' fill='url(#dashGrad)' filter='url(#dashGlow)' />
+        <text x='20' y='9' fontSize='6' fontWeight='bold' fill='#ffffff'>F</text>
+        
+        {/* Bottom left node - gray square with green dot */}
+        <rect x='3' y='13' width='8' height='8' rx='2' fill='#9ca3af' opacity='0.7' />
+        <circle cx='7' cy='17' r='1.2' fill='url(#dashGrad)' filter='url(#dashGlow)' />
+        
+        {/* Bottom right node - large green/yellow square */}
+        <rect x='15' y='13' width='8' height='8' rx='2' fill='url(#dashGrad)' filter='url(#dashGlow)' opacity='0.9' />
+        <circle cx='19' cy='17' r='1.5' fill='#ffffff' />
+        
+        <style>
+            {`
+                @keyframes dashPulse {
+                    0%, 100% { opacity: 0.9; }
+                    50% { opacity: 0.6; }
+                }
+                @keyframes linePulse {
+                    0%, 100% { opacity: 0.6; }
+                    50% { opacity: 1; }
+                }
+                svg:hover rect:nth-child(2) { animation: dashPulse 1.5s ease-in-out infinite; }
+                svg:hover rect:nth-child(6) { animation: dashPulse 1.5s ease-in-out 0.3s infinite; }
+                svg:hover path { animation: linePulse 1.5s ease-in-out infinite; }
+            `}
+        </style>
     </svg>
 );
 
@@ -58,23 +86,18 @@ const BotBuilderIcon = () => (
                 <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
         </defs>
-        {/* Simple gear/settings icon */}
-        <circle
-            cx='12'
-            cy='12'
-            r='3'
-            stroke='url(#botGrad)'
-            strokeWidth='2'
-            fill='none'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
-        <path
-            d='M12 2v3M12 19v3M22 12h-3M5 12H2M19.07 4.93l-2.12 2.12M7.05 16.95l-2.12 2.12M19.07 19.07l-2.12-2.12M7.05 7.05L4.93 4.93'
-            stroke='url(#botGrad)'
-            strokeWidth='2'
-            strokeLinecap='round'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
+        {/* Bot Builder - Wrench/Tool icon */}
+        <path d='M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z' 
+              fill='url(#botGrad)' />
+        <style>
+            {`
+                @keyframes botRotate {
+                    0%, 100% { transform: rotate(0deg); }
+                    50% { transform: rotate(15deg); }
+                }
+                svg:hover { animation: botRotate 0.5s ease-in-out infinite; }
+            `}
+        </style>
     </svg>
 );
 
@@ -86,26 +109,18 @@ const ChartsIcon = () => (
                 <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
         </defs>
-        {/* Simple chart icon matching screenshot */}
-        <rect
-            x='3'
-            y='3'
-            width='18'
-            height='18'
-            rx='2'
-            stroke='url(#chartGrad)'
-            strokeWidth='2'
-            fill='none'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
-        <path
-            d='M7 15l3-4 3 3 4-6'
-            stroke='url(#chartGrad)'
-            strokeWidth='2'
-            strokeLinecap='round'
-            strokeLinejoin='round'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
+        {/* Charts - Trending up line chart */}
+        <path d='M3 17l6-6 4 4 8-8' stroke='url(#chartGrad)' strokeWidth='2.5' strokeLinecap='round' strokeLinejoin='round' />
+        <path d='M17 7h4v4' stroke='url(#chartGrad)' strokeWidth='2.5' strokeLinecap='round' strokeLinejoin='round' />
+        <style>
+            {`
+                @keyframes chartPulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.7; }
+                }
+                svg:hover path { animation: chartPulse 1s ease-in-out infinite; }
+            `}
+        </style>
     </svg>
 );
 
@@ -117,25 +132,18 @@ const TutorialsIcon = () => (
                 <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
         </defs>
-        {/* Simple book/document icon matching screenshot */}
-        <rect
-            x='5'
-            y='3'
-            width='14'
-            height='18'
-            rx='2'
-            stroke='url(#tutGrad)'
-            strokeWidth='2'
-            fill='none'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
-        <path
-            d='M9 8h6M9 12h6M9 16h4'
-            stroke='url(#tutGrad)'
-            strokeWidth='2'
-            strokeLinecap='round'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
+        {/* Tutorials - Play button in circle */}
+        <circle cx='12' cy='12' r='10' stroke='url(#tutGrad)' strokeWidth='2' fill='none' />
+        <path d='M10 8l6 4-6 4V8z' fill='url(#tutGrad)' />
+        <style>
+            {`
+                @keyframes tutScale {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.05); }
+                }
+                svg:hover { animation: tutScale 0.8s ease-in-out infinite; }
+            `}
+        </style>
     </svg>
 );
 
@@ -147,34 +155,19 @@ const AnalysisToolIcon = () => (
                 <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
         </defs>
-        {/* Simple bar chart icon matching screenshot */}
-        <rect
-            x='4'
-            y='12'
-            width='3'
-            height='8'
-            rx='1'
-            fill='url(#analysisGrad)'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
-        <rect
-            x='10'
-            y='8'
-            width='3'
-            height='12'
-            rx='1'
-            fill='url(#analysisGrad)'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
-        <rect
-            x='16'
-            y='4'
-            width='3'
-            height='16'
-            rx='1'
-            fill='url(#analysisGrad)'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
+        {/* Analysis Tool - Magnifying glass with chart */}
+        <circle cx='11' cy='11' r='7' stroke='url(#analysisGrad)' strokeWidth='2' fill='none' />
+        <path d='M16 16l5 5' stroke='url(#analysisGrad)' strokeWidth='2' strokeLinecap='round' />
+        <path d='M8 13l2-3 2 2 2-3' stroke='url(#analysisGrad)' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' fill='none' />
+        <style>
+            {`
+                @keyframes analysisZoom {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.08); }
+                }
+                svg:hover { animation: analysisZoom 1s ease-in-out infinite; }
+            `}
+        </style>
     </svg>
 );
 
@@ -186,22 +179,48 @@ const SignalsIcon = () => (
                 <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
         </defs>
-        {/* Simple signal/wifi icon */}
+        {/* Signals - Lightning bolt */}
+        <path d='M13 2L3 14h8l-1 8 10-12h-8l1-8z' fill='url(#signalGrad)' />
+        <style>
+            {`
+                @keyframes signalFlash {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.6; }
+                }
+                svg:hover path { animation: signalFlash 0.5s ease-in-out infinite; }
+            `}
+        </style>
+    </svg>
+);
+
+const XDTraderIcon = () => (
+    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+        <defs>
+            <linearGradient id='xdtraderGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                <stop offset='0%' stopColor='#ffffff' />
+                <stop offset='100%' stopColor='#fbbf24' />
+            </linearGradient>
+        </defs>
+        {/* Trading chart with X */}
         <path
-            d='M5 12.55a11 11 0 0 1 14.08 0'
-            stroke='url(#signalGrad)'
+            d='M3 18L9 12L13 16L21 8'
+            stroke='url(#xdtraderGrad)'
             strokeWidth='2'
             strokeLinecap='round'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
+            strokeLinejoin='round'
         />
-        <path
-            d='M8.5 16.5a6 6 0 0 1 7 0'
-            stroke='url(#signalGrad)'
-            strokeWidth='2'
-            strokeLinecap='round'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
-        <circle cx='12' cy='20' r='1.5' fill='url(#signalGrad)' style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }} />
+        <path d='M16 8H21V13' stroke='url(#xdtraderGrad)' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
+        {/* X overlay */}
+        <path d='M7 3L11 7M11 3L7 7' stroke='url(#xdtraderGrad)' strokeWidth='2' strokeLinecap='round' />
+        <style>
+            {`
+                @keyframes xdtraderPulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.05); }
+                }
+                svg:hover { animation: xdtraderPulse 0.6s ease-in-out infinite; }
+            `}
+        </style>
     </svg>
 );
 
@@ -212,44 +231,52 @@ const FreeBotsIcon = () => (
                 <stop offset='0%' stopColor='#ffffff' />
                 <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
+            <filter id='glow'>
+                <feGaussianBlur stdDeviation='2' result='coloredBlur'/>
+                <feMerge>
+                    <feMergeNode in='coloredBlur'/>
+                    <feMergeNode in='SourceGraphic'/>
+                </feMerge>
+            </filter>
         </defs>
-        {/* Simple grid icon matching screenshot */}
-        <rect
-            x='4'
-            y='4'
-            width='6'
-            height='6'
-            rx='1'
-            fill='url(#freeGrad)'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
-        <rect
-            x='14'
-            y='4'
-            width='6'
-            height='6'
-            rx='1'
-            fill='url(#freeGrad)'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
-        <rect
-            x='4'
-            y='14'
-            width='6'
-            height='6'
-            rx='1'
-            fill='url(#freeGrad)'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
-        <rect
-            x='14'
-            y='14'
-            width='6'
-            height='6'
-            rx='1'
-            fill='url(#freeGrad)'
-            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-        />
+        {/* Robot head - rounded rectangle */}
+        <rect x='6' y='3' width='12' height='11' rx='5' fill='#6b7280' opacity='0.8' />
+        
+        {/* Left eye - small yellow circle */}
+        <circle cx='9' cy='7' r='1.5' fill='#fbbf24' filter='url(#glow)' />
+        
+        {/* Right eye - larger yellow circle with white center */}
+        <circle cx='14' cy='8' r='2.5' fill='#fbbf24' filter='url(#glow)' />
+        <circle cx='14' cy='8' r='1.2' fill='#ffffff' opacity='0.9' />
+        
+        {/* Neck/body connector */}
+        <rect x='10.5' y='13' width='3' height='3' fill='#9ca3af' />
+        
+        {/* Base bars - 5 yellow vertical bars */}
+        <rect x='4' y='17' width='2.5' height='5' rx='1' fill='url(#freeGrad)' filter='url(#glow)' />
+        <rect x='7.5' y='17' width='2.5' height='5' rx='1' fill='url(#freeGrad)' filter='url(#glow)' />
+        <rect x='11' y='17' width='2.5' height='5' rx='1' fill='#ffffff' opacity='0.9' />
+        <rect x='14.5' y='17' width='2.5' height='5' rx='1' fill='url(#freeGrad)' filter='url(#glow)' />
+        <rect x='18' y='17' width='2.5' height='5' rx='1' fill='url(#freeGrad)' filter='url(#glow)' />
+        
+        <style>
+            {`
+                @keyframes eyeBlink {
+                    0%, 90%, 100% { opacity: 1; }
+                    95% { opacity: 0.3; }
+                }
+                @keyframes barPulse {
+                    0%, 100% { transform: scaleY(1); }
+                    50% { transform: scaleY(0.9); }
+                }
+                svg:hover circle { animation: eyeBlink 2s ease-in-out infinite; }
+                svg:hover rect:nth-child(5) { animation: barPulse 0.8s ease-in-out infinite; }
+                svg:hover rect:nth-child(6) { animation: barPulse 0.8s ease-in-out 0.1s infinite; }
+                svg:hover rect:nth-child(7) { animation: barPulse 0.8s ease-in-out 0.2s infinite; }
+                svg:hover rect:nth-child(8) { animation: barPulse 0.8s ease-in-out 0.3s infinite; }
+                svg:hover rect:nth-child(9) { animation: barPulse 0.8s ease-in-out 0.4s infinite; }
+            `}
+        </style>
     </svg>
 );
 
@@ -2508,6 +2535,37 @@ const AppWrapper = observer(() => {
                         >
                             <ProtectedSignalsCenter />
                         </div>
+                        {/* XDTRADER TAB */}
+                        <div
+                            label={
+                                <>
+                                    <XDTraderIcon />
+                                    <Localize i18n_default_text='xDTrader' />
+                                </>
+                            }
+                            id='id-xdtrader'
+                        >
+                            <div
+                                className='xdtrader-container'
+                                style={{
+                                    width: '100%',
+                                    height: '100%',
+                                    overflow: 'hidden',
+                                }}
+                            >
+                                <iframe
+                                    src='https://deriv-dtrader.vercel.app'
+                                    title='xDTrader - Professional Trading Platform'
+                                    style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        border: 'none',
+                                    }}
+                                    allow='clipboard-read; clipboard-write'
+                                    sandbox='allow-same-origin allow-scripts allow-forms allow-popups allow-modals'
+                                />
+                            </div>
+                        </div>
                         {/* FREE BOTS TAB */}
                         <div
                             label={
@@ -3245,21 +3303,23 @@ const AppWrapper = observer(() => {
                                         fill='none'
                                         xmlns='http://www.w3.org/2000/svg'
                                     >
-                                        <path d='M12 2L2 7L12 12L22 7L12 2Z' fill='currentColor' opacity='0.6' />
-                                        <path
-                                            d='M2 17L12 22L22 17'
-                                            stroke='currentColor'
-                                            strokeWidth='2'
-                                            strokeLinecap='round'
-                                            strokeLinejoin='round'
-                                        />
-                                        <path
-                                            d='M2 12L12 17L22 12'
-                                            stroke='currentColor'
-                                            strokeWidth='2'
-                                            strokeLinecap='round'
-                                            strokeLinejoin='round'
-                                        />
+                                        <defs>
+                                            <linearGradient id='novaGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                                                <stop offset='0%' stopColor='#ffffff' />
+                                                <stop offset='100%' stopColor='#fbbf24' />
+                                            </linearGradient>
+                                        </defs>
+                                        {/* Nova Analysis - Star/Sparkle icon */}
+                                        <path d='M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.8 5.6 21.2 8 14 2 9.2h7.6L12 2z' fill='url(#novaGrad)' />
+                                        <style>
+                                            {`
+                                                @keyframes novaSpin {
+                                                    0%, 100% { transform: rotate(0deg) scale(1); }
+                                                    50% { transform: rotate(180deg) scale(1.05); }
+                                                }
+                                                svg:hover { animation: novaSpin 1.5s ease-in-out infinite; }
+                                            `}
+                                        </style>
                                     </svg>
                                     <Localize i18n_default_text='Nova Analysis' />
                                 </>
@@ -3304,42 +3364,18 @@ const AppWrapper = observer(() => {
                                                 <stop offset='100%' stopColor='#fbbf24' />
                                             </linearGradient>
                                         </defs>
-                                        <rect
-                                            x='3'
-                                            y='3'
-                                            width='8'
-                                            height='8'
-                                            rx='1'
-                                            fill='url(#dtraderGrad)'
-                                            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-                                        />
-                                        <rect
-                                            x='13'
-                                            y='3'
-                                            width='8'
-                                            height='8'
-                                            rx='1'
-                                            fill='url(#dtraderGrad)'
-                                            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-                                        />
-                                        <rect
-                                            x='3'
-                                            y='13'
-                                            width='8'
-                                            height='8'
-                                            rx='1'
-                                            fill='url(#dtraderGrad)'
-                                            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-                                        />
-                                        <rect
-                                            x='13'
-                                            y='13'
-                                            width='8'
-                                            height='8'
-                                            rx='1'
-                                            fill='url(#dtraderGrad)'
-                                            style={{ filter: 'drop-shadow(0 0 4px #fbbf24)' }}
-                                        />
+                                        {/* DTrader - Dollar sign in circle */}
+                                        <circle cx='12' cy='12' r='10' stroke='url(#dtraderGrad)' strokeWidth='2' fill='none' />
+                                        <path d='M12 6v12M9 8h4.5a2.5 2.5 0 010 5H9M9 13h4.5a2.5 2.5 0 010 5H9' stroke='url(#dtraderGrad)' strokeWidth='2' strokeLinecap='round' />
+                                        <style>
+                                            {`
+                                                @keyframes dtraderSpin {
+                                                    0%, 100% { transform: rotate(0deg); }
+                                                    50% { transform: rotate(180deg); }
+                                                }
+                                                svg:hover { animation: dtraderSpin 1s ease-in-out infinite; }
+                                            `}
+                                        </style>
                                     </svg>
                                     <Localize i18n_default_text='DTrader' />
                                 </>

@@ -68,6 +68,9 @@ const SpeedBotPage = lazy(() => import('../pages/speed-bot-page').then(m => ({ d
 // DTrader Manual Page
 const DTraderManual = lazy(() => import('../pages/dtrader-manual').then(m => ({ default: m.default })));
 
+// xDTrader Page
+const XDTraderPage = lazy(() => import('../pages/xdtrader-page').then(m => ({ default: m.default })));
+
 // Nova Analysis Page
 const NovaAnalysisPage = lazy(() => import('../pages/nova-analysis-page').then(m => ({ default: m.default })));
 
@@ -128,6 +131,9 @@ const router = createBrowserRouter(
 
             {/* DTrader Manual Page */}
             <Route path='dtrader-manual' element={<DTraderManual />} />
+
+            {/* xDTrader Page */}
+            <Route path='xdtrader' element={<XDTraderPage />} />
 
             {/* Nova Analysis Page */}
             <Route path='nova-analysis' element={<NovaAnalysisPage />} />
