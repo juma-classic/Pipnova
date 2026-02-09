@@ -3,6 +3,7 @@ let ws;
 let tickHistory = [];
 let currentSymbol = 'R_50'; // Volatility 50 Index
 let selectedDigit = 3;
+let decimalPlaces = 3; // Will be dynamically detected from tick data
 
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', function () {
@@ -170,23 +171,51 @@ function requestTickHistory() {
 // Handle WebSocket messages
 function handleWebSocketMessage(data) {
     if (data.msg_type === 'history') {
-        // Process historical ticks
+        // Process historical ticks - store originalQuote like Metatron
         tickHistory = [];
         if (data.history && data.history.times && data.history.prices) {
+            console.log('🔍 RAW HISTORY DATA:', {
+                firstPrice: data.history.prices[0],
+                typeOfFirstPrice: typeof data.history.prices[0],
+                last5Prices: data.history.prices.slice(-5)
+            });
+            
             for (let i = 0; i < data.history.times.length; i++) {
+                const price = data.history.prices[i];
+                // Store as string to preserve format
+                const originalQuote = typeof price === 'string' ? price : String(price);
                 tickHistory.push({
                     time: data.history.times[i],
-                    quote: parseFloat(data.history.prices[i]),
+                    quote: parseFloat(price),
+                    originalQuote: originalQuote,
                 });
             }
         }
+        
+        // Detect decimal places dynamically from actual tick data
+        detectDecimalPlaces();
+        
+        console.log('📊 Loaded', tickHistory.length, 'historical ticks');
+        console.log('🔍 Sample tick structure:', tickHistory[0]);
+        console.log('🔍 Last tick structure:', tickHistory[tickHistory.length - 1]);
+        
+        // Debug: Check digit distribution
+        const allDigits = tickHistory.map(t => getLastDigit(t));
+        const digitCounts = Array(10).fill(0);
+        allDigits.forEach(d => digitCounts[d]++);
+        console.log('🔢 DIGIT DISTRIBUTION:', digitCounts);
+        console.log('🔢 Digit 0 count:', digitCounts[0], 'out of', tickHistory.length, '=', ((digitCounts[0] / tickHistory.length) * 100).toFixed(1) + '%');
+        
         updateUI();
         subscribeToTicks();
     } else if (data.msg_type === 'tick') {
-        // Process live tick
+        // Process live tick - store originalQuote like Metatron
+        const price = data.tick.quote;
+        const originalQuote = typeof price === 'string' ? price : String(price);
         tickHistory.push({
             time: data.tick.epoch,
-            quote: parseFloat(data.tick.quote),
+            quote: parseFloat(price),
+            originalQuote: originalQuote,
         });
 
         // Keep last 1000 ticks
@@ -211,16 +240,17 @@ function subscribeToTicks() {
 function updateUI() {
     if (tickHistory.length === 0) return;
 
-    // Update current price
+    // Update current price - use originalQuote like Metatron
     const lastTick = tickHistory[tickHistory.length - 1];
-    document.getElementById('current-price').textContent = lastTick.quote.toFixed(3);
+    const priceStr = lastTick.originalQuote || lastTick.quote.toString();
+    document.getElementById('current-price').textContent = priceStr;
 
     // Calculate digit distribution
     const digitCounts = Array(10).fill(0);
     const lastDigits = [];
 
     tickHistory.forEach(tick => {
-        const digit = getLastDigit(tick.quote);
+        const digit = getLastDigit(tick);
         digitCounts[digit]++;
         lastDigits.push(digit);
     });
@@ -241,15 +271,53 @@ function updateUI() {
     updateDigitsStream(50);
 }
 
+// Function to detect the number of decimal places dynamically
+function detectDecimalPlaces() {
+    if (tickHistory.length === 0) return;
+
+    let decimalCounts = tickHistory.map(tick => {
+        let decimalPart = tick.quote.toString().split('.')[1] || '';
+        return decimalPart.length;
+    });
+
+    decimalPlaces = Math.max(...decimalCounts, 2);
+    console.log('🔍 Detected decimal places:', decimalPlaces);
+}
+
 // Get last digit from price
-function getLastDigit(price) {
-    const priceStr = price.toString();
-    const parts = priceStr.split('.');
-    if (parts.length > 1) {
-        const decimals = parts[1];
-        return parseInt(decimals[decimals.length - 1]);
+function getLastDigit(tick) {
+    // Use original quote string if available, otherwise convert number to string
+    let priceStr;
+    if (typeof tick === 'object' && tick.originalQuote) {
+        priceStr = tick.originalQuote;
+    } else if (typeof tick === 'object' && tick.quote !== undefined) {
+        priceStr = tick.quote.toString();
+    } else {
+        priceStr = tick.toString();
     }
-    return parseInt(priceStr[priceStr.length - 1]);
+
+    // Ensure priceStr is always a string
+    if (typeof priceStr !== 'string') {
+        priceStr = String(priceStr);
+    }
+
+    let priceParts = priceStr.split('.');
+    let decimals = priceParts[1] || '';
+
+    // Pad with zeros to match expected decimal places (dynamically detected)
+    while (decimals.length < decimalPlaces) {
+        decimals += '0';
+    }
+
+    // Get the last digit from the decimal part
+    const lastDigit = Number(decimals.slice(-1));
+
+    // Debug logging for digit 0
+    if (lastDigit === 0 && Math.random() < 0.05) {
+        console.log(`🔍 Digit 0 found: "${priceStr}" -> decimals: "${decimals}" (padded to ${decimalPlaces}) -> lastDigit: ${lastDigit}`);
+    }
+
+    return lastDigit;
 }
 
 // Update digit circles with percentages and progress rings
@@ -263,7 +331,7 @@ function updateDigitCircles(digitCounts) {
     let lowestCount = digitCounts[0];
 
     // Get current last digit
-    const currentLastDigit = tickHistory.length > 0 ? getLastDigit(tickHistory[tickHistory.length - 1].quote) : null;
+    const currentLastDigit = tickHistory.length > 0 ? getLastDigit(tickHistory[tickHistory.length - 1]) : null;
 
     digitCounts.forEach((count, digit) => {
         const percentage = ((count / total) * 100).toFixed(1);
@@ -313,7 +381,7 @@ function updateDigitCircles(digitCounts) {
 function updateComparison() {
     if (tickHistory.length === 0) return;
 
-    const lastDigits = tickHistory.map(tick => getLastDigit(tick.quote));
+    const lastDigits = tickHistory.map(tick => getLastDigit(tick));
     const total = lastDigits.length;
 
     let overCount = 0;
@@ -343,7 +411,7 @@ function updateComparison() {
 function updateEvenOddPattern() {
     if (tickHistory.length === 0) return;
 
-    const lastDigits = tickHistory.map(tick => getLastDigit(tick.quote));
+    const lastDigits = tickHistory.map(tick => getLastDigit(tick));
     const last50 = lastDigits.slice(-50);
 
     let evenCount = 0;
@@ -403,7 +471,7 @@ function updateMarketMovement() {
 function updateDigitsStream(count = 50) {
     if (tickHistory.length === 0) return;
 
-    const lastDigits = tickHistory.map(tick => getLastDigit(tick.quote));
+    const lastDigits = tickHistory.map(tick => getLastDigit(tick));
     const displayDigits = lastDigits.slice(-count);
 
     const container = document.getElementById('digits-stream');
