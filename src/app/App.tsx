@@ -65,9 +65,6 @@ const PatelSignalCenterPage = lazy(() =>
 // Speed Bot Page
 const SpeedBotPage = lazy(() => import('../pages/speed-bot-page').then(m => ({ default: m.default })));
 
-// DTrader Manual Page
-const DTraderManual = lazy(() => import('../pages/dtrader-manual').then(m => ({ default: m.default })));
-
 // xDTrader Page
 const XDTraderPage = lazy(() => import('../pages/xdtrader-page').then(m => ({ default: m.default })));
 
@@ -128,9 +125,6 @@ const router = createBrowserRouter(
 
             {/* Speed Bot Page */}
             <Route path='speed-bot' element={<SpeedBotPage />} />
-
-            {/* DTrader Manual Page */}
-            <Route path='dtrader-manual' element={<DTraderManual />} />
 
             {/* xDTrader Page */}
             <Route path='xdtrader' element={<XDTraderPage />} />

@@ -3347,62 +3347,6 @@ const AppWrapper = observer(() => {
                             </div>
                         </div>
 
-                        {/* DTRADER MANUAL TRADING TAB */}
-                        <div
-                            label={
-                                <>
-                                    <svg
-                                        width='24'
-                                        height='24'
-                                        viewBox='0 0 24 24'
-                                        fill='none'
-                                        xmlns='http://www.w3.org/2000/svg'
-                                    >
-                                        <defs>
-                                            <linearGradient id='dtraderGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
-                                                <stop offset='0%' stopColor='#ffffff' />
-                                                <stop offset='100%' stopColor='#fbbf24' />
-                                            </linearGradient>
-                                        </defs>
-                                        {/* DTrader - Dollar sign in circle */}
-                                        <circle cx='12' cy='12' r='10' stroke='url(#dtraderGrad)' strokeWidth='2' fill='none' />
-                                        <path d='M12 6v12M9 8h4.5a2.5 2.5 0 010 5H9M9 13h4.5a2.5 2.5 0 010 5H9' stroke='url(#dtraderGrad)' strokeWidth='2' strokeLinecap='round' />
-                                        <style>
-                                            {`
-                                                @keyframes dtraderSpin {
-                                                    0%, 100% { transform: rotate(0deg); }
-                                                    50% { transform: rotate(180deg); }
-                                                }
-                                                svg:hover { animation: dtraderSpin 1s ease-in-out infinite; }
-                                            `}
-                                        </style>
-                                    </svg>
-                                    <Localize i18n_default_text='DTrader' />
-                                </>
-                            }
-                            id='id-dtrader'
-                        >
-                            <div
-                                style={{
-                                    width: '100%',
-                                    height: 'calc(100vh - 120px)',
-                                    minHeight: 'calc(100vh - 120px)',
-                                    overflow: 'hidden',
-                                }}
-                            >
-                                <iframe
-                                    src='/dtrader/index.html'
-                                    title='DTrader Manual Trading'
-                                    style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        border: 'none',
-                                        display: 'block',
-                                    }}
-                                />
-                            </div>
-                        </div>
-
                         {/* STATES FX ZONE TAB - MOVED TO ANALYSIS TOOL */}
 
                         {/* TICKSHARK TAB - MOVED TO ANALYSIS TOOL */}
