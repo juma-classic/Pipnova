@@ -2537,12 +2537,12 @@ const AppWrapper = observer(() => {
                         >
                             <ProtectedSignalsCenter />
                         </div>
-                        {/* XDTRADER TAB */}
+                        {/* DTRADER TAB */}
                         <div
                             label={
                                 <>
                                     <XDTraderIcon />
-                                    <Localize i18n_default_text='xDTrader' />
+                                    <Localize i18n_default_text='DTrader' />
                                 </>
                             }
                             id='id-xdtrader'
@@ -2557,7 +2557,7 @@ const AppWrapper = observer(() => {
                             >
                                 <iframe
                                     src='https://deriv-dtrader.vercel.app'
-                                    title='xDTrader - Professional Trading Platform'
+                                    title='DTrader - Professional Trading Platform'
                                     style={{
                                         width: '100%',
                                         height: '100%',

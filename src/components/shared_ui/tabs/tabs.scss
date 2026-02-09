@@ -201,7 +201,7 @@
         }
 
         /* Reorder tabs using flexbox order */
-        /* Desired order: Free Bots, Bot Builder, Dashboard, Charts, Nova Analysis, xDTrader, Analysis Tool, Tutorials, Signals */
+        /* Desired order: Free Bots, Bot Builder, Dashboard, Charts, Nova Analysis, DTrader, Analysis Tool, Tutorials, Signals */
         .dc-tabs__item:nth-child(1) {
             order: 2;
         } /* Bot Builder -> 2nd */
@@ -222,7 +222,7 @@
         } /* Signals -> 9th */
         .dc-tabs__item:nth-child(7) {
             order: 6;
-        } /* xDTrader -> 6th */
+        } /* DTrader -> 6th */
         .dc-tabs__item:nth-child(8) {
             order: 1;
         } /* Free Bots -> 1st */
