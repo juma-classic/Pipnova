@@ -276,22 +276,168 @@ const TutorialsIcon = () => (
 );
 
 const AnalysisToolIcon = () => (
-    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+    <svg width='40.56' height='40.56' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' className='analysis-tool-nav-icon'>
         <defs>
             <linearGradient id='analysisGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
                 <stop offset='0%' stopColor='#ffffff' />
-                <stop offset='100%' stopColor='#fbbf24' />
+                <stop offset='50%' stopColor='#ef4444' />
+                <stop offset='100%' stopColor='#dc2626' />
             </linearGradient>
+            <radialGradient id='analysisRadial' cx='50%' cy='50%'>
+                <stop offset='0%' stopColor='#ef4444' stopOpacity='1' />
+                <stop offset='100%' stopColor='#dc2626' stopOpacity='0.3' />
+            </radialGradient>
+            <filter id='analysisGlow'>
+                <feGaussianBlur stdDeviation='2' result='coloredBlur'/>
+                <feMerge>
+                    <feMergeNode in='coloredBlur'/>
+                    <feMergeNode in='SourceGraphic'/>
+                </feMerge>
+            </filter>
         </defs>
-        {/* Analysis Tool - Magnifying glass with chart */}
-        <circle cx='11' cy='11' r='7' stroke='url(#analysisGrad)' strokeWidth='2' fill='none' />
-        <path d='M16 16l5 5' stroke='url(#analysisGrad)' strokeWidth='2' strokeLinecap='round' />
-        <path d='M8 13l2-3 2 2 2-3' stroke='url(#analysisGrad)' strokeWidth='1.5' strokeLinecap='round' strokeLinejoin='round' fill='none' />
+        
+        {/* Avengers A - main structure - WIDER AND MORE DEFINED */}
+        {/* Left leg of A */}
+        <path d='M6 21L12 3' stroke='url(#analysisGrad)' strokeWidth='3.5' strokeLinecap='round' filter='url(#analysisGlow)' />
+        {/* Right leg of A */}
+        <path d='M18 21L12 3' stroke='url(#analysisGrad)' strokeWidth='3.5' strokeLinecap='round' filter='url(#analysisGlow)' />
+        {/* Crossbar of A - lower and wider */}
+        <line x1='8' y1='15' x2='16' y2='15' stroke='url(#analysisGrad)' strokeWidth='3' strokeLinecap='round' filter='url(#analysisGlow)' />
+        
+        {/* Top triangle/peak */}
+        <circle cx='12' cy='3' r='1.8' fill='#ef4444' filter='url(#analysisGlow)' />
+        
+        {/* Mechanical gears on the A crossbar */}
+        <circle cx='8' cy='15' r='2' fill='url(#analysisRadial)' stroke='url(#analysisGrad)' strokeWidth='0.5' />
+        <circle cx='16' cy='15' r='2' fill='url(#analysisRadial)' stroke='url(#analysisGrad)' strokeWidth='0.5' />
+        
+        {/* Gear teeth */}
+        <path d='M8 13L8.6 14.5L8 16L7.4 14.5Z' fill='#ef4444' />
+        <path d='M10 15L8.5 15.6L7 15L8.5 14.4Z' fill='#ef4444' />
+        <path d='M16 13L16.6 14.5L16 16L15.4 14.5Z' fill='#ef4444' />
+        <path d='M18 15L16.5 15.6L15 15L16.5 14.4Z' fill='#ef4444' />
+        
+        {/* Energy nodes along the legs */}
+        <circle cx='9' cy='9' r='1.2' fill='#ef4444' filter='url(#analysisGlow)' />
+        <circle cx='15' cy='9' r='1.2' fill='#ef4444' filter='url(#analysisGlow)' />
+        <circle cx='7' cy='18' r='1.2' fill='#ef4444' filter='url(#analysisGlow)' />
+        <circle cx='17' cy='18' r='1.2' fill='#ef4444' filter='url(#analysisGlow)' />
+        
+        {/* Arc reactor style core at crossbar center */}
+        <circle cx='12' cy='15' r='2.2' fill='url(#analysisRadial)' filter='url(#analysisGlow)' />
+        <circle cx='12' cy='15' r='1.4' stroke='#ef4444' strokeWidth='0.5' fill='none' />
+        <circle cx='12' cy='15' r='0.7' fill='#ffffff' opacity='0.9' />
+        
+        {/* Energy lines connecting nodes */}
+        <line x1='9' y1='9' x2='12' y2='15' stroke='#ef4444' strokeWidth='0.5' opacity='0.5' strokeDasharray='1 1' />
+        <line x1='15' y1='9' x2='12' y2='15' stroke='#ef4444' strokeWidth='0.5' opacity='0.5' strokeDasharray='1 1' />
+        
+        {/* Outer shield/frame */}
+        <circle cx='12' cy='12' r='10.5' stroke='url(#analysisGrad)' strokeWidth='1.5' fill='none' opacity='0.4' strokeDasharray='3 3' />
+        
+        {/* Corner brackets - Avengers style */}
+        <path d='M2 2L2 5M2 2L5 2' stroke='#ef4444' strokeWidth='1.5' strokeLinecap='round' opacity='0.7' />
+        <path d='M22 2L22 5M22 2L19 2' stroke='#ef4444' strokeWidth='1.5' strokeLinecap='round' opacity='0.7' />
+        <path d='M2 22L2 19M2 22L5 22' stroke='#ef4444' strokeWidth='1.5' strokeLinecap='round' opacity='0.7' />
+        <path d='M22 22L22 19M22 22L19 22' stroke='#ef4444' strokeWidth='1.5' strokeLinecap='round' opacity='0.7' />
+        
+        {/* Orbiting power particles */}
+        <circle cx='12' cy='5' r='0.8' fill='#ffffff' opacity='0.9' />
+        <circle cx='18' cy='12' r='0.8' fill='#ffffff' opacity='0.9' />
+        <circle cx='12' cy='19' r='0.8' fill='#ffffff' opacity='0.9' />
+        <circle cx='6' cy='12' r='0.8' fill='#ffffff' opacity='0.9' />
+        
         <style>
             {`
-                @keyframes analysisZoom {
-                    0%, 100% { transform: scale(1); }
-                    50% { transform: scale(1.08); }
+                @keyframes analysisGearRotate1 {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                @keyframes analysisGearRotate2 {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(-360deg); }
+                }
+                @keyframes analysisNodePulse {
+                    0%, 100% { r: 1.2; opacity: 1; }
+                    50% { r: 1.5; opacity: 0.6; }
+                }
+                @keyframes analysisCorePulse {
+                    0%, 100% { r: 2.2; opacity: 1; }
+                    50% { r: 2.5; opacity: 0.7; }
+                }
+                @keyframes analysisRingPulse {
+                    0%, 100% { r: 1.4; opacity: 1; }
+                    50% { r: 1.6; opacity: 0.6; }
+                }
+                @keyframes analysisShieldRotate {
+                    0% { transform: rotate(0deg); stroke-dashoffset: 0; }
+                    100% { transform: rotate(360deg); stroke-dashoffset: 30; }
+                }
+                @keyframes analysisBracketPulse {
+                    0%, 100% { opacity: 0.7; }
+                    50% { opacity: 1; }
+                }
+                @keyframes analysisOrbitRotate {
+                    0% { transform: rotate(0deg) translateX(0); }
+                    100% { transform: rotate(360deg) translateX(0); }
+                }
+                @keyframes analysisLineFlow {
+                    0% { stroke-dashoffset: 0; }
+                    100% { stroke-dashoffset: 10; }
+                }
+                @keyframes analysisPeakPulse {
+                    0%, 100% { r: 1.8; opacity: 1; }
+                    50% { r: 2.1; opacity: 0.7; }
+                }
+                
+                /* Always animate - scoped to analysis tool icon */
+                .analysis-tool-nav-icon circle:nth-of-type(2),
+                .analysis-tool-nav-icon path:nth-of-type(3),
+                .analysis-tool-nav-icon path:nth-of-type(4) { 
+                    animation: analysisGearRotate1 4s linear infinite; 
+                    transform-origin: 8px 15px;
+                }
+                .analysis-tool-nav-icon circle:nth-of-type(3),
+                .analysis-tool-nav-icon path:nth-of-type(5),
+                .analysis-tool-nav-icon path:nth-of-type(6) { 
+                    animation: analysisGearRotate2 4s linear infinite; 
+                    transform-origin: 16px 15px;
+                }
+                .analysis-tool-nav-icon circle:nth-of-type(4),
+                .analysis-tool-nav-icon circle:nth-of-type(5),
+                .analysis-tool-nav-icon circle:nth-of-type(6),
+                .analysis-tool-nav-icon circle:nth-of-type(7) { 
+                    animation: analysisNodePulse 2s ease-in-out infinite; 
+                }
+                .analysis-tool-nav-icon circle:nth-of-type(8) { 
+                    animation: analysisCorePulse 1.5s ease-in-out infinite; 
+                }
+                .analysis-tool-nav-icon circle:nth-of-type(9) { 
+                    animation: analysisRingPulse 1.5s ease-in-out infinite; 
+                }
+                .analysis-tool-nav-icon circle:nth-of-type(11) { 
+                    animation: analysisShieldRotate 8s linear infinite; 
+                    transform-origin: 12px 12px;
+                }
+                .analysis-tool-nav-icon path:nth-of-type(7),
+                .analysis-tool-nav-icon path:nth-of-type(8),
+                .analysis-tool-nav-icon path:nth-of-type(9),
+                .analysis-tool-nav-icon path:nth-of-type(10) { 
+                    animation: analysisBracketPulse 2s ease-in-out infinite; 
+                }
+                .analysis-tool-nav-icon circle:nth-of-type(12),
+                .analysis-tool-nav-icon circle:nth-of-type(13),
+                .analysis-tool-nav-icon circle:nth-of-type(14),
+                .analysis-tool-nav-icon circle:nth-of-type(15) { 
+                    animation: analysisOrbitRotate 6s linear infinite; 
+                    transform-origin: 12px 12px;
+                }
+                .analysis-tool-nav-icon line:nth-of-type(2),
+                .analysis-tool-nav-icon line:nth-of-type(3) { 
+                    animation: analysisLineFlow 2s linear infinite; 
+                }
+                .analysis-tool-nav-icon circle:nth-of-type(1) { 
+                    animation: analysisPeakPulse 1.5s ease-in-out infinite; 
                 }
             `}
         </style>
