@@ -320,7 +320,6 @@
                 repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255, 255, 255, 0.05) 10px, rgba(255, 255, 255, 0.05) 20px);
             border-color: rgba(96, 165, 250, 0.8);
             color: #fff !important;
-            transform: translateY(-2px);
             box-shadow: 
                 0 0 25px rgba(59, 130, 246, 0.6),
                 0 5px 15px rgba(0, 0, 0, 0.4),
@@ -332,7 +331,6 @@
             }
 
             svg {
-                transform: scale(1.1) rotate(5deg);
                 filter: drop-shadow(0 0 12px rgba(96, 165, 250, 0.8));
             }
 
@@ -364,9 +362,7 @@
             }
 
             svg {
-                transform: scale(1.15);
                 filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.9));
-                animation: pulse-icon 2s ease-in-out infinite;
             }
 
             span,

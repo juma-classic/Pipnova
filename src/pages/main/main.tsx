@@ -70,9 +70,6 @@ const DashboardIcon = () => (
                     0%, 100% { opacity: 0.6; }
                     50% { opacity: 1; }
                 }
-                svg:hover rect:nth-child(2) { animation: dashPulse 1.5s ease-in-out infinite; }
-                svg:hover rect:nth-child(6) { animation: dashPulse 1.5s ease-in-out 0.3s infinite; }
-                svg:hover path { animation: linePulse 1.5s ease-in-out infinite; }
             `}
         </style>
     </svg>
@@ -95,7 +92,6 @@ const BotBuilderIcon = () => (
                     0%, 100% { transform: rotate(0deg); }
                     50% { transform: rotate(15deg); }
                 }
-                svg:hover { animation: botRotate 0.5s ease-in-out infinite; }
             `}
         </style>
     </svg>
@@ -118,7 +114,6 @@ const ChartsIcon = () => (
                     0%, 100% { opacity: 1; }
                     50% { opacity: 0.7; }
                 }
-                svg:hover path { animation: chartPulse 1s ease-in-out infinite; }
             `}
         </style>
     </svg>
@@ -141,7 +136,6 @@ const TutorialsIcon = () => (
                     0%, 100% { transform: scale(1); }
                     50% { transform: scale(1.05); }
                 }
-                svg:hover { animation: tutScale 0.8s ease-in-out infinite; }
             `}
         </style>
     </svg>
@@ -165,21 +159,24 @@ const AnalysisToolIcon = () => (
                     0%, 100% { transform: scale(1); }
                     50% { transform: scale(1.08); }
                 }
-                svg:hover { animation: analysisZoom 1s ease-in-out infinite; }
             `}
         </style>
     </svg>
 );
 
 const SignalsIcon = () => (
-    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+    <svg width='40.56' height='40.56' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' className='signals-nav-icon'>
         <defs>
             <linearGradient id='signalGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
                 <stop offset='0%' stopColor='#ffffff' />
                 <stop offset='100%' stopColor='#fbbf24' />
             </linearGradient>
+            <radialGradient id='signalRadial' cx='50%' cy='50%'>
+                <stop offset='0%' stopColor='#fbbf24' stopOpacity='0.8' />
+                <stop offset='100%' stopColor='#ffffff' stopOpacity='0.2' />
+            </radialGradient>
             <filter id='signalGlow'>
-                <feGaussianBlur stdDeviation='1.5' result='coloredBlur'/>
+                <feGaussianBlur stdDeviation='2' result='coloredBlur'/>
                 <feMerge>
                     <feMergeNode in='coloredBlur'/>
                     <feMergeNode in='SourceGraphic'/>
@@ -187,117 +184,140 @@ const SignalsIcon = () => (
             </filter>
         </defs>
         
-        {/* Central radar circle */}
-        <circle cx='12' cy='12' r='2' fill='url(#signalGrad)' filter='url(#signalGlow)' />
+        {/* Central antenna base - vertical tower */}
+        <rect x='11' y='14' width='2' height='8' fill='url(#signalGrad)' rx='1' />
+        <circle cx='12' cy='14' r='1.5' fill='#fbbf24' filter='url(#signalGlow)' />
         
-        {/* Rotating radar sweep line */}
-        <line 
-            x1='12' 
-            y1='12' 
-            x2='12' 
-            y2='5' 
-            stroke='url(#signalGrad)' 
-            strokeWidth='1.5' 
-            strokeLinecap='round'
-            opacity='0.8'
-            style={{ transformOrigin: '12px 12px' }}
-        />
-        
-        {/* Concentric signal rings - animated */}
-        <circle 
+        {/* Antenna rings - expanding outward like alien tech */}
+        <ellipse 
             cx='12' 
-            cy='12' 
-            r='5' 
+            cy='14' 
+            rx='3' 
+            ry='1.5' 
             stroke='url(#signalGrad)' 
             strokeWidth='1.5' 
-            opacity='0.6'
-            strokeDasharray='2 3'
+            fill='none'
+            opacity='0.9'
         />
-        <circle 
+        <ellipse 
             cx='12' 
-            cy='12' 
-            r='8' 
+            cy='14' 
+            rx='5.5' 
+            ry='2.5' 
             stroke='url(#signalGrad)' 
             strokeWidth='1.5' 
-            opacity='0.4'
-            strokeDasharray='3 4'
+            fill='none'
+            opacity='0.7'
         />
-        <circle 
+        <ellipse 
             cx='12' 
-            cy='12' 
-            r='10.5' 
+            cy='14' 
+            rx='8' 
+            ry='3.5' 
             stroke='url(#signalGrad)' 
             strokeWidth='1.5' 
-            opacity='0.2'
-            strokeDasharray='4 5'
+            fill='none'
+            opacity='0.5'
+        />
+        <ellipse 
+            cx='12' 
+            cy='14' 
+            rx='10.5' 
+            ry='4.5' 
+            stroke='url(#signalGrad)' 
+            strokeWidth='1.5' 
+            fill='none'
+            opacity='0.3'
         />
         
-        {/* Signal wave indicators - 4 corners */}
-        <path d='M4 4L6 6' stroke='url(#signalGrad)' strokeWidth='2' strokeLinecap='round' />
-        <path d='M20 4L18 6' stroke='url(#signalGrad)' strokeWidth='2' strokeLinecap='round' />
-        <path d='M4 20L6 18' stroke='url(#signalGrad)' strokeWidth='2' strokeLinecap='round' />
-        <path d='M20 20L18 18' stroke='url(#signalGrad)' strokeWidth='2' strokeLinecap='round' />
+        {/* Signal wave particles - floating upward */}
+        <circle cx='12' cy='10' r='1' fill='#fbbf24' opacity='0.8' />
+        <circle cx='9' cy='8' r='0.8' fill='#fbbf24' opacity='0.6' />
+        <circle cx='15' cy='8' r='0.8' fill='#fbbf24' opacity='0.6' />
+        <circle cx='12' cy='5' r='1' fill='#fbbf24' opacity='0.4' />
+        <circle cx='8' cy='4' r='0.7' fill='#fbbf24' opacity='0.3' />
+        <circle cx='16' cy='4' r='0.7' fill='#fbbf24' opacity='0.3' />
         
-        {/* Data nodes - pulsing dots */}
-        <circle cx='12' cy='5' r='1.2' fill='#fbbf24' filter='url(#signalGlow)' />
-        <circle cx='17' cy='9' r='1.2' fill='#fbbf24' filter='url(#signalGlow)' />
-        <circle cx='17' cy='15' r='1.2' fill='#fbbf24' filter='url(#signalGlow)' />
-        <circle cx='7' cy='9' r='1.2' fill='#fbbf24' filter='url(#signalGlow)' />
+        {/* Energy beams shooting upward */}
+        <line x1='12' y1='14' x2='12' y2='3' stroke='url(#signalRadial)' strokeWidth='0.5' opacity='0.4' />
+        <line x1='12' y1='14' x2='9' y2='5' stroke='url(#signalRadial)' strokeWidth='0.5' opacity='0.3' />
+        <line x1='12' y1='14' x2='15' y2='5' stroke='url(#signalRadial)' strokeWidth='0.5' opacity='0.3' />
         
         <style>
             {`
-                @keyframes radarSweep {
-                    0% { transform: rotate(0deg); opacity: 0.8; }
-                    100% { transform: rotate(360deg); opacity: 0.8; }
+                @keyframes ringExpand1Sig {
+                    0%, 100% { rx: 3; ry: 1.5; opacity: 0.9; }
+                    50% { rx: 3.5; ry: 1.8; opacity: 1; }
                 }
-                @keyframes ringPulse1 {
-                    0%, 100% { r: 5; opacity: 0.6; }
-                    50% { r: 5.5; opacity: 0.8; }
+                @keyframes ringExpand2Sig {
+                    0%, 100% { rx: 5.5; ry: 2.5; opacity: 0.7; }
+                    50% { rx: 6; ry: 2.8; opacity: 0.9; }
                 }
-                @keyframes ringPulse2 {
-                    0%, 100% { r: 8; opacity: 0.4; }
-                    50% { r: 8.5; opacity: 0.6; }
+                @keyframes ringExpand3Sig {
+                    0%, 100% { rx: 8; ry: 3.5; opacity: 0.5; }
+                    50% { rx: 8.5; ry: 3.8; opacity: 0.7; }
                 }
-                @keyframes ringPulse3 {
-                    0%, 100% { r: 10.5; opacity: 0.2; }
-                    50% { r: 11; opacity: 0.4; }
+                @keyframes ringExpand4Sig {
+                    0%, 100% { rx: 10.5; ry: 4.5; opacity: 0.3; }
+                    50% { rx: 11; ry: 4.8; opacity: 0.5; }
                 }
-                @keyframes nodePulse {
-                    0%, 100% { r: 1.2; opacity: 1; }
-                    50% { r: 1.5; opacity: 0.6; }
+                @keyframes particleFloat1Sig {
+                    0% { cy: 10; opacity: 0.8; }
+                    100% { cy: 2; opacity: 0; }
                 }
-                @keyframes cornerBlink {
-                    0%, 100% { opacity: 1; }
-                    50% { opacity: 0.3; }
+                @keyframes particleFloat2Sig {
+                    0% { cy: 8; opacity: 0.6; }
+                    100% { cy: 1; opacity: 0; }
                 }
-                @keyframes dashRotate {
-                    0% { stroke-dashoffset: 0; }
-                    100% { stroke-dashoffset: 20; }
+                @keyframes particleFloat3Sig {
+                    0% { cy: 5; opacity: 0.4; }
+                    100% { cy: -1; opacity: 0; }
+                }
+                @keyframes particleFloat4Sig {
+                    0% { cy: 4; opacity: 0.3; }
+                    100% { cy: -2; opacity: 0; }
+                }
+                @keyframes corePulseSig {
+                    0%, 100% { r: 1.5; opacity: 1; }
+                    50% { r: 2; opacity: 0.6; }
+                }
+                @keyframes beamPulseSig {
+                    0%, 100% { opacity: 0.4; }
+                    50% { opacity: 0.8; }
                 }
                 
-                svg:hover line:nth-of-type(1) { 
-                    animation: radarSweep 2s linear infinite; 
+                /* Always animate - scoped to signals icon */
+                .signals-nav-icon ellipse:nth-of-type(1) { 
+                    animation: ringExpand1Sig 2s ease-in-out infinite; 
                 }
-                svg:hover circle:nth-of-type(2) { 
-                    animation: ringPulse1 2s ease-in-out infinite, dashRotate 3s linear infinite; 
+                .signals-nav-icon ellipse:nth-of-type(2) { 
+                    animation: ringExpand2Sig 2s ease-in-out infinite 0.2s; 
                 }
-                svg:hover circle:nth-of-type(3) { 
-                    animation: ringPulse2 2s ease-in-out infinite 0.3s, dashRotate 4s linear infinite; 
+                .signals-nav-icon ellipse:nth-of-type(3) { 
+                    animation: ringExpand3Sig 2s ease-in-out infinite 0.4s; 
                 }
-                svg:hover circle:nth-of-type(4) { 
-                    animation: ringPulse3 2s ease-in-out infinite 0.6s, dashRotate 5s linear infinite; 
+                .signals-nav-icon ellipse:nth-of-type(4) { 
+                    animation: ringExpand4Sig 2s ease-in-out infinite 0.6s; 
                 }
-                svg:hover circle:nth-of-type(5),
-                svg:hover circle:nth-of-type(6),
-                svg:hover circle:nth-of-type(7),
-                svg:hover circle:nth-of-type(8) { 
-                    animation: nodePulse 1.5s ease-in-out infinite; 
+                .signals-nav-icon circle:nth-of-type(2) { 
+                    animation: corePulseSig 1.5s ease-in-out infinite; 
                 }
-                svg:hover path:nth-of-type(2),
-                svg:hover path:nth-of-type(3),
-                svg:hover path:nth-of-type(4),
-                svg:hover path:nth-of-type(5) { 
-                    animation: cornerBlink 1s ease-in-out infinite; 
+                .signals-nav-icon circle:nth-of-type(3) { 
+                    animation: particleFloat1Sig 2s ease-out infinite; 
+                }
+                .signals-nav-icon circle:nth-of-type(4),
+                .signals-nav-icon circle:nth-of-type(5) { 
+                    animation: particleFloat2Sig 2.5s ease-out infinite; 
+                }
+                .signals-nav-icon circle:nth-of-type(6) { 
+                    animation: particleFloat3Sig 3s ease-out infinite; 
+                }
+                .signals-nav-icon circle:nth-of-type(7),
+                .signals-nav-icon circle:nth-of-type(8) { 
+                    animation: particleFloat4Sig 3.5s ease-out infinite; 
+                }
+                .signals-nav-icon line { 
+                    animation: beamPulseSig 1.5s ease-in-out infinite; 
                 }
             `}
         </style>
@@ -330,7 +350,6 @@ const XDTraderIcon = () => (
                     0%, 100% { transform: scale(1); }
                     50% { transform: scale(1.05); }
                 }
-                svg:hover { animation: xdtraderPulse 0.6s ease-in-out infinite; }
             `}
         </style>
     </svg>
@@ -381,12 +400,6 @@ const FreeBotsIcon = () => (
                     0%, 100% { transform: scaleY(1); }
                     50% { transform: scaleY(0.9); }
                 }
-                svg:hover circle { animation: eyeBlink 2s ease-in-out infinite; }
-                svg:hover rect:nth-child(5) { animation: barPulse 0.8s ease-in-out infinite; }
-                svg:hover rect:nth-child(6) { animation: barPulse 0.8s ease-in-out 0.1s infinite; }
-                svg:hover rect:nth-child(7) { animation: barPulse 0.8s ease-in-out 0.2s infinite; }
-                svg:hover rect:nth-child(8) { animation: barPulse 0.8s ease-in-out 0.3s infinite; }
-                svg:hover rect:nth-child(9) { animation: barPulse 0.8s ease-in-out 0.4s infinite; }
             `}
         </style>
     </svg>
@@ -3411,27 +3424,130 @@ const AppWrapper = observer(() => {
                             label={
                                 <>
                                     <svg
-                                        width='24'
-                                        height='24'
+                                        width='31.2'
+                                        height='31.2'
                                         viewBox='0 0 24 24'
                                         fill='none'
                                         xmlns='http://www.w3.org/2000/svg'
+                                        className='nova-analysis-nav-icon'
                                     >
                                         <defs>
-                                            <linearGradient id='novaGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                                            <linearGradient id='novaGradNav' x1='0%' y1='0%' x2='100%' y2='100%'>
                                                 <stop offset='0%' stopColor='#ffffff' />
-                                                <stop offset='100%' stopColor='#fbbf24' />
+                                                <stop offset='50%' stopColor='#fbbf24' />
+                                                <stop offset='100%' stopColor='#f59e0b' />
                                             </linearGradient>
+                                            <radialGradient id='novaRadialNav' cx='50%' cy='50%'>
+                                                <stop offset='0%' stopColor='#fbbf24' stopOpacity='1' />
+                                                <stop offset='100%' stopColor='#f59e0b' stopOpacity='0.3' />
+                                            </radialGradient>
+                                            <filter id='novaGlowNav'>
+                                                <feGaussianBlur stdDeviation='2' result='coloredBlur'/>
+                                                <feMerge>
+                                                    <feMergeNode in='coloredBlur'/>
+                                                    <feMergeNode in='SourceGraphic'/>
+                                                </feMerge>
+                                            </filter>
                                         </defs>
-                                        {/* Nova Analysis - Star/Sparkle icon */}
-                                        <path d='M12 2l2.4 7.2H22l-6 4.8 2.4 7.2L12 16.8 5.6 21.2 8 14 2 9.2h7.6L12 2z' fill='url(#novaGrad)' />
+                                        
+                                        {/* Central hexagon core */}
+                                        <path 
+                                            d='M12 4L16 7L16 13L12 16L8 13L8 7Z' 
+                                            fill='url(#novaRadialNav)' 
+                                            stroke='url(#novaGradNav)' 
+                                            strokeWidth='1.5'
+                                            filter='url(#novaGlowNav)'
+                                        />
+                                        
+                                        {/* Inner energy core */}
+                                        <circle cx='12' cy='10' r='2' fill='#fbbf24' filter='url(#novaGlowNav)' />
+                                        
+                                        {/* Outer hexagonal ring */}
+                                        <path 
+                                            d='M12 2L18 6L18 14L12 18L6 14L6 6Z' 
+                                            fill='none' 
+                                            stroke='url(#novaGradNav)' 
+                                            strokeWidth='1.5'
+                                            opacity='0.7'
+                                        />
+                                        
+                                        {/* Energy nodes at hexagon corners */}
+                                        <circle cx='12' cy='2' r='1.2' fill='#fbbf24' filter='url(#novaGlowNav)' />
+                                        <circle cx='18' cy='6' r='1.2' fill='#fbbf24' filter='url(#novaGlowNav)' />
+                                        <circle cx='18' cy='14' r='1.2' fill='#fbbf24' filter='url(#novaGlowNav)' />
+                                        <circle cx='12' cy='18' r='1.2' fill='#fbbf24' filter='url(#novaGlowNav)' />
+                                        <circle cx='6' cy='14' r='1.2' fill='#fbbf24' filter='url(#novaGlowNav)' />
+                                        <circle cx='6' cy='6' r='1.2' fill='#fbbf24' filter='url(#novaGlowNav)' />
+                                        
+                                        {/* Energy beams connecting to center */}
+                                        <line x1='12' y1='2' x2='12' y2='10' stroke='url(#novaGradNav)' strokeWidth='0.5' opacity='0.5' />
+                                        <line x1='18' y1='6' x2='12' y2='10' stroke='url(#novaGradNav)' strokeWidth='0.5' opacity='0.5' />
+                                        <line x1='18' y1='14' x2='12' y2='10' stroke='url(#novaGradNav)' strokeWidth='0.5' opacity='0.5' />
+                                        <line x1='12' y1='18' x2='12' y2='10' stroke='url(#novaGradNav)' strokeWidth='0.5' opacity='0.5' />
+                                        <line x1='6' y1='14' x2='12' y2='10' stroke='url(#novaGradNav)' strokeWidth='0.5' opacity='0.5' />
+                                        <line x1='6' y1='6' x2='12' y2='10' stroke='url(#novaGradNav)' strokeWidth='0.5' opacity='0.5' />
+                                        
+                                        {/* Orbiting particles */}
+                                        <circle cx='12' cy='6' r='0.8' fill='#ffffff' opacity='0.8' />
+                                        <circle cx='15' cy='10' r='0.8' fill='#ffffff' opacity='0.8' />
+                                        <circle cx='9' cy='10' r='0.8' fill='#ffffff' opacity='0.8' />
+                                        
                                         <style>
                                             {`
-                                                @keyframes novaSpin {
-                                                    0%, 100% { transform: rotate(0deg) scale(1); }
-                                                    50% { transform: rotate(180deg) scale(1.05); }
+                                                @keyframes novaRotateNav {
+                                                    0% { transform: rotate(0deg); }
+                                                    100% { transform: rotate(360deg); }
                                                 }
-                                                svg:hover { animation: novaSpin 1.5s ease-in-out infinite; }
+                                                @keyframes novaPulseNav {
+                                                    0%, 100% { opacity: 1; r: 2; }
+                                                    50% { opacity: 0.6; r: 2.5; }
+                                                }
+                                                @keyframes nodeGlowNav {
+                                                    0%, 100% { r: 1.2; opacity: 1; }
+                                                    50% { r: 1.5; opacity: 0.6; }
+                                                }
+                                                @keyframes beamPulseNav {
+                                                    0%, 100% { opacity: 0.5; }
+                                                    50% { opacity: 1; }
+                                                }
+                                                @keyframes orbitRotateNav {
+                                                    0% { transform: rotate(0deg) translateX(0); }
+                                                    100% { transform: rotate(360deg) translateX(0); }
+                                                }
+                                                @keyframes hexagonPulseNav {
+                                                    0%, 100% { opacity: 0.7; stroke-width: 1.5; }
+                                                    50% { opacity: 1; stroke-width: 2; }
+                                                }
+                                                
+                                                /* Scoped to only .nova-analysis-nav-icon */
+                                                .nova-analysis-nav-icon path:nth-of-type(1) { 
+                                                    animation: novaRotateNav 4s linear infinite; 
+                                                    transform-origin: 12px 10px;
+                                                }
+                                                .nova-analysis-nav-icon path:nth-of-type(2) { 
+                                                    animation: novaRotateNav 6s linear infinite reverse, hexagonPulseNav 2s ease-in-out infinite; 
+                                                    transform-origin: 12px 10px;
+                                                }
+                                                .nova-analysis-nav-icon circle:nth-of-type(1) { 
+                                                    animation: novaPulseNav 1.5s ease-in-out infinite; 
+                                                }
+                                                .nova-analysis-nav-icon circle:nth-of-type(2),
+                                                .nova-analysis-nav-icon circle:nth-of-type(3),
+                                                .nova-analysis-nav-icon circle:nth-of-type(4),
+                                                .nova-analysis-nav-icon circle:nth-of-type(5),
+                                                .nova-analysis-nav-icon circle:nth-of-type(6),
+                                                .nova-analysis-nav-icon circle:nth-of-type(7) { 
+                                                    animation: nodeGlowNav 1.5s ease-in-out infinite; 
+                                                }
+                                                .nova-analysis-nav-icon line { 
+                                                    animation: beamPulseNav 1.5s ease-in-out infinite; 
+                                                }
+                                                .nova-analysis-nav-icon circle:nth-of-type(8),
+                                                .nova-analysis-nav-icon circle:nth-of-type(9),
+                                                .nova-analysis-nav-icon circle:nth-of-type(10) { 
+                                                    animation: orbitRotateNav 3s linear infinite; 
+                                                    transform-origin: 12px 10px;
+                                                }
                                             `}
                                         </style>
                                     </svg>
