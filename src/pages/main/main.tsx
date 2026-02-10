@@ -460,29 +460,171 @@ const SignalsIcon = () => (
 
 
 const XDTraderIcon = () => (
-    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+    <svg width='40.56' height='40.56' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' className='dtrader-nav-icon'>
         <defs>
-            <linearGradient id='xdtraderGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+            <linearGradient id='dtraderGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
                 <stop offset='0%' stopColor='#ffffff' />
-                <stop offset='100%' stopColor='#fbbf24' />
+                <stop offset='50%' stopColor='#fbbf24' />
+                <stop offset='100%' stopColor='#f59e0b' />
             </linearGradient>
+            <radialGradient id='dtraderRadial' cx='50%' cy='50%'>
+                <stop offset='0%' stopColor='#fbbf24' stopOpacity='1' />
+                <stop offset='100%' stopColor='#f59e0b' stopOpacity='0.3' />
+            </radialGradient>
+            <filter id='dtraderGlow'>
+                <feGaussianBlur stdDeviation='2' result='coloredBlur'/>
+                <feMerge>
+                    <feMergeNode in='coloredBlur'/>
+                    <feMergeNode in='SourceGraphic'/>
+                </feMerge>
+            </filter>
         </defs>
-        {/* Trading chart with X */}
-        <path
-            d='M3 18L9 12L13 16L21 8'
-            stroke='url(#xdtraderGrad)'
-            strokeWidth='2'
+        
+        {/* Letter D - left vertical bar */}
+        <rect x='5' y='4' width='3' height='16' rx='1' fill='url(#dtraderGrad)' filter='url(#dtraderGlow)' />
+        
+        {/* Letter D - curved right side with segments */}
+        <path 
+            d='M8 4 Q19 4 19 12 Q19 20 8 20' 
+            stroke='url(#dtraderGrad)' 
+            strokeWidth='3' 
+            fill='none' 
             strokeLinecap='round'
-            strokeLinejoin='round'
+            filter='url(#dtraderGlow)'
         />
-        <path d='M16 8H21V13' stroke='url(#xdtraderGrad)' strokeWidth='2' strokeLinecap='round' strokeLinejoin='round' />
-        {/* X overlay */}
-        <path d='M7 3L11 7M11 3L7 7' stroke='url(#xdtraderGrad)' strokeWidth='2' strokeLinecap='round' />
+        
+        {/* Mechanical gears on the D */}
+        <circle cx='8' cy='7' r='1.5' fill='url(#dtraderRadial)' stroke='url(#dtraderGrad)' strokeWidth='0.5' />
+        <circle cx='8' cy='12' r='2' fill='url(#dtraderRadial)' stroke='url(#dtraderGrad)' strokeWidth='0.5' />
+        <circle cx='8' cy='17' r='1.5' fill='url(#dtraderRadial)' stroke='url(#dtraderGrad)' strokeWidth='0.5' />
+        
+        {/* Gear teeth */}
+        <path d='M8 5.5L8.5 6.5L8 7.5L7.5 6.5Z' fill='#fbbf24' />
+        <path d='M8 10L8.7 11L8 12L7.3 11Z' fill='#fbbf24' />
+        <path d='M8 15.5L8.5 16.5L8 17.5L7.5 16.5Z' fill='#fbbf24' />
+        
+        {/* Mechanical pistons/connectors */}
+        <line x1='8' y1='7' x2='14' y2='7' stroke='url(#dtraderGrad)' strokeWidth='1' opacity='0.7' />
+        <line x1='8' y1='12' x2='16' y2='12' stroke='url(#dtraderGrad)' strokeWidth='1' opacity='0.7' />
+        <line x1='8' y1='17' x2='14' y2='17' stroke='url(#dtraderGrad)' strokeWidth='1' opacity='0.7' />
+        
+        {/* Piston heads on curve */}
+        <circle cx='14' cy='7' r='1' fill='#fbbf24' filter='url(#dtraderGlow)' />
+        <circle cx='16' cy='12' r='1.2' fill='#fbbf24' filter='url(#dtraderGlow)' />
+        <circle cx='14' cy='17' r='1' fill='#fbbf24' filter='url(#dtraderGlow)' />
+        
+        {/* Rotating outer ring segments */}
+        <path d='M19 8 A8 8 0 0 1 20 12' stroke='url(#dtraderGrad)' strokeWidth='1.5' fill='none' strokeDasharray='2 2' opacity='0.6' />
+        <path d='M20 12 A8 8 0 0 1 19 16' stroke='url(#dtraderGrad)' strokeWidth='1.5' fill='none' strokeDasharray='2 2' opacity='0.6' />
+        
+        {/* Energy nodes on outer ring */}
+        <circle cx='19.5' cy='8' r='0.8' fill='#fbbf24' />
+        <circle cx='20.5' cy='12' r='0.8' fill='#fbbf24' />
+        <circle cx='19.5' cy='16' r='0.8' fill='#fbbf24' />
+        
+        {/* Inner circuit lines */}
+        <line x1='10' y1='9' x2='12' y2='9' stroke='#fbbf24' strokeWidth='0.5' opacity='0.5' strokeDasharray='1 1' />
+        <line x1='10' y1='15' x2='12' y2='15' stroke='#fbbf24' strokeWidth='0.5' opacity='0.5' strokeDasharray='1 1' />
+        
+        {/* Central power core */}
+        <circle cx='13' cy='12' r='1.5' fill='url(#dtraderRadial)' filter='url(#dtraderGlow)' />
+        <circle cx='13' cy='12' r='0.7' fill='#ffffff' opacity='0.9' />
+        
+        {/* Orbiting data particles */}
+        <circle cx='11' cy='8' r='0.6' fill='#ffffff' opacity='0.8' />
+        <circle cx='15' cy='10' r='0.6' fill='#ffffff' opacity='0.8' />
+        <circle cx='15' cy='14' r='0.6' fill='#ffffff' opacity='0.8' />
+        <circle cx='11' cy='16' r='0.6' fill='#ffffff' opacity='0.8' />
+        
         <style>
             {`
-                @keyframes xdtraderPulse {
-                    0%, 100% { transform: scale(1); }
-                    50% { transform: scale(1.05); }
+                @keyframes dtraderGearRotate1 {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                @keyframes dtraderGearRotate2 {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(-360deg); }
+                }
+                @keyframes dtraderPistonPulse {
+                    0%, 100% { opacity: 0.7; stroke-width: 1; }
+                    50% { opacity: 1; stroke-width: 1.5; }
+                }
+                @keyframes dtraderPistonHeadPulse {
+                    0%, 100% { r: 1; opacity: 1; }
+                    50% { r: 1.3; opacity: 0.7; }
+                }
+                @keyframes dtraderRingRotate {
+                    0% { stroke-dashoffset: 0; }
+                    100% { stroke-dashoffset: 20; }
+                }
+                @keyframes dtraderNodePulse {
+                    0%, 100% { r: 0.8; opacity: 1; }
+                    50% { r: 1; opacity: 0.6; }
+                }
+                @keyframes dtraderCorePulse {
+                    0%, 100% { r: 1.5; opacity: 1; }
+                    50% { r: 1.8; opacity: 0.7; }
+                }
+                @keyframes dtraderOrbitRotate {
+                    0% { transform: rotate(0deg) translateX(0); }
+                    100% { transform: rotate(360deg) translateX(0); }
+                }
+                @keyframes dtraderCircuitFlow {
+                    0% { stroke-dashoffset: 0; }
+                    100% { stroke-dashoffset: 10; }
+                }
+                
+                /* Always animate - scoped to dtrader icon */
+                .dtrader-nav-icon circle:nth-of-type(1),
+                .dtrader-nav-icon path:nth-of-type(2) { 
+                    animation: dtraderGearRotate1 4s linear infinite; 
+                    transform-origin: 8px 7px;
+                }
+                .dtrader-nav-icon circle:nth-of-type(2),
+                .dtrader-nav-icon path:nth-of-type(3) { 
+                    animation: dtraderGearRotate2 3s linear infinite; 
+                    transform-origin: 8px 12px;
+                }
+                .dtrader-nav-icon circle:nth-of-type(3),
+                .dtrader-nav-icon path:nth-of-type(4) { 
+                    animation: dtraderGearRotate1 4s linear infinite; 
+                    transform-origin: 8px 17px;
+                }
+                .dtrader-nav-icon line:nth-of-type(1),
+                .dtrader-nav-icon line:nth-of-type(2),
+                .dtrader-nav-icon line:nth-of-type(3) { 
+                    animation: dtraderPistonPulse 2s ease-in-out infinite; 
+                }
+                .dtrader-nav-icon circle:nth-of-type(4),
+                .dtrader-nav-icon circle:nth-of-type(6) { 
+                    animation: dtraderPistonHeadPulse 2s ease-in-out infinite; 
+                }
+                .dtrader-nav-icon circle:nth-of-type(5) { 
+                    animation: dtraderPistonHeadPulse 2s ease-in-out infinite 0.3s; 
+                }
+                .dtrader-nav-icon path:nth-of-type(5),
+                .dtrader-nav-icon path:nth-of-type(6) { 
+                    animation: dtraderRingRotate 3s linear infinite; 
+                }
+                .dtrader-nav-icon circle:nth-of-type(7),
+                .dtrader-nav-icon circle:nth-of-type(8),
+                .dtrader-nav-icon circle:nth-of-type(9) { 
+                    animation: dtraderNodePulse 1.5s ease-in-out infinite; 
+                }
+                .dtrader-nav-icon line:nth-of-type(4),
+                .dtrader-nav-icon line:nth-of-type(5) { 
+                    animation: dtraderCircuitFlow 2s linear infinite; 
+                }
+                .dtrader-nav-icon circle:nth-of-type(10) { 
+                    animation: dtraderCorePulse 1.5s ease-in-out infinite; 
+                }
+                .dtrader-nav-icon circle:nth-of-type(12),
+                .dtrader-nav-icon circle:nth-of-type(13),
+                .dtrader-nav-icon circle:nth-of-type(14),
+                .dtrader-nav-icon circle:nth-of-type(15) { 
+                    animation: dtraderOrbitRotate 5s linear infinite; 
+                    transform-origin: 13px 12px;
                 }
             `}
         </style>
