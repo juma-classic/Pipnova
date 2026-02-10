@@ -76,21 +76,155 @@ const DashboardIcon = () => (
 );
 
 const BotBuilderIcon = () => (
-    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+    <svg width='40.56' height='40.56' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' className='bot-builder-nav-icon'>
         <defs>
             <linearGradient id='botGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
                 <stop offset='0%' stopColor='#ffffff' />
-                <stop offset='100%' stopColor='#fbbf24' />
+                <stop offset='50%' stopColor='#fbbf24' />
+                <stop offset='100%' stopColor='#f59e0b' />
             </linearGradient>
+            <radialGradient id='botRadial' cx='50%' cy='50%'>
+                <stop offset='0%' stopColor='#fbbf24' stopOpacity='1' />
+                <stop offset='100%' stopColor='#f59e0b' stopOpacity='0.3' />
+            </radialGradient>
+            <filter id='botGlow'>
+                <feGaussianBlur stdDeviation='2' result='coloredBlur'/>
+                <feMerge>
+                    <feMergeNode in='coloredBlur'/>
+                    <feMergeNode in='SourceGraphic'/>
+                </feMerge>
+            </filter>
         </defs>
-        {/* Bot Builder - Wrench/Tool icon */}
-        <path d='M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z' 
-              fill='url(#botGrad)' />
+        
+        {/* Central processor core */}
+        <circle cx='12' cy='12' r='4' fill='url(#botRadial)' stroke='url(#botGrad)' strokeWidth='1.5' filter='url(#botGlow)' />
+        
+        {/* Inner rotating gear */}
+        <path d='M12 9L13 10.5L12 12L11 10.5Z' fill='#fbbf24' />
+        <path d='M15 12L13.5 13L12 12L13.5 11Z' fill='#fbbf24' />
+        <path d='M12 15L11 13.5L12 12L13 13.5Z' fill='#fbbf24' />
+        <path d='M9 12L10.5 11L12 12L10.5 13Z' fill='#fbbf24' />
+        
+        {/* Central AI core */}
+        <circle cx='12' cy='12' r='1.5' fill='#fbbf24' filter='url(#botGlow)' />
+        
+        {/* Outer rotating ring with nodes */}
+        <circle cx='12' cy='12' r='7' stroke='url(#botGrad)' strokeWidth='1.5' fill='none' opacity='0.6' strokeDasharray='2 3' />
+        
+        {/* Circuit nodes at cardinal points */}
+        <circle cx='12' cy='5' r='1.2' fill='#fbbf24' filter='url(#botGlow)' />
+        <circle cx='19' cy='12' r='1.2' fill='#fbbf24' filter='url(#botGlow)' />
+        <circle cx='12' cy='19' r='1.2' fill='#fbbf24' filter='url(#botGlow)' />
+        <circle cx='5' cy='12' r='1.2' fill='#fbbf24' filter='url(#botGlow)' />
+        
+        {/* Connecting circuit lines */}
+        <line x1='12' y1='5' x2='12' y2='8' stroke='url(#botGrad)' strokeWidth='1' opacity='0.5' />
+        <line x1='19' y1='12' x2='16' y2='12' stroke='url(#botGrad)' strokeWidth='1' opacity='0.5' />
+        <line x1='12' y1='19' x2='12' y2='16' stroke='url(#botGrad)' strokeWidth='1' opacity='0.5' />
+        <line x1='5' y1='12' x2='8' y2='12' stroke='url(#botGrad)' strokeWidth='1' opacity='0.5' />
+        
+        {/* Corner processors */}
+        <rect x='2' y='2' width='3' height='3' rx='0.5' fill='url(#botGrad)' opacity='0.7' />
+        <rect x='19' y='2' width='3' height='3' rx='0.5' fill='url(#botGrad)' opacity='0.7' />
+        <rect x='2' y='19' width='3' height='3' rx='0.5' fill='url(#botGrad)' opacity='0.7' />
+        <rect x='19' y='19' width='3' height='3' rx='0.5' fill='url(#botGrad)' opacity='0.7' />
+        
+        {/* Corner processor indicators */}
+        <circle cx='3.5' cy='3.5' r='0.6' fill='#fbbf24' />
+        <circle cx='20.5' cy='3.5' r='0.6' fill='#fbbf24' />
+        <circle cx='3.5' cy='20.5' r='0.6' fill='#fbbf24' />
+        <circle cx='20.5' cy='20.5' r='0.6' fill='#fbbf24' />
+        
+        {/* Diagonal connection lines */}
+        <line x1='5' y1='5' x2='8' y2='8' stroke='url(#botGrad)' strokeWidth='0.5' opacity='0.4' strokeDasharray='1 1' />
+        <line x1='19' y1='5' x2='16' y2='8' stroke='url(#botGrad)' strokeWidth='0.5' opacity='0.4' strokeDasharray='1 1' />
+        <line x1='5' y1='19' x2='8' y2='16' stroke='url(#botGrad)' strokeWidth='0.5' opacity='0.4' strokeDasharray='1 1' />
+        <line x1='19' y1='19' x2='16' y2='16' stroke='url(#botGrad)' strokeWidth='0.5' opacity='0.4' strokeDasharray='1 1' />
+        
+        {/* Orbiting data particles */}
+        <circle cx='12' cy='7' r='0.8' fill='#ffffff' opacity='0.9' />
+        <circle cx='15' cy='9' r='0.8' fill='#ffffff' opacity='0.9' />
+        <circle cx='15' cy='15' r='0.8' fill='#ffffff' opacity='0.9' />
+        <circle cx='9' cy='15' r='0.8' fill='#ffffff' opacity='0.9' />
+        
         <style>
             {`
-                @keyframes botRotate {
-                    0%, 100% { transform: rotate(0deg); }
-                    50% { transform: rotate(15deg); }
+                @keyframes botCoreRotate {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(360deg); }
+                }
+                @keyframes botRingRotate {
+                    0% { transform: rotate(0deg); }
+                    100% { transform: rotate(-360deg); }
+                }
+                @keyframes botNodePulse {
+                    0%, 100% { r: 1.2; opacity: 1; }
+                    50% { r: 1.5; opacity: 0.6; }
+                }
+                @keyframes botCorePulse {
+                    0%, 100% { r: 1.5; opacity: 1; }
+                    50% { r: 1.8; opacity: 0.7; }
+                }
+                @keyframes botLinePulse {
+                    0%, 100% { opacity: 0.5; }
+                    50% { opacity: 1; }
+                }
+                @keyframes botProcessorBlink {
+                    0%, 90%, 100% { opacity: 0.7; }
+                    95% { opacity: 1; }
+                }
+                @keyframes botIndicatorPulse {
+                    0%, 100% { r: 0.6; opacity: 1; }
+                    50% { r: 0.8; opacity: 0.5; }
+                }
+                @keyframes botOrbitRotate {
+                    0% { transform: rotate(0deg) translateX(0); }
+                    100% { transform: rotate(360deg) translateX(0); }
+                }
+                @keyframes botDashFlow {
+                    0% { stroke-dashoffset: 0; }
+                    100% { stroke-dashoffset: 10; }
+                }
+                
+                /* Always animate - scoped to bot builder icon */
+                .bot-builder-nav-icon path:nth-of-type(1),
+                .bot-builder-nav-icon path:nth-of-type(2),
+                .bot-builder-nav-icon path:nth-of-type(3),
+                .bot-builder-nav-icon path:nth-of-type(4) { 
+                    animation: botCoreRotate 4s linear infinite; 
+                    transform-origin: 12px 12px;
+                }
+                .bot-builder-nav-icon circle:nth-of-type(2) { 
+                    animation: botRingRotate 8s linear infinite, botDashFlow 2s linear infinite; 
+                    transform-origin: 12px 12px;
+                }
+                .bot-builder-nav-icon circle:nth-of-type(3),
+                .bot-builder-nav-icon circle:nth-of-type(4),
+                .bot-builder-nav-icon circle:nth-of-type(5),
+                .bot-builder-nav-icon circle:nth-of-type(6) { 
+                    animation: botNodePulse 2s ease-in-out infinite; 
+                }
+                .bot-builder-nav-icon circle:nth-of-type(1) { 
+                    animation: botCorePulse 1.5s ease-in-out infinite; 
+                }
+                .bot-builder-nav-icon line { 
+                    animation: botLinePulse 2s ease-in-out infinite; 
+                }
+                .bot-builder-nav-icon rect { 
+                    animation: botProcessorBlink 3s ease-in-out infinite; 
+                }
+                .bot-builder-nav-icon circle:nth-of-type(7),
+                .bot-builder-nav-icon circle:nth-of-type(8),
+                .bot-builder-nav-icon circle:nth-of-type(9),
+                .bot-builder-nav-icon circle:nth-of-type(10) { 
+                    animation: botIndicatorPulse 1.5s ease-in-out infinite; 
+                }
+                .bot-builder-nav-icon circle:nth-of-type(11),
+                .bot-builder-nav-icon circle:nth-of-type(12),
+                .bot-builder-nav-icon circle:nth-of-type(13),
+                .bot-builder-nav-icon circle:nth-of-type(14) { 
+                    animation: botOrbitRotate 6s linear infinite; 
+                    transform-origin: 12px 12px;
                 }
             `}
         </style>
