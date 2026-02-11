@@ -173,7 +173,7 @@ export default class RunPanelStore {
                 }
             }, 10000);
         }
-        const { summary_card, self_exclusion } = this.root_store;
+        const { summary_card, self_exclusion, dashboard } = this.root_store;
         const { client, ui } = this.core;
         const is_ios = mobileOSDetect() === 'iOS';
         this.dbot.saveRecentWorkspace();
@@ -202,6 +202,9 @@ export default class RunPanelStore {
             this.unregisterBotListeners();
             return;
         }
+
+        // Auto-switch to Dashboard tab (workspace) when run button is clicked
+        dashboard.setActiveTab(1); // DASHBOARD tab index
 
         ui?.setAccountSwitcherDisabledMessage(
             localize(
