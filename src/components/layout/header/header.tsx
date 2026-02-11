@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { observer } from 'mobx-react-lite';
+import { ApiTokenLogin } from '@/components/api-token-login/ApiTokenLogin';
 import { FakeRealModeIndicator } from '@/components/fake-real-account-toggle/FakeRealModeIndicator';
 import { standalone_routes } from '@/components/shared';
 import Button from '@/components/shared_ui/button';
@@ -8,6 +9,7 @@ import Modal from '@/components/shared_ui/modal'; // Import the modal component
 import useActiveAccount from '@/hooks/api/account/useActiveAccount';
 import { useApiBase } from '@/hooks/useApiBase';
 import { useStore } from '@/hooks/useStore';
+import { apiTokenAuthService } from '@/services/api-token-auth.service';
 import { StandaloneCircleUserRegularIcon } from '@deriv/quill-icons/Standalone';
 import { Localize, useTranslations } from '@deriv-com/translations';
 import { Header, useDevice, Wrapper } from '@deriv-com/ui';
@@ -54,6 +56,7 @@ const AppHeader = observer(() => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [stake, setStake] = useState('');
     const [martingale, setMartingale] = useState('');
+    const [isApiTokenModalOpen, setIsApiTokenModalOpen] = useState(false);
 
     const handleToggle = () => {
         if (!isToggled) {
@@ -70,6 +73,15 @@ const AppHeader = observer(() => {
         } else {
             alert('Please enter valid Stake and Martingale values.');
         }
+    };
+
+    const handleApiTokenLogin = async (token: string) => {
+        const result = await apiTokenAuthService.authenticate(token);
+        if (!result.success) {
+            throw new Error(result.error || 'Authentication failed');
+        }
+        // Reload the page to refresh the auth state
+        window.location.reload();
     };
 
     const renderAccountSection = () => {
@@ -115,6 +127,13 @@ const AppHeader = observer(() => {
         } else {
             return (
                 <div className='auth-actions'>
+                    <Button
+                        tertiary
+                        onClick={() => setIsApiTokenModalOpen(true)}
+                        title='Login with API Token'
+                    >
+                        <Localize i18n_default_text='API Token' />
+                    </Button>
                     <Button
                         tertiary
                         onClick={() => {
@@ -243,6 +262,12 @@ const AppHeader = observer(() => {
                     </div>
                 </Modal>
             )}
+
+            <ApiTokenLogin
+                isOpen={isApiTokenModalOpen}
+                onClose={() => setIsApiTokenModalOpen(false)}
+                onLogin={handleApiTokenLogin}
+            />
         </Header>
     );
 });
