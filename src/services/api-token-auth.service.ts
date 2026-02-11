@@ -57,11 +57,30 @@ class ApiTokenAuthService {
             this.isAuthenticated = true;
             this.storeToken(token);
 
+            const loginid = response.authorize.loginid;
+            const balance = response.authorize.balance;
+            const currency = response.authorize.currency;
+
+            // Store account information in localStorage (same format as OAuth)
+            const accountsList: Record<string, string> = {};
+            const clientAccounts: Record<string, { loginid: string; token: string; currency: string }> = {};
+            
+            accountsList[loginid] = token;
+            clientAccounts[loginid] = { loginid, token, currency };
+            
+            localStorage.setItem('accountsList', JSON.stringify(accountsList));
+            localStorage.setItem('clientAccounts', JSON.stringify(clientAccounts));
+            localStorage.setItem('authToken', token);
+            localStorage.setItem('active_loginid', loginid);
+
+            // Subscribe to balance updates
+            await api.send({ balance: 1, subscribe: 1 });
+
             // Update the auth observables so the app recognizes the user as logged in
             const authData = {
-                loginid: response.authorize.loginid,
-                balance: response.authorize.balance,
-                currency: response.authorize.currency,
+                loginid,
+                balance,
+                currency,
                 email: response.authorize.email,
                 account_list: response.authorize.account_list || [],
                 is_virtual: response.authorize.is_virtual || 0,
@@ -71,12 +90,13 @@ class ApiTokenAuthService {
             setIsAuthorized(true);
 
             console.log('✅ Authentication successful:', response.authorize);
+            console.log('💰 Balance:', balance, currency);
 
             return {
                 success: true,
-                loginid: response.authorize.loginid,
-                balance: response.authorize.balance,
-                currency: response.authorize.currency,
+                loginid,
+                balance,
+                currency,
             };
         } catch (error) {
             console.error('❌ Authentication error:', error);
@@ -94,6 +114,13 @@ class ApiTokenAuthService {
         this.authToken = null;
         this.isAuthenticated = false;
         this.clearStoredToken();
+        
+        // Clear all auth-related localStorage items
+        localStorage.removeItem('accountsList');
+        localStorage.removeItem('clientAccounts');
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('active_loginid');
+        
         setIsAuthorized(false);
         setAuthData(null);
         console.log('🔓 Logged out');
