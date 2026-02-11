@@ -566,3 +566,28 @@
         box-shadow: 0 4px 12px rgba(255, 0, 80, 0.4);
     }
 }
+
+
+/* Logout Button */
+.logout-button {
+    margin-left: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem !important;
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
+
+    svg {
+        width: 16px;
+        height: 16px;
+        transition: transform 0.2s ease;
+    }
+
+    &:hover {
+        svg {
+            transform: translateX(2px);
+        }
+    }
+}

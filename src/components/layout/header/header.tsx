@@ -83,6 +83,19 @@ const AppHeader = observer(() => {
         // No need to reload - auth state is now properly set via observables
     };
 
+    const handleLogout = () => {
+        // Check if user is logged in with API token
+        if (apiTokenAuthService.isAuth()) {
+            apiTokenAuthService.logout();
+            window.location.reload();
+        } else {
+            // OAuth logout
+            if (client) {
+                client.logout();
+            }
+        }
+    };
+
     const renderAccountSection = () => {
         if (isAuthorizing) {
             return <AccountsInfoLoader isLoggedIn isMobile={!isDesktop} speed={3} />;
@@ -101,26 +114,40 @@ const AppHeader = observer(() => {
                         </Tooltip>
                     )}
                     <AccountSwitcher activeAccount={activeAccount} />
-                    {isDesktop &&
-                        (has_wallet ? (
+                    {isDesktop && (
+                        <>
+                            {has_wallet ? (
+                                <Button
+                                    className='manage-funds-button'
+                                    has_effect
+                                    text={localize('Manage funds')}
+                                    onClick={() => window.location.assign(standalone_routes.wallets_transfer)}
+                                    primary
+                                />
+                            ) : (
+                                <Button
+                                    primary
+                                    onClick={() => {
+                                        window.location.assign(standalone_routes.cashier_deposit);
+                                    }}
+                                    className='deposit-button'
+                                >
+                                    {localize('Deposit')}
+                                </Button>
+                            )}
                             <Button
-                                className='manage-funds-button'
-                                has_effect
-                                text={localize('Manage funds')}
-                                onClick={() => window.location.assign(standalone_routes.wallets_transfer)}
-                                primary
-                            />
-                        ) : (
-                            <Button
-                                primary
-                                onClick={() => {
-                                    window.location.assign(standalone_routes.cashier_deposit);
-                                }}
-                                className='deposit-button'
+                                tertiary
+                                onClick={handleLogout}
+                                className='logout-button'
+                                title='Logout'
                             >
-                                {localize('Deposit')}
+                                <svg width='16' height='16' viewBox='0 0 24 24' fill='currentColor' xmlns='http://www.w3.org/2000/svg'>
+                                    <path d='M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z'/>
+                                </svg>
+                                <Localize i18n_default_text='Logout' />
                             </Button>
-                        ))}
+                        </>
+                    )}
                 </>
             );
         } else {
