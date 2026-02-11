@@ -4,6 +4,7 @@
  */
 
 import { generateDerivApiInstance } from '@/external/bot-skeleton/services/api/appId';
+import { setAuthData, setIsAuthorized } from '@/external/bot-skeleton/services/api/observables/connection-status-stream';
 
 interface AuthResult {
     success: boolean;
@@ -56,6 +57,19 @@ class ApiTokenAuthService {
             this.isAuthenticated = true;
             this.storeToken(token);
 
+            // Update the auth observables so the app recognizes the user as logged in
+            const authData = {
+                loginid: response.authorize.loginid,
+                balance: response.authorize.balance,
+                currency: response.authorize.currency,
+                email: response.authorize.email,
+                account_list: response.authorize.account_list || [],
+                is_virtual: response.authorize.is_virtual || 0,
+            };
+
+            setAuthData(authData);
+            setIsAuthorized(true);
+
             console.log('✅ Authentication successful:', response.authorize);
 
             return {
@@ -80,6 +94,8 @@ class ApiTokenAuthService {
         this.authToken = null;
         this.isAuthenticated = false;
         this.clearStoredToken();
+        setIsAuthorized(false);
+        setAuthData(null);
         console.log('🔓 Logged out');
     }
 

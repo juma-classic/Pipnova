@@ -1,6 +1,7 @@
 import React from 'react';
 import { PipnovaLoader } from '@/components/loader/PipnovaLoader';
 import { generateDerivApiInstance } from '@/external/bot-skeleton/services/api/appId';
+import { apiTokenAuthService } from '@/services/api-token-auth.service';
 import { URLUtils } from '@deriv-com/utils';
 import App from './App';
 
@@ -52,8 +53,15 @@ export const AuthWrapper = () => {
 
     React.useEffect(() => {
         const initializeAuth = async () => {
-            await setLocalStorageToken(loginInfo, paramsToDelete);
-            URLUtils.filterSearchParams(['lang']);
+            // First, try to auto-authenticate with stored API token
+            const hasApiToken = await apiTokenAuthService.autoAuthenticate();
+            
+            if (!hasApiToken) {
+                // If no API token, proceed with OAuth flow
+                await setLocalStorageToken(loginInfo, paramsToDelete);
+                URLUtils.filterSearchParams(['lang']);
+            }
+            
             setIsAuthComplete(true);
         };
 

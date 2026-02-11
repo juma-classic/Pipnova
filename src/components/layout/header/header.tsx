@@ -80,8 +80,7 @@ const AppHeader = observer(() => {
         if (!result.success) {
             throw new Error(result.error || 'Authentication failed');
         }
-        // Reload the page to refresh the auth state
-        window.location.reload();
+        // No need to reload - auth state is now properly set via observables
     };
 
     const renderAccountSection = () => {
