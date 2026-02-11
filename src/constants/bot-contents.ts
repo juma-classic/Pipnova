@@ -29,9 +29,8 @@ export const DBOT_TABS: TDashboardTabIndex = Object.freeze({
     ZEN: 14,
     ELVIS_ZONE: 15,
     TICKSHARK: 16,
-    COPY_TRADING: 17,
-    ACCUMULATOR: 18,
-    DIGIT_HACKER: 19,
+    ACCUMULATOR: 17,
+    DIGIT_HACKER: 18,
 });
 
 export const MAX_STRATEGIES = 10;
@@ -54,7 +53,6 @@ export const TAB_IDS = [
     'id-zen',
     'id-elvis-zone',
     'id-tickshark',
-    'id-copy-trading',
     'id-accumulator',
     'id-digit-hacker',
 ];

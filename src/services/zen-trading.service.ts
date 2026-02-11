@@ -6,7 +6,6 @@
 
 import { API_CONFIG, getWebSocketURL } from '../config/api-config';
 import { calculateProfit, type ContractDetails } from '../utils/profit-calculator';
-import { masterTradeIntegrationService } from './master-trade-integration.service';
 
 export interface ZenTradeConfig {
     strategy: 'Even' | 'Odd' | 'Matches' | 'Differs' | 'Over' | 'Under' | 'Rise' | 'Fall' | 'Straddle6';
@@ -970,24 +969,6 @@ class ZenTradingService {
 
                 console.log(`⚡ Fast trade executed: Contract ${trade.contractId}`);
 
-                // 🔗 COPY TRADING INTEGRATION: Execute copy trades for clients (fast mode)
-                try {
-                    console.log('🔗 Triggering copy trading for fast Zen trade...');
-                    await masterTradeIntegrationService.onZenTrade({
-                        market: trade.market,
-                        contractType: trade.contractType,
-                        stake: trade.stake,
-                        duration: trade.duration,
-                        durationUnit: 't',
-                        strategy: trade.strategy,
-                        contractId: trade.contractId,
-                    });
-                    console.log('✅ Copy trading executed successfully (fast mode)');
-                } catch (copyError) {
-                    console.error('❌ Copy trading failed (fast mode):', copyError);
-                    // Don't fail the main trade if copy trading fails
-                }
-
                 // Minimal monitoring for fire-and-forget mode
                 this.monitorContractFast(trade);
             } else {
@@ -1145,24 +1126,6 @@ class ZenTradingService {
                 console.log(
                     `✅ Zen Trade executed: Contract ${trade.contractId} for ${trade.stake} ${this.getCurrency()}`
                 );
-
-                // 🔗 COPY TRADING INTEGRATION: Execute copy trades for clients
-                try {
-                    console.log('🔗 Triggering copy trading for Zen trade...');
-                    await masterTradeIntegrationService.onZenTrade({
-                        market: trade.market,
-                        contractType: trade.contractType,
-                        stake: trade.stake,
-                        duration: trade.duration,
-                        durationUnit: 't',
-                        strategy: trade.strategy,
-                        contractId: trade.contractId,
-                    });
-                    console.log('✅ Copy trading executed successfully');
-                } catch (copyError) {
-                    console.error('❌ Copy trading failed:', copyError);
-                    // Don't fail the main trade if copy trading fails
-                }
             } else {
                 throw new Error('Invalid buy response from Deriv API');
             }

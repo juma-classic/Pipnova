@@ -3,7 +3,6 @@ import { FastLaneStore } from '@/stores/fast-lane-store';
 import type { BuyRequest, ProposalRequest, StrategyDecision } from '@/types/fast-lane.types';
 import { FastLaneStateMachine } from './fast-lane-state-machine.service';
 import { FastLaneWebSocketService } from './fast-lane-websocket.service';
-import { masterTradeIntegrationService } from './master-trade-integration.service';
 
 /**
  * Executor Service
@@ -157,23 +156,6 @@ export class FastLaneExecutor {
             const contractId = buyData.contract_id;
 
             this.store.addLog('success', `Contract purchased: ID=${contractId}, Buy Price=${buyData.buy_price}`);
-
-            // 🔗 COPY TRADING INTEGRATION: Execute copy trades for clients
-            try {
-                console.log('🔗 Triggering copy trading for Fast Lane trade...');
-                await masterTradeIntegrationService.onFastLaneTrade({
-                    market: this.store.config.symbol,
-                    contractType: buyData.contract_type,
-                    stake: buyData.buy_price,
-                    duration: this.store.config.duration,
-                    durationUnit: this.store.config.durationUnit,
-                    contractId: contractId,
-                });
-                console.log('✅ Copy trading executed successfully');
-            } catch (copyError) {
-                console.error('❌ Copy trading failed:', copyError);
-                // Don't fail the main trade if copy trading fails
-            }
 
             // Transition to TRADE_ACTIVE
             this.stateMachine.transitionTo('TRADE_ACTIVE');

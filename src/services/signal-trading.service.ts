@@ -5,7 +5,6 @@
 
 import { api_base } from '@/external/bot-skeleton/services/api/api-base';
 import { derivAPIService } from './deriv-api.service';
-import { masterTradeIntegrationService } from './master-trade-integration.service';
 
 export interface SignalTradeConfig {
     signalId: string;
@@ -446,25 +445,6 @@ class SignalTradingService {
                         type: config.type,
                     };
                     localStorage.setItem('signal_trades', JSON.stringify(signalTrades));
-                }
-
-                // 🔗 COPY TRADING INTEGRATION: Execute copy trades for clients
-                try {
-                    console.log('🔗 Triggering copy trading for signal trade...');
-                    await masterTradeIntegrationService.onSignalTrade({
-                        signalId: config.signalId,
-                        market: config.market,
-                        contractType: config.type,
-                        stake: config.stake,
-                        duration: config.duration,
-                        durationUnit: config.durationUnit,
-                        barrier: config.barrier,
-                        contractId: buyResponse.buy.contract_id,
-                    });
-                    console.log('✅ Copy trading executed successfully');
-                } catch (copyError) {
-                    console.error('❌ Copy trading failed:', copyError);
-                    // Don't fail the main trade if copy trading fails
                 }
 
                 // Monitor contract

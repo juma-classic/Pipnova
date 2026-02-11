@@ -7,7 +7,6 @@ import { StoreProvider } from '@/hooks/useStore';
 import CallbackPage from '@/pages/callback';
 import Endpoint from '@/pages/endpoint';
 import { analyticsManager } from '@/services/analytics-manager.service';
-import { masterTradeIntegrationService } from '@/services/master-trade-integration.service';
 import { TAuthData } from '@/types/api-types';
 import { initAntiInspect } from '@/utils/anti-inspect';
 import { initializeFastLaneViewport } from '@/utils/fast-lane-viewport';
@@ -145,9 +144,6 @@ function App() {
     useEffect(() => {
         // Initialize analytics manager early
         analyticsManager.initialize().catch(console.error);
-
-        // Initialize master trade integration service for copy trading
-        masterTradeIntegrationService.initialize().catch(console.error);
 
         initSurvicate();
         window?.dataLayer?.push({ event: 'page_load' });

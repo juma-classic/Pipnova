@@ -5,7 +5,6 @@
 
 import { api_base } from '@/external/bot-skeleton/services/api/api-base';
 import { derivAPIService } from './deriv-api.service';
-import { masterTradeIntegrationService } from './master-trade-integration.service';
 
 export interface FlippingToolConfig {
     market: string;
@@ -172,24 +171,6 @@ class FlippingToolService {
             }
 
             console.log('📈 Trade placed:', buyResponse.buy);
-
-            // 🔗 COPY TRADING INTEGRATION: Execute copy trades for clients
-            try {
-                console.log('🔗 Triggering copy trading for Flipping Tool trade...');
-                await masterTradeIntegrationService.onFlippingToolTrade({
-                    market: this.config.market,
-                    contractType: contractType,
-                    stake: this.currentStake,
-                    duration: 1,
-                    durationUnit: 't',
-                    barrier: this.config.overUnderDigit.toString(),
-                    contractId: buyResponse.buy.contract_id,
-                });
-                console.log('✅ Copy trading executed successfully');
-            } catch (copyError) {
-                console.error('❌ Copy trading failed:', copyError);
-                // Don't fail the main trade if copy trading fails
-            }
 
             // Monitor the contract
             if (buyResponse.buy?.contract_id) {
