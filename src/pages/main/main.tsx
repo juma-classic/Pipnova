@@ -951,7 +951,7 @@ const AppWrapper = observer(() => {
 
             console.log('🤖 Loading bot:', bot.title);
 
-            setActiveTab(DBOT_TABS.BOT_BUILDER);
+            setActiveTab(DBOT_TABS.DASHBOARD);
 
             // Validate load_modal exists and has the required method
             if (!load_modal) {
@@ -994,7 +994,7 @@ const AppWrapper = observer(() => {
 
     const handleOpen = useCallback(async () => {
         await load_modal.loadFileFromRecent();
-        setActiveTab(DBOT_TABS.BOT_BUILDER);
+        setActiveTab(DBOT_TABS.DASHBOARD);
     }, [load_modal, setActiveTab]);
 
     const toggleAnalysisTool = (url: string) => setAnalysisToolUrl(url);
@@ -1309,10 +1309,10 @@ const AppWrapper = observer(() => {
             // Find the bot in the bots array
             const bot = bots.find(b => b.filePath === botFile);
             if (bot) {
-                console.log('✅ Found CFX bot, loading directly into Bot Builder...');
+                console.log('✅ Found CFX bot, loading directly into workspace...');
 
-                // Switch to Bot Builder tab first
-                setActiveTab(DBOT_TABS.BOT_BUILDER);
+                // Switch to Dashboard tab (workspace) first
+                setActiveTab(DBOT_TABS.DASHBOARD);
 
                 // Load the bot directly
                 await handleBotClick(bot);
@@ -1357,10 +1357,10 @@ const AppWrapper = observer(() => {
             // Find the bot in the bots array
             const bot = bots.find(b => b.filePath === botFile);
             if (bot) {
-                console.log('✅ Found Elvis bot, loading directly into Bot Builder...');
+                console.log('✅ Found Elvis bot, loading directly into workspace...');
 
-                // Switch to Bot Builder tab first
-                setActiveTab(DBOT_TABS.BOT_BUILDER);
+                // Switch to Dashboard tab (workspace) first
+                setActiveTab(DBOT_TABS.DASHBOARD);
 
                 // Load the bot directly
                 await handleBotClick(bot);
@@ -1405,10 +1405,10 @@ const AppWrapper = observer(() => {
             // Find the bot in the bots array
             const bot = bots.find(b => b.filePath === botFile);
             if (bot) {
-                console.log('✅ Found signal bot, loading directly into Bot Builder...');
+                console.log('✅ Found signal bot, loading directly into workspace...');
 
-                // Switch to Bot Builder tab first
-                setActiveTab(DBOT_TABS.BOT_BUILDER);
+                // Switch to Dashboard tab (workspace) first
+                setActiveTab(DBOT_TABS.DASHBOARD);
 
                 // Load the bot directly
                 await handleBotClick(bot);
@@ -1598,8 +1598,8 @@ const AppWrapper = observer(() => {
 
                 console.log('✅ PATEL bot configured with proper OVER/UNDER logic, loading into workspace...');
 
-                // Switch to Bot Builder tab first
-                setActiveTab(DBOT_TABS.BOT_BUILDER);
+                // Switch to Dashboard tab (workspace) first
+                setActiveTab(DBOT_TABS.DASHBOARD);
 
                 // Small delay to ensure tab switch completes
                 setTimeout(async () => {
@@ -1628,10 +1628,10 @@ const AppWrapper = observer(() => {
                         console.error('   3. Try loading a different bot first to test the system');
                         console.error('   4. Refresh the page and try again');
 
-                        // Attempt recovery by switching to bot builder tab
+                        // Attempt recovery by switching to workspace tab
                         try {
-                            console.log('🔄 Attempting recovery by switching to Bot Builder...');
-                            setActiveTab(DBOT_TABS.BOT_BUILDER);
+                            console.log('🔄 Attempting recovery by switching to Dashboard...');
+                            setActiveTab(DBOT_TABS.DASHBOARD);
                         } catch (recoveryError) {
                             console.error('❌ Recovery attempt failed:', recoveryError);
                         }
@@ -1806,8 +1806,8 @@ const AppWrapper = observer(() => {
 
                 console.log('✅ Raziel Over Under bot configured, loading into workspace...');
 
-                // Switch to Bot Builder tab first
-                setActiveTab(DBOT_TABS.BOT_BUILDER);
+                // Switch to Dashboard tab (workspace) first
+                setActiveTab(DBOT_TABS.DASHBOARD);
 
                 // Load the bot
                 await handleBotClick(configuredBot);
@@ -1968,8 +1968,8 @@ const AppWrapper = observer(() => {
 
                 console.log('✅ PATEL bot configured, loading into workspace...');
 
-                // Switch to Bot Builder tab first
-                setActiveTab(1); // BOT_BUILDER is at index 1
+                // Switch to Dashboard tab (workspace) first
+                setActiveTab(DBOT_TABS.DASHBOARD);
 
                 // Load the bot with a slight delay to ensure tab switch completes
                 setTimeout(async () => {
@@ -2133,8 +2133,8 @@ const AppWrapper = observer(() => {
 
                 console.log('✅ MATCHES bot configured, loading into workspace...');
 
-                // Switch to Bot Builder tab first
-                setActiveTab(1); // BOT_BUILDER is at index 1
+                // Switch to Dashboard tab (workspace) first
+                setActiveTab(DBOT_TABS.DASHBOARD);
 
                 // Load the bot with a slight delay to ensure tab switch completes
                 setTimeout(async () => {
@@ -2268,8 +2268,8 @@ const AppWrapper = observer(() => {
 
                 console.log('✅ EVEN/ODD bot configured, loading into workspace...');
 
-                // Switch to Bot Builder tab first
-                setActiveTab(1); // BOT_BUILDER is at index 1
+                // Switch to Dashboard tab (workspace) first
+                setActiveTab(DBOT_TABS.DASHBOARD);
 
                 // Load the bot with a slight delay to ensure tab switch completes
                 setTimeout(async () => {
@@ -2303,10 +2303,10 @@ const AppWrapper = observer(() => {
             // Find the bot in the bots array
             const bot = bots.find(b => b.filePath === botFile);
             if (bot) {
-                console.log('✅ Found auto-load bot, loading directly into Bot Builder...');
+                console.log('✅ Found auto-load bot, loading directly into workspace...');
 
-                // Switch to Bot Builder tab first
-                setActiveTab(DBOT_TABS.BOT_BUILDER);
+                // Switch to Dashboard tab (workspace) first
+                setActiveTab(DBOT_TABS.DASHBOARD);
 
                 // Small delay to ensure tab switch completes
                 setTimeout(async () => {
@@ -2343,8 +2343,8 @@ const AppWrapper = observer(() => {
 
                 console.log('✅ Loading Fibonacci-configured Raziel Over Under bot...');
 
-                // Switch to Bot Builder tab first
-                setActiveTab(DBOT_TABS.BOT_BUILDER);
+                // Switch to Dashboard tab (workspace) first
+                setActiveTab(DBOT_TABS.DASHBOARD);
 
                 // Small delay to ensure tab switch completes
                 setTimeout(async () => {
@@ -2430,7 +2430,7 @@ const AppWrapper = observer(() => {
     }, [setActiveTab]);
 
     const showRunPanel = [
-        DBOT_TABS.BOT_BUILDER,
+        DBOT_TABS.DASHBOARD,
         DBOT_TABS.CHART,
         DBOT_TABS.PATEL_SIGNALS,
         DBOT_TABS.PATEL_SIGNAL_CENTER,
@@ -2451,7 +2451,7 @@ const AppWrapper = observer(() => {
                     >
                         {/* Note: Tab order matches DBOT_TABS indices in bot-contents.ts */}
                         {/* 0. FREE BOTS TAB - Will be moved here from line 2557 */}
-                        {/* 1. BOT BUILDER TAB */}
+                        {/* 0. BOT BUILDER TAB */}
                         <div
                             label={
                                 <>
@@ -2460,8 +2460,11 @@ const AppWrapper = observer(() => {
                                 </>
                             }
                             id='id-bot-builder'
-                        />
-                        {/* 2. DASHBOARD TAB */}
+                        >
+                            <Dashboard handleTabChange={setActiveTab} />
+                            <button onClick={handleOpen}>Load Bot</button>
+                        </div>
+                        {/* 1. DASHBOARD TAB */}
                         <div
                             label={
                                 <>
@@ -2470,10 +2473,7 @@ const AppWrapper = observer(() => {
                                 </>
                             }
                             id='id-dbot-dashboard'
-                        >
-                            <Dashboard handleTabChange={setActiveTab} />
-                            <button onClick={handleOpen}>Load Bot</button>
-                        </div>
+                        />
                         {/* 3. CHARTS TAB */}
                         <div
                             label={
