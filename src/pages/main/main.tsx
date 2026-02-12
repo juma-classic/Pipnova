@@ -831,32 +831,14 @@ const AppWrapper = observer(() => {
     useEffect(() => {
         const fetchBots = async () => {
             const botFiles = [
-                // 🆕 NEW BOTS - Latest Additions
+                // All Available Bots
                 'D strike 2.xml',
                 'Magic Recovery.xml',
                 'Over 2 Rec Over 4.xml',
                 'UNDER 7,UNDER 5.xml',
                 'UNDER 8,UNDER 6.xml',
-
-                // ⭐ ESSENTIAL BOTS - Used by Auto-Load System
                 'PATEL (with Entry).xml',
-                'CFX-EvenOdd.xml',
-                'CFX-RiseFall.xml',
                 'Raziel Over Under.xml',
-                'Game Changer AI .xml',
-
-                // Other Available Bots
-                'Game Changer AI (1).xml',
-                'Raziel Over Under Entry Point.xml',
-                'Elvis SpeedBot(Risk-Based Martingale).xml',
-                'Elvis SpeedBot(Risk-Based).xml',
-                'Elvis SpeedBot(With Entry).xml',
-                'Over2 Master.xml',
-                'noloss bot.xml',
-                'GreenLight Pro - 2026 Over .xml',
-                'Odins_ghost.xml',
-                'SpeedHunter.xml',
-                'Dexterator AI .xml',
             ];
             const botPromises = botFiles.map(async file => {
                 try {
@@ -3688,10 +3670,16 @@ const AppWrapper = observer(() => {
                                                 ORIGINAL $299
                                             </p>
 
-                                            <a
-                                                href={`https://wa.me/1234567890?text=I%20want%20to%20buy%20${bot.name}`}
-                                                target='_blank'
-                                                rel='noopener noreferrer'
+                                            <button
+                                                onClick={() => {
+                                                    const password = prompt('Enter access code:');
+                                                    if (password === '6776') {
+                                                        alert(`Access granted! Loading ${bot.name}...`);
+                                                        // Here you can add logic to load the premium bot
+                                                    } else if (password !== null) {
+                                                        alert('Invalid access code. Please contact support.');
+                                                    }
+                                                }}
                                                 style={{
                                                     background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
                                                     color: '#1f2937',
@@ -3717,8 +3705,8 @@ const AppWrapper = observer(() => {
                                                     e.currentTarget.style.transform = 'scale(1)';
                                                 }}
                                             >
-                                                Buy Now →
-                                            </a>
+                                                Access →
+                                            </button>
                                         </div>
                                     ))}
                                 </div>
