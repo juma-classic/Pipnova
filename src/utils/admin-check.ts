@@ -3,17 +3,35 @@
  * Determines if the current user has admin access
  */
 
-// List of admin login IDs or emails
-const ADMIN_IDENTIFIERS = [
-    'CR5186289', // Add admin login IDs here
-    'VRTC90460', // Virtual account for testing
-    'VRTC10463082', // New admin demo account
-    'CR7005911', // New admin real account
-    'CR2371589', // New admin real account
-    'VRTC4143924', // New admin demo account
-    'admin@pipnova.site',
-    'support@pipnova.site',
-];
+/**
+ * Get the list of admin account identifiers from localStorage
+ * @returns Array of admin account IDs
+ */
+const getAdminAccounts = (): string[] => {
+    try {
+        const stored = localStorage.getItem('pipnova_admin_accounts');
+        if (stored) {
+            return JSON.parse(stored);
+        }
+        
+        // Default admin accounts if none are stored
+        const defaultAdmins = [
+            'CR5186289',
+            'VRTC90460',
+            'VRTC10463082',
+            'CR7005911',
+            'CR2371589',
+            'VRTC4143924',
+        ];
+        
+        // Initialize localStorage with defaults
+        localStorage.setItem('pipnova_admin_accounts', JSON.stringify(defaultAdmins));
+        return defaultAdmins;
+    } catch (error) {
+        console.error('Error getting admin accounts:', error);
+        return [];
+    }
+};
 
 /**
  * Check if the current user is an admin
@@ -21,6 +39,8 @@ const ADMIN_IDENTIFIERS = [
  */
 export const isAdmin = (): boolean => {
     try {
+        const ADMIN_IDENTIFIERS = getAdminAccounts();
+        
         // Check localStorage for user info
         const clientAccounts = localStorage.getItem('client.accounts');
         const activeLoginId = localStorage.getItem('active_loginid');
