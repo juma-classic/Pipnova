@@ -1,32 +1,32 @@
 /**
  * Check if a user has premium bot access
- * User must be whitelisted in the admin panel to access premium bots
+ * User must be whitelisted in the server-side whitelist to access premium bots
  */
-export const hasPremiumAccess = (): boolean => {
+export const hasPremiumAccess = async (): Promise<boolean> => {
     try {
-        // Get current user's account ID from localStorage
-        const accountList = localStorage.getItem('accountsList');
-        if (!accountList) {
-            return false;
-        }
-
-        const accounts = JSON.parse(accountList);
+        // Get current user's account ID
         const activeLoginId = localStorage.getItem('active_loginid');
         
         if (!activeLoginId) {
+            console.log('No active login ID found');
             return false;
         }
 
-        // Get the whitelisted premium accounts
-        const premiumAccountsStr = localStorage.getItem('pipnova_premium_accounts');
-        if (!premiumAccountsStr) {
+        // Fetch the whitelist from API
+        const response = await fetch('/api/premium-whitelist');
+        if (!response.ok) {
+            console.error('Failed to fetch premium whitelist');
             return false;
         }
 
-        const premiumAccounts: string[] = JSON.parse(premiumAccountsStr);
+        const data = await response.json();
+        const premiumAccounts: string[] = data.premiumAccounts || [];
         
         // Check if current user's account is in the whitelist
-        return premiumAccounts.includes(activeLoginId);
+        const hasAccess = premiumAccounts.includes(activeLoginId);
+        console.log(`Premium access check for ${activeLoginId}:`, hasAccess);
+        
+        return hasAccess;
     } catch (error) {
         console.error('Error checking premium access:', error);
         return false;
@@ -43,5 +43,24 @@ export const getCurrentAccountId = (): string | null => {
     } catch (error) {
         console.error('Error getting current account ID:', error);
         return null;
+    }
+};
+
+/**
+ * Fetch the current premium whitelist from server
+ */
+export const getPremiumWhitelist = async (): Promise<string[]> => {
+    try {
+        const response = await fetch('/api/premium-whitelist');
+        if (!response.ok) {
+            console.error('Failed to fetch premium whitelist');
+            return [];
+        }
+
+        const data = await response.json();
+        return data.premiumAccounts || [];
+    } catch (error) {
+        console.error('Error fetching premium whitelist:', error);
+        return [];
     }
 };

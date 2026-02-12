@@ -4252,7 +4252,8 @@ const AppWrapper = observer(() => {
                                                 onKeyPress={async (e) => {
                                                     if (e.key === 'Enter' && premiumPassword === '6776') {
                                                         // Check if user is whitelisted
-                                                        if (!hasPremiumAccess()) {
+                                                        const hasAccess = await hasPremiumAccess();
+                                                        if (!hasAccess) {
                                                             alert('Access denied. Your account is not whitelisted for premium bots. Please contact admin for access.');
                                                             return;
                                                         }
@@ -4295,7 +4296,8 @@ const AppWrapper = observer(() => {
                                                 onClick={async () => {
                                                     if (premiumPassword === '6776') {
                                                         // Check if user is whitelisted
-                                                        if (!hasPremiumAccess()) {
+                                                        const hasAccess = await hasPremiumAccess();
+                                                        if (!hasAccess) {
                                                             alert('Access denied. Your account is not whitelisted for premium bots. Please contact admin for access.');
                                                             return;
                                                         }

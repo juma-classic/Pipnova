@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './AdminPanel.scss';
+import { fetchWhitelist, addToWhitelist, removeFromWhitelist } from '@/services/premium-whitelist-api.service';
 
 interface AdminPanelProps {
     isOpen: boolean;
@@ -14,6 +15,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
     const [newPremiumAccount, setNewPremiumAccount] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [premiumSearchTerm, setPremiumSearchTerm] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         loadAdminAccounts();
@@ -43,16 +45,16 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
         }
     };
 
-    const loadPremiumAccounts = () => {
+    const loadPremiumAccounts = async () => {
         try {
-            const stored = localStorage.getItem('pipnova_premium_accounts');
-            if (stored) {
-                setPremiumAccounts(JSON.parse(stored));
-            } else {
-                setPremiumAccounts([]);
-            }
+            setIsLoading(true);
+            const accounts = await fetchWhitelist();
+            setPremiumAccounts(accounts);
         } catch (error) {
             console.error('Error loading premium accounts:', error);
+            setPremiumAccounts([]);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -62,15 +64,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
             setAdminAccounts(accounts);
         } catch (error) {
             console.error('Error saving admin accounts:', error);
-        }
-    };
-
-    const savePremiumAccounts = (accounts: string[]) => {
-        try {
-            localStorage.setItem('pipnova_premium_accounts', JSON.stringify(accounts));
-            setPremiumAccounts(accounts);
-        } catch (error) {
-            console.error('Error saving premium accounts:', error);
         }
     };
 
@@ -105,7 +98,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
         }
     };
 
-    const addPremiumAccount = () => {
+    const addPremiumAccountHandler = async () => {
         const trimmed = newPremiumAccount.trim().toUpperCase();
         
         if (!trimmed) {
@@ -119,20 +112,33 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
             return;
         }
 
-        if (premiumAccounts.includes(trimmed)) {
-            alert('This account is already in the premium list');
+        setIsLoading(true);
+        const result = await addToWhitelist(trimmed);
+        setIsLoading(false);
+
+        if (result.success) {
+            alert(result.message);
+            setNewPremiumAccount('');
+            await loadPremiumAccounts(); // Reload the list
+        } else {
+            alert(result.message);
+        }
+    };
+
+    const removePremiumAccountHandler = async (account: string) => {
+        if (!confirm(`Remove ${account} from premium bot access?`)) {
             return;
         }
 
-        const updated = [...premiumAccounts, trimmed];
-        savePremiumAccounts(updated);
-        setNewPremiumAccount('');
-    };
+        setIsLoading(true);
+        const result = await removeFromWhitelist(account);
+        setIsLoading(false);
 
-    const removePremiumAccount = (account: string) => {
-        if (confirm(`Remove ${account} from premium bot access?`)) {
-            const updated = premiumAccounts.filter(acc => acc !== account);
-            savePremiumAccounts(updated);
+        if (result.success) {
+            alert(result.message);
+            await loadPremiumAccounts(); // Reload the list
+        } else {
+            alert(result.message);
         }
     };
 
@@ -271,12 +277,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                                     onChange={(e) => setNewPremiumAccount(e.target.value.toUpperCase())}
                                     onKeyPress={(e) => {
                                         if (e.key === 'Enter') {
-                                            addPremiumAccount();
+                                            addPremiumAccountHandler();
                                         }
                                     }}
+                                    disabled={isLoading}
                                 />
-                                <button className="add-btn" onClick={addPremiumAccount}>
-                                    Add Account
+                                <button className="add-btn" onClick={addPremiumAccountHandler} disabled={isLoading}>
+                                    {isLoading ? 'Processing...' : 'Add Account'}
                                 </button>
                             </div>
                             <p className="hint">Users need both correct password (6776) AND be whitelisted here</p>
@@ -295,7 +302,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                             </div>
 
                             <div className="accounts-list">
-                                {filteredPremiumAccounts.length === 0 ? (
+                                {isLoading ? (
+                                    <div className="empty-state">Loading...</div>
+                                ) : filteredPremiumAccounts.length === 0 ? (
                                     <div className="empty-state">
                                         {premiumSearchTerm ? 'No accounts match your search' : 'No premium accounts added yet'}
                                     </div>
@@ -310,8 +319,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                                             </div>
                                             <button
                                                 className="remove-btn"
-                                                onClick={() => removePremiumAccount(account)}
+                                                onClick={() => removePremiumAccountHandler(account)}
                                                 title="Remove premium bot access"
+                                                disabled={isLoading}
                                             >
                                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/>
@@ -334,7 +344,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" fill="#f59e0b"/>
                                 </svg>
-                                <p>Both password AND whitelist are required for premium bot access.</p>
+                                <p>Changes sync instantly across all devices and browsers via API.</p>
                             </div>
                         </div>
                     </div>
