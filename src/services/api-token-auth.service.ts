@@ -73,6 +73,23 @@ class ApiTokenAuthService {
             localStorage.setItem('authToken', token);
             localStorage.setItem('active_loginid', loginid);
 
+            // Store balance in the format expected by account switcher
+            const balanceData = {
+                accounts: {
+                    [loginid]: {
+                        balance: balance,
+                        currency: currency,
+                    }
+                },
+                total: {
+                    deriv: {
+                        amount: balance,
+                        currency: currency,
+                    }
+                }
+            };
+            localStorage.setItem('client.accounts_balance', JSON.stringify(balanceData));
+
             // Subscribe to balance updates
             await api.send({ balance: 1, subscribe: 1 });
 
