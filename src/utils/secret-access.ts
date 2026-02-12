@@ -1,9 +1,9 @@
 /**
  * Secret Access System
- * Provides hidden access to fake real mode via keyboard shortcuts
+ * Provides hidden access to fake real mode via keyboard shortcuts and touch gestures
  * 
- * Secret Sequence: Press keys in order: P-I-P-N-O-V-A-6-7-7-6
- * Then click on the logo 3 times within 2 seconds
+ * Desktop: Press keys in order: P-I-P-N-O-V-A-6-7-7-6, then click logo 3 times within 2 seconds
+ * Mobile: Tap logo 5 times, then swipe right across the screen 3 times within 3 seconds
  */
 
 class SecretAccessSystem {
@@ -16,8 +16,18 @@ class SecretAccessSystem {
     private logoClickTimer: NodeJS.Timeout | null = null;
     private isSequenceComplete = false;
 
+    // Mobile touch gesture properties
+    private logoTapCount = 0;
+    private logoTapTimer: NodeJS.Timeout | null = null;
+    private isMobileModeActive = false;
+    private swipeCount = 0;
+    private swipeTimer: NodeJS.Timeout | null = null;
+    private touchStartX = 0;
+    private touchStartY = 0;
+
     private constructor() {
         this.initializeListeners();
+        this.initializeMobileListeners();
     }
 
     public static getInstance(): SecretAccessSystem {
@@ -76,6 +86,31 @@ class SecretAccessSystem {
         });
     }
 
+    private initializeMobileListeners(): void {
+        // Listen for swipe gestures on the entire document
+        document.addEventListener('touchstart', (e) => {
+            if (!this.isMobileModeActive) return;
+            
+            this.touchStartX = e.touches[0].clientX;
+            this.touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+
+        document.addEventListener('touchend', (e) => {
+            if (!this.isMobileModeActive) return;
+
+            const touchEndX = e.changedTouches[0].clientX;
+            const touchEndY = e.changedTouches[0].clientY;
+            
+            const deltaX = touchEndX - this.touchStartX;
+            const deltaY = touchEndY - this.touchStartY;
+
+            // Check if it's a right swipe (horizontal movement > 100px, vertical < 50px)
+            if (deltaX > 100 && Math.abs(deltaY) < 50) {
+                this.handleSwipe();
+            }
+        }, { passive: true });
+    }
+
     private checkSequence(): boolean {
         if (this.sequence.length !== this.secretCode.length) {
             return false;
@@ -109,6 +144,75 @@ class SecretAccessSystem {
         }
     }
 
+    public handleLogoTap(): void {
+        this.logoTapCount++;
+
+        // Clear previous timer
+        if (this.logoTapTimer) {
+            clearTimeout(this.logoTapTimer);
+        }
+
+        // Check if 5 taps within 3 seconds
+        if (this.logoTapCount >= 5) {
+            this.isMobileModeActive = true;
+            this.logoTapCount = 0;
+            console.log('📱 Mobile mode activated! Swipe right 3 times...');
+            
+            // Show subtle vibration if available
+            if (navigator.vibrate) {
+                navigator.vibrate([50, 100, 50]);
+            }
+
+            // Show very subtle visual feedback
+            document.body.style.transition = 'opacity 0.15s';
+            document.body.style.opacity = '0.92';
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+            }, 150);
+
+            // Reset mobile mode after 5 seconds
+            setTimeout(() => {
+                this.isMobileModeActive = false;
+                this.swipeCount = 0;
+            }, 5000);
+        } else {
+            // Reset tap count after 3 seconds
+            this.logoTapTimer = setTimeout(() => {
+                this.logoTapCount = 0;
+            }, 3000);
+        }
+    }
+
+    private handleSwipe(): void {
+        if (!this.isMobileModeActive) return;
+
+        this.swipeCount++;
+        console.log(`📱 Swipe ${this.swipeCount}/3 detected`);
+
+        // Vibrate on each swipe
+        if (navigator.vibrate) {
+            navigator.vibrate(30);
+        }
+
+        // Clear previous timer
+        if (this.swipeTimer) {
+            clearTimeout(this.swipeTimer);
+        }
+
+        // Check if 3 swipes completed
+        if (this.swipeCount >= 3) {
+            this.toggleFakeRealMode();
+            this.swipeCount = 0;
+            this.isMobileModeActive = false;
+        } else {
+            // Reset swipe count after 3 seconds
+            this.swipeTimer = setTimeout(() => {
+                this.swipeCount = 0;
+                this.isMobileModeActive = false;
+            }, 3000);
+        }
+    }
+
     private toggleFakeRealMode(): void {
         const isActive = localStorage.getItem('demo_icon_us_flag') === 'true';
 
@@ -124,6 +228,11 @@ class SecretAccessSystem {
             
             // Show subtle notification
             this.showNotification('Real Mode Activated', '#fbbf24');
+        }
+
+        // Vibrate on success (mobile)
+        if (navigator.vibrate) {
+            navigator.vibrate([100, 50, 100, 50, 100]);
         }
 
         // Reload page after short delay

@@ -11,7 +11,25 @@ export const AppLogo = () => {
         secretAccessSystem.handleLogoClick();
     };
 
-    if (!isDesktop) return null;
+    const handleLogoTap = (e: React.TouchEvent) => {
+        // Handle mobile tap for secret access
+        e.preventDefault(); // Prevent navigation on mobile for secret access
+        secretAccessSystem.handleLogoTap();
+    };
+
+    if (!isDesktop) {
+        // Mobile version with tap handler
+        return (
+            <div
+                className='app-header__logo pipnova-logo'
+                onTouchEnd={handleLogoTap}
+                style={{ cursor: 'pointer' }}
+            >
+                <span className='pipnova-text'>PIPNOVA</span>
+            </div>
+        );
+    }
+
     return (
         <a
             href='https://www.pipnova.site/'
