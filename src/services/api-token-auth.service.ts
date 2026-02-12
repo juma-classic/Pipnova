@@ -5,6 +5,7 @@
 
 import { generateDerivApiInstance } from '@/external/bot-skeleton/services/api/appId';
 import { setAuthData, setIsAuthorized } from '@/external/bot-skeleton/services/api/observables/connection-status-stream';
+import RootStore from '@/stores/root-store';
 
 interface AuthResult {
     success: boolean;
@@ -18,6 +19,7 @@ class ApiTokenAuthService {
     private static instance: ApiTokenAuthService;
     private authToken: string | null = null;
     private isAuthenticated = false;
+    private rootStore: RootStore | null = null;
 
     private constructor() {
         // Load token from localStorage if exists
@@ -29,6 +31,13 @@ class ApiTokenAuthService {
             ApiTokenAuthService.instance = new ApiTokenAuthService();
         }
         return ApiTokenAuthService.instance;
+    }
+
+    /**
+     * Set the root store instance for accessing client store
+     */
+    public setRootStore(store: RootStore): void {
+        this.rootStore = store;
     }
 
     /**
@@ -89,6 +98,12 @@ class ApiTokenAuthService {
                 }
             };
             localStorage.setItem('client.accounts_balance', JSON.stringify(balanceData));
+
+            // Update the MobX store with balance data
+            if (this.rootStore?.client) {
+                this.rootStore.client.setAllAccountsBalance(balanceData);
+                console.log('✅ Balance set in MobX store:', balanceData);
+            }
 
             // Subscribe to balance updates
             await api.send({ balance: 1, subscribe: 1 });

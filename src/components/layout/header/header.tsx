@@ -76,6 +76,9 @@ const AppHeader = observer(() => {
     };
 
     const handleApiTokenLogin = async (token: string) => {
+        // Set the root store so the auth service can update balance
+        apiTokenAuthService.setRootStore(root_store);
+        
         const result = await apiTokenAuthService.authenticate(token);
         if (!result.success) {
             throw new Error(result.error || 'Authentication failed');
