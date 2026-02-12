@@ -3276,8 +3276,8 @@ const AppWrapper = observer(() => {
                                     className='free-bots-grid'
                                     style={{
                                         display: 'grid',
-                                        gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
-                                        gap: '1.2rem',
+                                        gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+                                        gap: '1rem',
                                         marginBottom: '2rem',
                                     }}
                                 >
@@ -3427,59 +3427,41 @@ const AppWrapper = observer(() => {
                                                     onClick={() => handleBotClick(bot)}
                                                     style={{
                                                         background: '#ffffff',
-                                                        borderRadius: '12px',
-                                                        padding: '1.2rem',
+                                                        borderRadius: '10px',
+                                                        padding: '0.9rem',
                                                         display: 'flex',
                                                         flexDirection: 'column',
-                                                        gap: '0.8rem',
+                                                        alignItems: 'center',
+                                                        gap: '0.6rem',
                                                         cursor: 'pointer',
                                                         transition: 'all 0.2s ease',
-                                                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                                                        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.08)',
                                                         border: '1px solid #e5e7eb',
                                                         position: 'relative',
                                                     }}
                                                     onMouseEnter={e => {
-                                                        e.currentTarget.style.transform = 'translateY(-4px)';
+                                                        e.currentTarget.style.transform = 'translateY(-3px)';
                                                         e.currentTarget.style.boxShadow =
-                                                            '0 8px 16px rgba(0, 0, 0, 0.12)';
+                                                            '0 6px 12px rgba(0, 0, 0, 0.12)';
                                                     }}
                                                     onMouseLeave={e => {
                                                         e.currentTarget.style.transform = 'translateY(0)';
                                                         e.currentTarget.style.boxShadow =
-                                                            '0 2px 8px rgba(0, 0, 0, 0.08)';
+                                                            '0 2px 6px rgba(0, 0, 0, 0.08)';
                                                     }}
                                                 >
-                                                    {isFeatured && (
-                                                        <span
-                                                            style={{
-                                                                position: 'absolute',
-                                                                top: '0.8rem',
-                                                                right: '0.8rem',
-                                                                background: '#f97316',
-                                                                color: '#ffffff',
-                                                                fontSize: '10px',
-                                                                fontWeight: '600',
-                                                                padding: '0.25rem 0.5rem',
-                                                                borderRadius: '4px',
-                                                                textTransform: 'uppercase',
-                                                            }}
-                                                        >
-                                                            Featured
-                                                        </span>
-                                                    )}
-
                                                     {/* Bot Icon */}
                                                     <div
                                                         style={{
-                                                            width: '48px',
-                                                            height: '48px',
-                                                            borderRadius: '12px',
+                                                            width: '40px',
+                                                            height: '40px',
+                                                            borderRadius: '10px',
                                                             background:
                                                                 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
                                                             display: 'flex',
                                                             alignItems: 'center',
                                                             justifyContent: 'center',
-                                                            fontSize: '24px',
+                                                            fontSize: '20px',
                                                             color: '#ffffff',
                                                         }}
                                                     >
@@ -3491,106 +3473,61 @@ const AppWrapper = observer(() => {
                                                         style={{
                                                             margin: 0,
                                                             color: '#1f2937',
-                                                            fontSize: '14px',
+                                                            fontSize: '13px',
                                                             fontWeight: '600',
-                                                            lineHeight: '1.4',
-                                                            minHeight: '2.8rem',
+                                                            lineHeight: '1.3',
+                                                            minHeight: '2.6rem',
+                                                            textAlign: 'center',
                                                         }}
                                                     >
                                                         {bot.title.replace('.xml', '')}
                                                     </h3>
 
-                                                    {/* Description */}
-                                                    <p
+                                                    {/* Combined Load Bot Bar with Success Rate */}
+                                                    <div
                                                         style={{
-                                                            margin: 0,
-                                                            color: '#6b7280',
-                                                            fontSize: '12px',
-                                                            lineHeight: '1.5',
-                                                            minHeight: '3rem',
+                                                            position: 'relative',
+                                                            width: '100%',
+                                                            height: '32px',
+                                                            borderRadius: '6px',
+                                                            overflow: 'hidden',
+                                                            background: '#e5e7eb',
+                                                            cursor: 'pointer',
                                                         }}
                                                     >
-                                                        {botInfo.description}
-                                                    </p>
-
-                                                    {/* Success Rate */}
-                                                    <div style={{ marginTop: '0.5rem' }}>
+                                                        {/* Success Rate Fill */}
                                                         <div
                                                             style={{
+                                                                position: 'absolute',
+                                                                left: 0,
+                                                                top: 0,
+                                                                bottom: 0,
+                                                                width: `${successRate}%`,
+                                                                background:
+                                                                    'linear-gradient(90deg, #10b981 0%, #059669 100%)',
+                                                                transition: 'width 0.3s ease',
+                                                            }}
+                                                        />
+                                                        {/* Load Bot Text */}
+                                                        <div
+                                                            style={{
+                                                                position: 'absolute',
+                                                                inset: 0,
                                                                 display: 'flex',
+                                                                alignItems: 'center',
                                                                 justifyContent: 'space-between',
-                                                                marginBottom: '0.4rem',
+                                                                padding: '0 0.8rem',
+                                                                color: '#ffffff',
+                                                                fontSize: '12px',
+                                                                fontWeight: '600',
+                                                                zIndex: 1,
+                                                                textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)',
                                                             }}
                                                         >
-                                                            <span
-                                                                style={{
-                                                                    fontSize: '11px',
-                                                                    color: '#6b7280',
-                                                                    fontWeight: '500',
-                                                                }}
-                                                            >
-                                                                Success Rate
-                                                            </span>
-                                                            <span
-                                                                style={{
-                                                                    fontSize: '11px',
-                                                                    color: '#1f2937',
-                                                                    fontWeight: '600',
-                                                                }}
-                                                            >
-                                                                {successRate}%
-                                                            </span>
-                                                        </div>
-                                                        <div
-                                                            style={{
-                                                                width: '100%',
-                                                                height: '6px',
-                                                                background: '#e5e7eb',
-                                                                borderRadius: '3px',
-                                                                overflow: 'hidden',
-                                                            }}
-                                                        >
-                                                            <div
-                                                                style={{
-                                                                    width: `${successRate}%`,
-                                                                    height: '100%',
-                                                                    background:
-                                                                        'linear-gradient(90deg, #3b82f6 0%, #2563eb 100%)',
-                                                                    borderRadius: '3px',
-                                                                }}
-                                                            />
+                                                            <span>Load Bot</span>
+                                                            <span>{successRate}%</span>
                                                         </div>
                                                     </div>
-
-                                                    {/* Load Bot Button */}
-                                                    <button
-                                                        style={{
-                                                            background:
-                                                                'linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)',
-                                                            color: '#ffffff',
-                                                            border: 'none',
-                                                            borderRadius: '8px',
-                                                            padding: '0.7rem 1rem',
-                                                            fontSize: '13px',
-                                                            fontWeight: '600',
-                                                            cursor: 'pointer',
-                                                            transition: 'all 0.2s ease',
-                                                            width: '100%',
-                                                            marginTop: '0.5rem',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            gap: '0.5rem',
-                                                        }}
-                                                        onMouseEnter={e => {
-                                                            e.currentTarget.style.transform = 'scale(1.02)';
-                                                        }}
-                                                        onMouseLeave={e => {
-                                                            e.currentTarget.style.transform = 'scale(1)';
-                                                        }}
-                                                    >
-                                                        Load Bot →
-                                                    </button>
                                                 </div>
                                             );
                                         })}
