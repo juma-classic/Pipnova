@@ -3086,6 +3086,7 @@ const AppWrapper = observer(() => {
                             >
                                 {/* Social Media Icons */}
                                 <div
+                                    className='social-media-icons-section'
                                     style={{
                                         display: 'flex',
                                         justifyContent: 'center',

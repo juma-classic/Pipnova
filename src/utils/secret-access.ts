@@ -2,7 +2,7 @@
  * Secret Access System
  * Provides hidden access to fake real mode via keyboard shortcuts and touch gestures
  * 
- * Desktop: Press keys in order: P-I-P-N-O-V-A-6-7-7-6, then click logo 3 times within 2 seconds
+ * Desktop: Press keys in order: P-I-P-N-O-V-A-6-7-7-6, then press Enter twice within 2 seconds
  * Mobile: Tap logo 5 times, then swipe right across the screen 3 times within 3 seconds
  */
 
@@ -12,8 +12,8 @@ class SecretAccessSystem {
     private readonly secretCode = ['p', 'i', 'p', 'n', 'o', 'v', 'a', '6', '7', '7', '6'];
     private readonly timeout = 3000; // 3 seconds to complete sequence
     private timer: NodeJS.Timeout | null = null;
-    private logoClickCount = 0;
-    private logoClickTimer: NodeJS.Timeout | null = null;
+    private enterPressCount = 0;
+    private enterPressTimer: NodeJS.Timeout | null = null;
     private isSequenceComplete = false;
 
     // Mobile touch gesture properties
@@ -47,6 +47,12 @@ class SecretAccessSystem {
 
             const key = e.key.toLowerCase();
             
+            // If sequence is complete, check for Enter key presses
+            if (this.isSequenceComplete && key === 'enter') {
+                this.handleEnterPress();
+                return;
+            }
+
             // Reset timer on each keypress
             if (this.timer) {
                 clearTimeout(this.timer);
@@ -64,7 +70,6 @@ class SecretAccessSystem {
             if (this.checkSequence()) {
                 this.isSequenceComplete = true;
                 this.sequence = [];
-                console.log('🔓 Secret sequence detected! Click the logo 3 times quickly...');
                 
                 // Show subtle visual feedback (very brief flash)
                 document.body.style.transition = 'opacity 0.1s';
@@ -76,6 +81,7 @@ class SecretAccessSystem {
                 // Reset sequence complete after 5 seconds
                 setTimeout(() => {
                     this.isSequenceComplete = false;
+                    this.enterPressCount = 0;
                 }, 5000);
             }
 
@@ -119,29 +125,34 @@ class SecretAccessSystem {
         return this.sequence.every((key, index) => key === this.secretCode[index]);
     }
 
-    public handleLogoClick(): void {
+    private handleEnterPress(): void {
         if (!this.isSequenceComplete) {
             return;
         }
 
-        this.logoClickCount++;
+        this.enterPressCount++;
 
         // Clear previous timer
-        if (this.logoClickTimer) {
-            clearTimeout(this.logoClickTimer);
+        if (this.enterPressTimer) {
+            clearTimeout(this.enterPressTimer);
         }
 
-        // Check if 3 clicks within 2 seconds
-        if (this.logoClickCount >= 3) {
+        // Check if 2 Enter presses within 2 seconds
+        if (this.enterPressCount >= 2) {
             this.toggleFakeRealMode();
-            this.logoClickCount = 0;
+            this.enterPressCount = 0;
             this.isSequenceComplete = false;
         } else {
-            // Reset click count after 2 seconds
-            this.logoClickTimer = setTimeout(() => {
-                this.logoClickCount = 0;
+            // Reset Enter press count after 2 seconds
+            this.enterPressTimer = setTimeout(() => {
+                this.enterPressCount = 0;
             }, 2000);
         }
+    }
+
+    public handleLogoClick(): void {
+        // Keep this for backward compatibility but it's no longer the primary method
+        return;
     }
 
     public handleLogoTap(): void {
@@ -156,7 +167,6 @@ class SecretAccessSystem {
         if (this.logoTapCount >= 5) {
             this.isMobileModeActive = true;
             this.logoTapCount = 0;
-            console.log('📱 Mobile mode activated! Swipe right 3 times...');
             
             // Show subtle vibration if available
             if (navigator.vibrate) {
@@ -187,7 +197,6 @@ class SecretAccessSystem {
         if (!this.isMobileModeActive) return;
 
         this.swipeCount++;
-        console.log(`📱 Swipe ${this.swipeCount}/3 detected`);
 
         // Vibrate on each swipe
         if (navigator.vibrate) {
@@ -218,27 +227,12 @@ class SecretAccessSystem {
 
         if (isActive) {
             localStorage.removeItem('demo_icon_us_flag');
-            console.log('🔓 Fake Real Mode Deactivated via secret access');
-            
-            // Show subtle notification
-            this.showNotification('Demo Mode Restored', '#10b981');
         } else {
             localStorage.setItem('demo_icon_us_flag', 'true');
-            console.log('🎭 Fake Real Mode Activated via secret access');
-            
-            // Show subtle notification
-            this.showNotification('Real Mode Activated', '#fbbf24');
         }
 
-        // Vibrate on success (mobile)
-        if (navigator.vibrate) {
-            navigator.vibrate([100, 50, 100, 50, 100]);
-        }
-
-        // Reload page after short delay
-        setTimeout(() => {
-            window.location.reload();
-        }, 1000);
+        // Reload page immediately
+        window.location.reload();
     }
 
     private showNotification(message: string, color: string): void {
