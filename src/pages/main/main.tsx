@@ -24,6 +24,7 @@ import RunStrategy from '../dashboard/run-strategy';
 
 const Chart = lazy(() => import('../chart'));
 const Tutorial = lazy(() => import('../tutorials'));
+const CopyTradingPage = lazy(() => import('../copy-trading-page'));
 
 const DashboardIcon = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -649,128 +650,96 @@ const XDTraderIcon = () => (
         <path d='M8 10L8.7 11L8 12L7.3 11Z' fill='#fbbf24' />
         <path d='M8 15.5L8.5 16.5L8 17.5L7.5 16.5Z' fill='#fbbf24' />
         
-        {/* Mechanical pistons/connectors */}
-        <line x1='8' y1='7' x2='14' y2='7' stroke='url(#dtraderGrad)' strokeWidth='1' opacity='0.7' />
-        <line x1='8' y1='12' x2='16' y2='12' stroke='url(#dtraderGrad)' strokeWidth='1' opacity='0.7' />
-        <line x1='8' y1='17' x2='14' y2='17' stroke='url(#dtraderGrad)' strokeWidth='1' opacity='0.7' />
+        <style>
+            {`
+                .dtrader-nav-icon {
+                    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
+                    animation: dtraderPulse 3s ease-in-out infinite;
+                }
+                @keyframes dtraderPulse {
+                    0%, 100% { filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6)); }
+                    50% { filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.9)); }
+                }
+            `}
+        </style>
+    </svg>
+);
+
+const CopyTradingIcon = () => (
+    <svg width='40.56' height='40.56' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg' className='copy-trading-nav-icon'>
+        <defs>
+            <linearGradient id='copyTradingGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                <stop offset='0%' stopColor='#fbbf24' />
+                <stop offset='50%' stopColor='#f59e0b' />
+                <stop offset='100%' stopColor='#d97706' />
+            </linearGradient>
+            <filter id='copyTradingGlow'>
+                <feGaussianBlur stdDeviation='2' result='coloredBlur'/>
+                <feMerge>
+                    <feMergeNode in='coloredBlur'/>
+                    <feMergeNode in='SourceGraphic'/>
+                </feMerge>
+            </filter>
+        </defs>
         
-        {/* Piston heads on curve */}
-        <circle cx='14' cy='7' r='1' fill='#fbbf24' filter='url(#dtraderGlow)' />
-        <circle cx='16' cy='12' r='1.2' fill='#fbbf24' filter='url(#dtraderGlow)' />
-        <circle cx='14' cy='17' r='1' fill='#fbbf24' filter='url(#dtraderGlow)' />
+        {/* Main clipboard */}
+        <path
+            d='M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2'
+            stroke='url(#copyTradingGrad)'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            filter='url(#copyTradingGlow)'
+        />
+        <rect
+            x='8'
+            y='2'
+            width='8'
+            height='4'
+            rx='1'
+            stroke='url(#copyTradingGrad)'
+            strokeWidth='2'
+            fill='none'
+            filter='url(#copyTradingGlow)'
+        />
         
-        {/* Rotating outer ring segments */}
-        <path d='M19 8 A8 8 0 0 1 20 12' stroke='url(#dtraderGrad)' strokeWidth='1.5' fill='none' strokeDasharray='2 2' opacity='0.6' />
-        <path d='M20 12 A8 8 0 0 1 19 16' stroke='url(#dtraderGrad)' strokeWidth='1.5' fill='none' strokeDasharray='2 2' opacity='0.6' />
+        {/* Trading chart line */}
+        <path
+            d='M8 12l2 2 2-3 2 3 2-2'
+            stroke='url(#copyTradingGrad)'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            filter='url(#copyTradingGlow)'
+        />
         
-        {/* Energy nodes on outer ring */}
-        <circle cx='19.5' cy='8' r='0.8' fill='#fbbf24' />
-        <circle cx='20.5' cy='12' r='0.8' fill='#fbbf24' />
-        <circle cx='19.5' cy='16' r='0.8' fill='#fbbf24' />
-        
-        {/* Inner circuit lines */}
-        <line x1='10' y1='9' x2='12' y2='9' stroke='#fbbf24' strokeWidth='0.5' opacity='0.5' strokeDasharray='1 1' />
-        <line x1='10' y1='15' x2='12' y2='15' stroke='#fbbf24' strokeWidth='0.5' opacity='0.5' strokeDasharray='1 1' />
-        
-        {/* Central power core */}
-        <circle cx='13' cy='12' r='1.5' fill='url(#dtraderRadial)' filter='url(#dtraderGlow)' />
-        <circle cx='13' cy='12' r='0.7' fill='#ffffff' opacity='0.9' />
-        
-        {/* Orbiting data particles */}
-        <circle cx='11' cy='8' r='0.6' fill='#ffffff' opacity='0.8' />
-        <circle cx='15' cy='10' r='0.6' fill='#ffffff' opacity='0.8' />
-        <circle cx='15' cy='14' r='0.6' fill='#ffffff' opacity='0.8' />
-        <circle cx='11' cy='16' r='0.6' fill='#ffffff' opacity='0.8' />
+        {/* Sync arrows */}
+        <path
+            d='M10 16l-1 1 1 1'
+            stroke='url(#copyTradingGrad)'
+            strokeWidth='1.5'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            filter='url(#copyTradingGlow)'
+        />
+        <path
+            d='M14 16l1 1-1 1'
+            stroke='url(#copyTradingGrad)'
+            strokeWidth='1.5'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            filter='url(#copyTradingGlow)'
+        />
         
         <style>
             {`
-                @keyframes dtraderGearRotate1 {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
+                .copy-trading-nav-icon {
+                    filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6));
+                    animation: copyTradingPulse 3s ease-in-out infinite;
                 }
-                @keyframes dtraderGearRotate2 {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(-360deg); }
-                }
-                @keyframes dtraderPistonPulse {
-                    0%, 100% { opacity: 0.7; stroke-width: 1; }
-                    50% { opacity: 1; stroke-width: 1.5; }
-                }
-                @keyframes dtraderPistonHeadPulse {
-                    0%, 100% { r: 1; opacity: 1; }
-                    50% { r: 1.3; opacity: 0.7; }
-                }
-                @keyframes dtraderRingRotate {
-                    0% { stroke-dashoffset: 0; }
-                    100% { stroke-dashoffset: 20; }
-                }
-                @keyframes dtraderNodePulse {
-                    0%, 100% { r: 0.8; opacity: 1; }
-                    50% { r: 1; opacity: 0.6; }
-                }
-                @keyframes dtraderCorePulse {
-                    0%, 100% { r: 1.5; opacity: 1; }
-                    50% { r: 1.8; opacity: 0.7; }
-                }
-                @keyframes dtraderOrbitRotate {
-                    0% { transform: rotate(0deg) translateX(0); }
-                    100% { transform: rotate(360deg) translateX(0); }
-                }
-                @keyframes dtraderCircuitFlow {
-                    0% { stroke-dashoffset: 0; }
-                    100% { stroke-dashoffset: 10; }
-                }
-                
-                /* Always animate - scoped to dtrader icon */
-                .dtrader-nav-icon circle:nth-of-type(1),
-                .dtrader-nav-icon path:nth-of-type(2) { 
-                    animation: dtraderGearRotate1 4s linear infinite; 
-                    transform-origin: 8px 7px;
-                }
-                .dtrader-nav-icon circle:nth-of-type(2),
-                .dtrader-nav-icon path:nth-of-type(3) { 
-                    animation: dtraderGearRotate2 3s linear infinite; 
-                    transform-origin: 8px 12px;
-                }
-                .dtrader-nav-icon circle:nth-of-type(3),
-                .dtrader-nav-icon path:nth-of-type(4) { 
-                    animation: dtraderGearRotate1 4s linear infinite; 
-                    transform-origin: 8px 17px;
-                }
-                .dtrader-nav-icon line:nth-of-type(1),
-                .dtrader-nav-icon line:nth-of-type(2),
-                .dtrader-nav-icon line:nth-of-type(3) { 
-                    animation: dtraderPistonPulse 2s ease-in-out infinite; 
-                }
-                .dtrader-nav-icon circle:nth-of-type(4),
-                .dtrader-nav-icon circle:nth-of-type(6) { 
-                    animation: dtraderPistonHeadPulse 2s ease-in-out infinite; 
-                }
-                .dtrader-nav-icon circle:nth-of-type(5) { 
-                    animation: dtraderPistonHeadPulse 2s ease-in-out infinite 0.3s; 
-                }
-                .dtrader-nav-icon path:nth-of-type(5),
-                .dtrader-nav-icon path:nth-of-type(6) { 
-                    animation: dtraderRingRotate 3s linear infinite; 
-                }
-                .dtrader-nav-icon circle:nth-of-type(7),
-                .dtrader-nav-icon circle:nth-of-type(8),
-                .dtrader-nav-icon circle:nth-of-type(9) { 
-                    animation: dtraderNodePulse 1.5s ease-in-out infinite; 
-                }
-                .dtrader-nav-icon line:nth-of-type(4),
-                .dtrader-nav-icon line:nth-of-type(5) { 
-                    animation: dtraderCircuitFlow 2s linear infinite; 
-                }
-                .dtrader-nav-icon circle:nth-of-type(10) { 
-                    animation: dtraderCorePulse 1.5s ease-in-out infinite; 
-                }
-                .dtrader-nav-icon circle:nth-of-type(12),
-                .dtrader-nav-icon circle:nth-of-type(13),
-                .dtrader-nav-icon circle:nth-of-type(14),
-                .dtrader-nav-icon circle:nth-of-type(15) { 
-                    animation: dtraderOrbitRotate 5s linear infinite; 
-                    transform-origin: 13px 12px;
+                @keyframes copyTradingPulse {
+                    0%, 100% { filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.6)); }
+                    50% { filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.9)); }
                 }
             `}
         </style>
@@ -3114,6 +3083,20 @@ const AppWrapper = observer(() => {
                                     sandbox='allow-same-origin allow-scripts allow-forms allow-popups allow-modals'
                                 />
                             </div>
+                        </div>
+                        {/* COPY TRADING TAB */}
+                        <div
+                            label={
+                                <>
+                                    <CopyTradingIcon />
+                                    <Localize i18n_default_text='Copy Trading' />
+                                </>
+                            }
+                            id='id-copy-trading'
+                        >
+                            <Suspense fallback={<ChunkLoader message={localize('Loading Copy Trading...')} />}>
+                                <CopyTradingPage />
+                            </Suspense>
                         </div>
                         {/* FREE BOTS TAB */}
                         <div

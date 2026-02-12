@@ -70,6 +70,9 @@ const XDTraderPage = lazy(() => import('../pages/xdtrader-page').then(m => ({ de
 // Nova Analysis Page
 const NovaAnalysisPage = lazy(() => import('../pages/nova-analysis-page').then(m => ({ default: m.default })));
 
+// Copy Trading Page
+const CopyTradingPage = lazy(() => import('../pages/copy-trading-page').then(m => ({ default: m.default })));
+
 const { TRANSLATIONS_CDN_URL, R2_PROJECT_NAME, CROWDIN_BRANCH_NAME } = process.env;
 const i18nInstance = initializeI18n({
     cdnUrl: `${TRANSLATIONS_CDN_URL}/${R2_PROJECT_NAME}/${CROWDIN_BRANCH_NAME}`,
@@ -130,6 +133,9 @@ const router = createBrowserRouter(
 
             {/* Nova Analysis Page */}
             <Route path='nova-analysis' element={<NovaAnalysisPage />} />
+
+            {/* Copy Trading Page */}
+            <Route path='copy-trading' element={<CopyTradingPage />} />
 
             {/* Phase 1 Demo Routes */}
             <Route path='live-signals-demo' element={<LiveSignalsDemo />} />
