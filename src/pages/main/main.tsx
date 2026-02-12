@@ -831,56 +831,32 @@ const AppWrapper = observer(() => {
     useEffect(() => {
         const fetchBots = async () => {
             const botFiles = [
-                // Core Trading Bots
-                'PATEL (with Entry).xml',
-                'Game Changer AI (1).xml',
-                'Game Changer AI .xml',
-                'Random LDP Differ .xml',
+                // 🆕 NEW BOTS - Latest Additions
+                'D strike 2.xml',
+                'Magic Recovery.xml',
+                'Over 2 Rec Over 4.xml',
+                'UNDER 7,UNDER 5.xml',
+                'UNDER 8,UNDER 6.xml',
 
-                // CFX Series Bots
-                'CFX-025-Base.xml',
-                'CFX - 025.xml',
+                // ⭐ ESSENTIAL BOTS - Used by Auto-Load System
+                'PATEL (with Entry).xml',
                 'CFX-EvenOdd.xml',
                 'CFX-RiseFall.xml',
+                'Raziel Over Under.xml',
+                'Game Changer AI .xml',
 
-                // Professional Trading Bots
-                'Digit-Hunter-Pro.xml',
-                'MatchesMaster.xml',
-                'Deriv Killer.xml',
-                'SpeedHunter.xml',
-
-                // Elvis Bot Collection
+                // Other Available Bots
+                'Game Changer AI (1).xml',
+                'Raziel Over Under Entry Point.xml',
                 'Elvis SpeedBot(Risk-Based Martingale).xml',
                 'Elvis SpeedBot(Risk-Based).xml',
                 'Elvis SpeedBot(With Entry).xml',
-                'Over 3 Delirium.xml',
-                'Over_Under Ghost .xml',
-                'Over_Under Ghost v2 .xml',
-                'Flipping-Tool-2026 .xml',
-
-                // Advanced Strategy Bots
-                'Dexterator AI .xml',
-                'Dexterator CFX Hit&Run.xml',
-                'D6 Deriv.xml',
-                'Even Odd Ghost V1 .xml',
-                'updated CFX Auto-Bot .xml',
-
-                // Specialized Bots
-                'MATCHES (with Entry).xml',
-                'EVENODD Double loss Bot .xml',
                 'Over2 Master.xml',
-                'Raziel Over Under.xml',
-                'Raziel Over Under Entry Point.xml',
                 'noloss bot.xml',
-                'DIFF SMART BOT.xml',
-                'Digit Differ Split martingale Strategy[4nd July 2022].xml',
-
-                // Premium & Special Bots
-                'AUTO C4 VOLT 🇬🇧 2 🇬🇧 AI PREMIUM ROBOT  (2) (1).xml',
-                '$Dollar printer .xml',
-                'M27 Auto Switch bot 2024 (1).xml',
                 'GreenLight Pro - 2026 Over .xml',
                 'Odins_ghost.xml',
+                'SpeedHunter.xml',
+                'Dexterator AI .xml',
             ];
             const botPromises = botFiles.map(async file => {
                 try {
