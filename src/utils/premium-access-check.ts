@@ -1,6 +1,6 @@
 /**
  * Check if a user has premium bot access
- * User must be whitelisted in the server-side whitelist to access premium bots
+ * User must be whitelisted in the premium-whitelist.json file
  */
 export const hasPremiumAccess = async (): Promise<boolean> => {
     try {
@@ -12,8 +12,8 @@ export const hasPremiumAccess = async (): Promise<boolean> => {
             return false;
         }
 
-        // Fetch the whitelist from API
-        const response = await fetch('/api/premium-whitelist');
+        // Fetch the whitelist from JSON file
+        const response = await fetch('/premium-whitelist.json');
         if (!response.ok) {
             console.error('Failed to fetch premium whitelist');
             return false;
@@ -24,7 +24,8 @@ export const hasPremiumAccess = async (): Promise<boolean> => {
         
         // Check if current user's account is in the whitelist
         const hasAccess = premiumAccounts.includes(activeLoginId);
-        console.log(`Premium access check for ${activeLoginId}:`, hasAccess);
+        console.log(`Premium access check for ${activeLoginId}:`, hasAccess ? '✅ GRANTED' : '❌ DENIED');
+        console.log('Whitelist:', premiumAccounts);
         
         return hasAccess;
     } catch (error) {
@@ -47,11 +48,11 @@ export const getCurrentAccountId = (): string | null => {
 };
 
 /**
- * Fetch the current premium whitelist from server
+ * Fetch the current premium whitelist from JSON file
  */
 export const getPremiumWhitelist = async (): Promise<string[]> => {
     try {
-        const response = await fetch('/api/premium-whitelist');
+        const response = await fetch('/premium-whitelist.json');
         if (!response.ok) {
             console.error('Failed to fetch premium whitelist');
             return [];

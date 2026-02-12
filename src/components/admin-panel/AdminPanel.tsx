@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './AdminPanel.scss';
-import { fetchWhitelist, addToWhitelist, removeFromWhitelist } from '@/services/premium-whitelist-api.service';
 
 interface AdminPanelProps {
     isOpen: boolean;
@@ -12,7 +11,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
     const [adminAccounts, setAdminAccounts] = useState<string[]>([]);
     const [premiumAccounts, setPremiumAccounts] = useState<string[]>([]);
     const [newAccount, setNewAccount] = useState('');
-    const [newPremiumAccount, setNewPremiumAccount] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
     const [premiumSearchTerm, setPremiumSearchTerm] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -48,8 +46,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
     const loadPremiumAccounts = async () => {
         try {
             setIsLoading(true);
-            const accounts = await fetchWhitelist();
-            setPremiumAccounts(accounts);
+            const response = await fetch('/premium-whitelist.json');
+            if (response.ok) {
+                const data = await response.json();
+                setPremiumAccounts(data.premiumAccounts || []);
+            } else {
+                setPremiumAccounts([]);
+            }
         } catch (error) {
             console.error('Error loading premium accounts:', error);
             setPremiumAccounts([]);
@@ -95,50 +98,6 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
         if (confirm(`Remove ${account} from admin access?`)) {
             const updated = adminAccounts.filter(acc => acc !== account);
             saveAdminAccounts(updated);
-        }
-    };
-
-    const addPremiumAccountHandler = async () => {
-        const trimmed = newPremiumAccount.trim().toUpperCase();
-        
-        if (!trimmed) {
-            alert('Please enter an account number');
-            return;
-        }
-
-        // Validate format (CR or VRTC followed by numbers)
-        if (!trimmed.match(/^(CR|VRTC)\d+$/)) {
-            alert('Invalid format. Use CR##### or VRTC##### format');
-            return;
-        }
-
-        setIsLoading(true);
-        const result = await addToWhitelist(trimmed);
-        setIsLoading(false);
-
-        if (result.success) {
-            alert(result.message);
-            setNewPremiumAccount('');
-            await loadPremiumAccounts(); // Reload the list
-        } else {
-            alert(result.message);
-        }
-    };
-
-    const removePremiumAccountHandler = async (account: string) => {
-        if (!confirm(`Remove ${account} from premium bot access?`)) {
-            return;
-        }
-
-        setIsLoading(true);
-        const result = await removeFromWhitelist(account);
-        setIsLoading(false);
-
-        if (result.success) {
-            alert(result.message);
-            await loadPremiumAccounts(); // Reload the list
-        } else {
-            alert(result.message);
         }
     };
 
@@ -268,30 +227,24 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                 ) : (
                     <div className="admin-panel-content">
                         <div className="add-section">
-                            <h3>Add Premium Bot Access</h3>
-                            <div className="input-group">
-                                <input
-                                    type="text"
-                                    placeholder="Enter CR or VRTC number (e.g., CR1234567)"
-                                    value={newPremiumAccount}
-                                    onChange={(e) => setNewPremiumAccount(e.target.value.toUpperCase())}
-                                    onKeyPress={(e) => {
-                                        if (e.key === 'Enter') {
-                                            addPremiumAccountHandler();
-                                        }
-                                    }}
-                                    disabled={isLoading}
-                                />
-                                <button className="add-btn" onClick={addPremiumAccountHandler} disabled={isLoading}>
-                                    {isLoading ? 'Processing...' : 'Add Account'}
-                                </button>
+                            <h3>How to Add Premium Bot Access</h3>
+                            <div style={{ background: '#f3f4f6', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
+                                <p style={{ margin: '0 0 0.5rem 0', color: '#1f2937', fontSize: '14px', fontWeight: '600' }}>
+                                    To whitelist a client:
+                                </p>
+                                <ol style={{ margin: '0', paddingLeft: '1.5rem', color: '#6b7280', fontSize: '13px' }}>
+                                    <li>Get client's Deriv account number (CR##### or VRTC#####)</li>
+                                    <li>Open <code style={{ background: '#e5e7eb', padding: '2px 6px', borderRadius: '4px' }}>public/premium-whitelist.json</code></li>
+                                    <li>Add their account to the "premiumAccounts" array</li>
+                                    <li>Run: <code style={{ background: '#e5e7eb', padding: '2px 6px', borderRadius: '4px' }}>git add . && git commit -m "feat: add client" && git push</code></li>
+                                    <li>Client can access immediately after deployment</li>
+                                </ol>
                             </div>
-                            <p className="hint">Users need both correct password (6776) AND be whitelisted here</p>
                         </div>
 
                         <div className="list-section">
                             <div className="list-header">
-                                <h3>Premium Accounts ({premiumAccounts.length})</h3>
+                                <h3>Current Whitelist ({premiumAccounts.length})</h3>
                                 <input
                                     type="text"
                                     className="search-input"
@@ -306,7 +259,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                                     <div className="empty-state">Loading...</div>
                                 ) : filteredPremiumAccounts.length === 0 ? (
                                     <div className="empty-state">
-                                        {premiumSearchTerm ? 'No accounts match your search' : 'No premium accounts added yet'}
+                                        {premiumSearchTerm ? 'No accounts match your search' : 'No premium accounts whitelisted yet'}
                                     </div>
                                 ) : (
                                     filteredPremiumAccounts.map((account) => (
@@ -317,16 +270,9 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                                                 </span>
                                                 <span className="account-number">{account}</span>
                                             </div>
-                                            <button
-                                                className="remove-btn"
-                                                onClick={() => removePremiumAccountHandler(account)}
-                                                title="Remove premium bot access"
-                                                disabled={isLoading}
-                                            >
-                                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z" fill="currentColor"/>
-                                                </svg>
-                                            </button>
+                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" fill="#10b981"/>
+                                            </svg>
                                         </div>
                                     ))
                                 )}
@@ -338,13 +284,19 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" fill="#3b82f6"/>
                                 </svg>
-                                <p>Whitelisted accounts can access premium bots with the correct password.</p>
+                                <p>Whitelist is stored in public/premium-whitelist.json file</p>
                             </div>
                             <div className="info-item">
                                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z" fill="#f59e0b"/>
                                 </svg>
-                                <p>Changes sync instantly across all devices and browsers via API.</p>
+                                <p>Changes require git commit and push to take effect</p>
+                            </div>
+                            <div className="info-item">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="#10b981"/>
+                                </svg>
+                                <p>Clients need password (6776) AND be whitelisted to access</p>
                             </div>
                         </div>
                     </div>

@@ -3,5 +3,6 @@
     "CR5186289",
     "VRTC90460"
   ],
-  "lastUpdated": "2024-01-01T00:00:00Z"
+  "lastUpdated": "2024-01-15T00:00:00Z",
+  "note": "Add your client's CR or VRTC account numbers here, then commit and push to deploy"
 }
