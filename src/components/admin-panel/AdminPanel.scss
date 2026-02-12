@@ -58,6 +58,39 @@
     }
 }
 
+.admin-panel-tabs {
+    display: flex;
+    background: #f3f4f6;
+    border-bottom: 2px solid #e5e7eb;
+
+    .tab-btn {
+        flex: 1;
+        padding: 1rem;
+        background: transparent;
+        border: none;
+        color: #6b7280;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        border-bottom: 3px solid transparent;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &:hover {
+            background: #e5e7eb;
+            color: #1f2937;
+        }
+
+        &.active {
+            background: #ffffff;
+            color: #1f2937;
+            border-bottom-color: #fbbf24;
+        }
+    }
+}
+
 .admin-panel-content {
     padding: 1.5rem;
     overflow-y: auto;

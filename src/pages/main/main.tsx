@@ -19,6 +19,7 @@ import { useDevice } from '@deriv-com/ui';
 import { BotLoadingErrorHandler, withBotLoadingErrorHandling } from '@/utils/bot-loading-error-handler';
 import { adminPanelAccess } from '@/utils/admin-panel-access';
 import { AdminPanel } from '@/components/admin-panel/AdminPanel';
+import { hasPremiumAccess } from '@/utils/premium-access-check';
 import RunPanel from '../../components/run-panel';
 import ChartModal from '../chart/chart-modal';
 import Dashboard from '../dashboard';
@@ -4250,6 +4251,12 @@ const AppWrapper = observer(() => {
                                                 onBlur={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
                                                 onKeyPress={async (e) => {
                                                     if (e.key === 'Enter' && premiumPassword === '6776') {
+                                                        // Check if user is whitelisted
+                                                        if (!hasPremiumAccess()) {
+                                                            alert('Access denied. Your account is not whitelisted for premium bots. Please contact admin for access.');
+                                                            return;
+                                                        }
+
                                                         try {
                                                             // Fetch the XML file from public folder
                                                             const response = await fetch(`/${premiumBotModal.xmlFile}`);
@@ -4287,6 +4294,12 @@ const AppWrapper = observer(() => {
                                             <button
                                                 onClick={async () => {
                                                     if (premiumPassword === '6776') {
+                                                        // Check if user is whitelisted
+                                                        if (!hasPremiumAccess()) {
+                                                            alert('Access denied. Your account is not whitelisted for premium bots. Please contact admin for access.');
+                                                            return;
+                                                        }
+
                                                         try {
                                                             // Fetch the XML file from public folder
                                                             const response = await fetch(`/${premiumBotModal.xmlFile}`);
