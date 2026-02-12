@@ -201,6 +201,29 @@
         }
     }
 
+    // Custom tab ordering using CSS order property
+    // Desired order: Free Bots, Bot Builder, Dashboard, Analysis Tool, Charts, Nova Analysis, Signals, Copy Trading, DTrader, [remaining]
+    #id-free-bots { order: 1; }
+    #id-bot-builder { order: 2; }
+    #id-dbot-dashboard { order: 3; }
+    #id-analysis-tool { order: 4; }
+    #id-charts { order: 5; }
+    #id-nova-analysis { order: 6; }
+    #id-signals { order: 7; }
+    #id-copy-trading { order: 8; }
+    #id-xdtrader { order: 9; }
+    #id-tutorials { order: 10; }
+    #id-patel-signals { order: 11; }
+    #id-patel-signal-center { order: 12; }
+    #id-advanced-algo { order: 13; }
+    #id-signal-savvy { order: 14; }
+    #id-fast-lane { order: 15; }
+    #id-zen { order: 16; }
+    #id-elvis-zone { order: 17; }
+    #id-tickshark { order: 18; }
+    #id-accumulator { order: 19; }
+    #id-digit-hacker { order: 20; }
+
     .dc-tabs__item {
         position: relative;
         display: flex;
