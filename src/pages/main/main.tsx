@@ -818,7 +818,7 @@ const AppWrapper = observer(() => {
     };
     const [bots, setBots] = useState<BotType[]>([]);
     const [analysisToolUrl, setAnalysisToolUrl] = useState('ai');
-    const [premiumBotModal, setPremiumBotModal] = useState({ isOpen: false, botName: '' });
+    const [premiumBotModal, setPremiumBotModal] = useState({ isOpen: false, botName: '', xmlFile: '' });
     const [premiumPassword, setPremiumPassword] = useState('');
     const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(false);
 
@@ -3829,7 +3829,8 @@ const AppWrapper = observer(() => {
                                 >
                                     {[
                                         { 
-                                            name: 'Novagrid 2026', 
+                                            name: 'Novagrid 2026',
+                                            xmlFile: 'NOVAGRID 2026.xml',
                                             icon: (
                                                 // Supernova / Cosmic Explosion
                                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -3929,7 +3930,11 @@ const AppWrapper = observer(() => {
                                             description: 'Ultimate AI-powered trading system with neural network analysis, real-time market adaptation, and premium 24/7 support'
                                         },
                                         { 
-                                            name: 'Novagrid Elite', 
+                                            name: 'The Dark Dynasty',
+                                            xmlFile: '🖤⚜️ 𝓣𝓱𝓮 𝓓𝓪𝓻𝓴 𝓓𝔂𝓷𝓪𝓼𝓽𝔂 ⚜️🖤2.xml',
+                                            rate: 94,
+                                            price: '$499',
+                                            description: 'Elite dark-themed strategy with advanced pattern recognition, stealth execution, and professional-grade analytics',
                                             icon: (
                                                 // Spiral Galaxy
                                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -4012,8 +4017,9 @@ const AppWrapper = observer(() => {
                                                 </svg>
                                             ), 
                                             rate: 94,
+                                            rate: 94,
                                             price: '$499',
-                                            description: 'Advanced automated strategy with smart risk management, pattern recognition, and professional-grade analytics'
+                                            description: 'Elite dark-themed strategy with advanced pattern recognition, stealth execution, and professional-grade analytics'
                                         },
                                     ].map((bot, index) => (
                                         <div
@@ -4155,7 +4161,7 @@ const AppWrapper = observer(() => {
 
                                             <button
                                                 onClick={() => {
-                                                    setPremiumBotModal({ isOpen: true, botName: bot.name });
+                                                    setPremiumBotModal({ isOpen: true, botName: bot.name, xmlFile: bot.xmlFile });
                                                     setPremiumPassword('');
                                                 }}
                                                 style={{
@@ -4204,7 +4210,7 @@ const AppWrapper = observer(() => {
                                             justifyContent: 'center',
                                             zIndex: 10000,
                                         }}
-                                        onClick={() => setPremiumBotModal({ isOpen: false, botName: '' })}
+                                        onClick={() => setPremiumBotModal({ isOpen: false, botName: '', xmlFile: '' })}
                                     >
                                         <div
                                             style={{
@@ -4242,19 +4248,75 @@ const AppWrapper = observer(() => {
                                                 }}
                                                 onFocus={(e) => e.currentTarget.style.borderColor = '#fbbf24'}
                                                 onBlur={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
-                                                onKeyPress={(e) => {
+                                                onKeyPress={async (e) => {
                                                     if (e.key === 'Enter' && premiumPassword === '6776') {
-                                                        alert(`Access granted! Loading ${premiumBotModal.botName}...`);
-                                                        setPremiumBotModal({ isOpen: false, botName: '' });
+                                                        try {
+                                                            // Fetch the XML file from public folder
+                                                            const response = await fetch(`/${premiumBotModal.xmlFile}`);
+                                                            if (!response.ok) {
+                                                                throw new Error('Failed to load bot file');
+                                                            }
+                                                            const xmlContent = await response.text();
+                                                            
+                                                            // Create strategy object to load
+                                                            const strategyToLoad = {
+                                                                id: `premium_${Date.now()}`,
+                                                                name: premiumBotModal.botName,
+                                                                xml: xmlContent,
+                                                                save_type: 'LOCAL',
+                                                                timestamp: Date.now(),
+                                                            };
+
+                                                            // Load the bot into workspace
+                                                            await load_modal.loadStrategyToBuilder(strategyToLoad);
+                                                            
+                                                            // Switch to dashboard tab
+                                                            setActiveTab(DBOT_TABS.DASHBOARD);
+                                                            
+                                                            // Close modal and reset
+                                                            setPremiumBotModal({ isOpen: false, botName: '', xmlFile: '' });
+                                                            setPremiumPassword('');
+                                                        } catch (error) {
+                                                            console.error('Error loading premium bot:', error);
+                                                            alert('Failed to load bot. Please try again or contact admin.');
+                                                        }
                                                     }
                                                 }}
                                             />
 
                                             <button
-                                                onClick={() => {
+                                                onClick={async () => {
                                                     if (premiumPassword === '6776') {
-                                                        alert(`Access granted! Loading ${premiumBotModal.botName}...`);
-                                                        setPremiumBotModal({ isOpen: false, botName: '' });
+                                                        try {
+                                                            // Fetch the XML file from public folder
+                                                            const response = await fetch(`/${premiumBotModal.xmlFile}`);
+                                                            if (!response.ok) {
+                                                                throw new Error('Failed to load bot file');
+                                                            }
+                                                            const xmlContent = await response.text();
+                                                            
+                                                            // Create strategy object to load
+                                                            const strategyToLoad = {
+                                                                id: `premium_${Date.now()}`,
+                                                                name: premiumBotModal.botName,
+                                                                xml: xmlContent,
+                                                                save_type: 'LOCAL',
+                                                                timestamp: Date.now(),
+                                                            };
+
+                                                            // Load the bot into workspace
+                                                            await load_modal.loadStrategyToBuilder(strategyToLoad);
+                                                            
+                                                            // Switch to dashboard tab
+                                                            setActiveTab(DBOT_TABS.DASHBOARD);
+                                                            
+                                                            // Close modal and reset
+                                                            setPremiumBotModal({ isOpen: false, botName: '', xmlFile: '' });
+                                                            setPremiumPassword('');
+                                                        } catch (error) {
+                                                            console.error('Error loading premium bot:', error);
+                                                            alert('Failed to load bot. Please try again or contact admin.');
+                                                        }
                                                     } else {
                                                         alert('Invalid access code. Please contact admin for access.');
                                                     }
@@ -4313,7 +4375,7 @@ const AppWrapper = observer(() => {
                                             </a>
 
                                             <button
-                                                onClick={() => setPremiumBotModal({ isOpen: false, botName: '' })}
+                                                onClick={() => setPremiumBotModal({ isOpen: false, botName: '', xmlFile: '' })}
                                                 style={{
                                                     width: '100%',
                                                     padding: '0.75rem',
