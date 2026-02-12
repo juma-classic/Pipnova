@@ -3243,138 +3243,425 @@ const AppWrapper = observer(() => {
                                     {bots
                                         .filter(bot => !bot.title.includes('PREMIUM'))
                                         .map((bot, index) => {
-                                            // Function to get icon and description based on bot name
-                                            const getBotInfo = name => {
+                                            // Function to get animated SVG icon based on bot name
+                                            const getBotIcon = name => {
                                                 const lowerName = name.toLowerCase();
-
-                                                // Icon selection based on keywords
-                                                let icon = '🤖';
-                                                let description =
-                                                    'Advanced automated trading strategy with optimized entry and exit points';
-
-                                                if (lowerName.includes('patel')) {
-                                                    icon = '👨‍💼';
-                                                    description =
-                                                        'Professional trading strategy with precise entry points and risk management';
-                                                } else if (
-                                                    lowerName.includes('game changer') ||
-                                                    lowerName.includes('gamechanger')
-                                                ) {
-                                                    icon = '🎮';
-                                                    description =
-                                                        'Revolutionary AI-powered strategy that adapts to market conditions';
-                                                } else if (lowerName.includes('cfx')) {
-                                                    icon = '⚡';
-                                                    description =
-                                                        'High-speed CFX trading with advanced pattern recognition';
-                                                } else if (
-                                                    lowerName.includes('digit') &&
-                                                    lowerName.includes('hunter')
-                                                ) {
-                                                    icon = '🎯';
-                                                    description =
-                                                        'Precision digit prediction with advanced hunting algorithms';
-                                                } else if (
-                                                    lowerName.includes('matches') ||
-                                                    lowerName.includes('match')
-                                                ) {
-                                                    icon = '🔥';
-                                                    description =
-                                                        'Pattern matching strategy for consistent winning trades';
-                                                } else if (
-                                                    lowerName.includes('market') &&
-                                                    lowerName.includes('maker')
-                                                ) {
-                                                    icon = '📊';
-                                                    description = 'Market maker strategy with liquidity optimization';
-                                                } else if (
-                                                    lowerName.includes('deriv') &&
-                                                    lowerName.includes('killer')
-                                                ) {
-                                                    icon = '💀';
-                                                    description =
-                                                        'Aggressive trading strategy designed for maximum profits';
-                                                } else if (lowerName.includes('speed')) {
-                                                    icon = '🚀';
-                                                    description =
-                                                        'Lightning-fast execution with rapid trade processing';
-                                                } else if (lowerName.includes('elvis')) {
-                                                    icon = '👑';
-                                                    description =
-                                                        'Premium Elvis strategy with risk-based martingale system';
-                                                } else if (lowerName.includes('over') || lowerName.includes('under')) {
-                                                    icon = '📈';
-                                                    description =
-                                                        'Over/Under prediction strategy with statistical analysis';
-                                                } else if (lowerName.includes('ghost')) {
-                                                    icon = '👻';
-                                                    description =
-                                                        'Stealth trading strategy with invisible market entry';
-                                                } else if (lowerName.includes('flip')) {
-                                                    icon = '🔄';
-                                                    description = 'Dynamic flipping strategy for volatile markets';
-                                                } else if (
-                                                    lowerName.includes('dexterator') ||
-                                                    lowerName.includes('dexter')
-                                                ) {
-                                                    icon = '🧠';
-                                                    description =
-                                                        'Intelligent AI-powered trading with neural network analysis';
-                                                } else if (lowerName.includes('even') || lowerName.includes('odd')) {
-                                                    icon = '🎲';
-                                                    description =
-                                                        'Even/Odd digit strategy with probability optimization';
+                                                
+                                                // Return animated SVG based on bot name
+                                                if (lowerName.includes('d strike') || lowerName.includes('strike')) {
+                                                    // Black Panther kinetic energy / Vibranium inspired
+                                                    return (
+                                                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <defs>
+                                                                <linearGradient id={`strikeGrad${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                    <stop offset="0%" stopColor="#a855f7" />
+                                                                    <stop offset="50%" stopColor="#7c3aed" />
+                                                                    <stop offset="100%" stopColor="#6366f1" />
+                                                                </linearGradient>
+                                                                <radialGradient id={`strikeRadial${index}`}>
+                                                                    <stop offset="0%" stopColor="#c4b5fd" stopOpacity="0.8" />
+                                                                    <stop offset="100%" stopColor="#7c3aed" stopOpacity="0" />
+                                                                </radialGradient>
+                                                            </defs>
+                                                            
+                                                            {/* Kinetic energy field */}
+                                                            <circle cx="24" cy="24" r="20" fill={`url(#strikeRadial${index})`}>
+                                                                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Outer vibranium ring */}
+                                                            <circle cx="24" cy="24" r="19" stroke={`url(#strikeGrad${index})`} strokeWidth="2" fill="none" opacity="0.6">
+                                                                <animate attributeName="r" values="19;20;19" dur="3s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Energy pulse rings */}
+                                                            <circle cx="24" cy="24" r="16" stroke={`url(#strikeGrad${index})`} strokeWidth="1.5" fill="none" strokeDasharray="6 3">
+                                                                <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="4s" repeatCount="indefinite" />
+                                                                <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="24" cy="24" r="13" stroke={`url(#strikeGrad${index})`} strokeWidth="1.5" fill="none" strokeDasharray="4 2">
+                                                                <animateTransform attributeName="transform" type="rotate" from="360 24 24" to="0 24 24" dur="3s" repeatCount="indefinite" />
+                                                                <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" begin="0.5s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Panther claw marks / Strike pattern */}
+                                                            <g opacity="0.8">
+                                                                <path d="M18 12 L20 16 L18 20" stroke={`url(#strikeGrad${index})`} strokeWidth="2" strokeLinecap="round">
+                                                                    <animate attributeName="opacity" values="0.6;1;0.6" dur="1.5s" repeatCount="indefinite" />
+                                                                </path>
+                                                                <path d="M24 10 L24 18" stroke={`url(#strikeGrad${index})`} strokeWidth="2" strokeLinecap="round">
+                                                                    <animate attributeName="opacity" values="0.6;1;0.6" dur="1.5s" begin="0.2s" repeatCount="indefinite" />
+                                                                </path>
+                                                                <path d="M30 12 L28 16 L30 20" stroke={`url(#strikeGrad${index})`} strokeWidth="2" strokeLinecap="round">
+                                                                    <animate attributeName="opacity" values="0.6;1;0.6" dur="1.5s" begin="0.4s" repeatCount="indefinite" />
+                                                                </path>
+                                                            </g>
+                                                            
+                                                            {/* Central vibranium core with D shape */}
+                                                            <g>
+                                                                <path d="M18 18 L18 30 L24 30 C27 30 29 28 29 24 C29 20 27 18 24 18 Z" 
+                                                                    fill={`url(#strikeGrad${index})`}
+                                                                >
+                                                                    <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" />
+                                                                </path>
+                                                                <path d="M20 20 L20 28 L24 28 C26 28 27 26.5 27 24 C27 21.5 26 20 24 20 Z" 
+                                                                    fill="none" 
+                                                                    stroke="#fff" 
+                                                                    strokeWidth="1"
+                                                                >
+                                                                    <animate attributeName="opacity" values="0.7;1;0.7" dur="2s" repeatCount="indefinite" />
+                                                                </path>
+                                                            </g>
+                                                            
+                                                            {/* Energy particles */}
+                                                            <circle cx="12" cy="24" r="1.5" fill={`url(#strikeGrad${index})`}>
+                                                                <animate attributeName="cx" values="12;36;12" dur="3s" repeatCount="indefinite" />
+                                                                <animate attributeName="opacity" values="0;1;0" dur="3s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="24" cy="12" r="1.5" fill={`url(#strikeGrad${index})`}>
+                                                                <animate attributeName="cy" values="12;36;12" dur="3s" begin="0.5s" repeatCount="indefinite" />
+                                                                <animate attributeName="opacity" values="0;1;0" dur="3s" begin="0.5s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="36" cy="24" r="1.5" fill={`url(#strikeGrad${index})`}>
+                                                                <animate attributeName="cx" values="36;12;36" dur="3s" begin="1s" repeatCount="indefinite" />
+                                                                <animate attributeName="opacity" values="0;1;0" dur="3s" begin="1s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="24" cy="36" r="1.5" fill={`url(#strikeGrad${index})`}>
+                                                                <animate attributeName="cy" values="36;12;36" dur="3s" begin="1.5s" repeatCount="indefinite" />
+                                                                <animate attributeName="opacity" values="0;1;0" dur="3s" begin="1.5s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Power surge lines */}
+                                                            <line x1="24" y1="24" x2="24" y2="6" stroke={`url(#strikeGrad${index})`} strokeWidth="2" opacity="0.4">
+                                                                <animate attributeName="opacity" values="0.2;0.6;0.2" dur="2s" repeatCount="indefinite" />
+                                                            </line>
+                                                            <line x1="24" y1="24" x2="42" y2="24" stroke={`url(#strikeGrad${index})`} strokeWidth="2" opacity="0.4">
+                                                                <animate attributeName="opacity" values="0.2;0.6;0.2" dur="2s" begin="0.5s" repeatCount="indefinite" />
+                                                            </line>
+                                                            <line x1="24" y1="24" x2="24" y2="42" stroke={`url(#strikeGrad${index})`} strokeWidth="2" opacity="0.4">
+                                                                <animate attributeName="opacity" values="0.2;0.6;0.2" dur="2s" begin="1s" repeatCount="indefinite" />
+                                                            </line>
+                                                            <line x1="24" y1="24" x2="6" y2="24" stroke={`url(#strikeGrad${index})`} strokeWidth="2" opacity="0.4">
+                                                                <animate attributeName="opacity" values="0.2;0.6;0.2" dur="2s" begin="1.5s" repeatCount="indefinite" />
+                                                            </line>
+                                                        </svg>
+                                                    );
+                                                } else if (lowerName.includes('magic') || lowerName.includes('recovery')) {
+                                                    // Doctor Strange inspired - Mystic Arts symbol with rotating runes
+                                                    return (
+                                                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <defs>
+                                                                <linearGradient id={`magicGrad${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                    <stop offset="0%" stopColor="#f59e0b" />
+                                                                    <stop offset="50%" stopColor="#d97706" />
+                                                                    <stop offset="100%" stopColor="#b45309" />
+                                                                </linearGradient>
+                                                                <radialGradient id={`magicRadial${index}`}>
+                                                                    <stop offset="0%" stopColor="#fbbf24" stopOpacity="0.8" />
+                                                                    <stop offset="100%" stopColor="#f59e0b" stopOpacity="0" />
+                                                                </radialGradient>
+                                                            </defs>
+                                                            
+                                                            {/* Outer mystical circle */}
+                                                            <circle cx="24" cy="24" r="20" stroke={`url(#magicGrad${index})`} strokeWidth="2" fill="none" opacity="0.6">
+                                                                <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="8s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Inner rotating runes circle */}
+                                                            <circle cx="24" cy="24" r="15" stroke={`url(#magicGrad${index})`} strokeWidth="1.5" fill="none" opacity="0.5" strokeDasharray="3 3">
+                                                                <animateTransform attributeName="transform" type="rotate" from="360 24 24" to="0 24 24" dur="6s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Mystical symbol - Eye of Agamotto inspired */}
+                                                            <g>
+                                                                <ellipse cx="24" cy="24" rx="10" ry="14" stroke={`url(#magicGrad${index})`} strokeWidth="2" fill="none">
+                                                                    <animate attributeName="opacity" values="0.8;1;0.8" dur="3s" repeatCount="indefinite" />
+                                                                </ellipse>
+                                                                <circle cx="24" cy="24" r="6" fill={`url(#magicGrad${index})`}>
+                                                                    <animate attributeName="r" values="6;7;6" dur="2s" repeatCount="indefinite" />
+                                                                </circle>
+                                                                <circle cx="24" cy="24" r="3" fill="#fff">
+                                                                    <animate attributeName="opacity" values="1;0.6;1" dur="2s" repeatCount="indefinite" />
+                                                                </circle>
+                                                            </g>
+                                                            
+                                                            {/* Mystical particles */}
+                                                            <circle cx="24" cy="8" r="1.5" fill={`url(#magicGrad${index})`}>
+                                                                <animate attributeName="opacity" values="0;1;0" dur="2s" repeatCount="indefinite" />
+                                                                <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="8s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="40" cy="24" r="1.5" fill={`url(#magicGrad${index})`}>
+                                                                <animate attributeName="opacity" values="0;1;0" dur="2s" begin="0.5s" repeatCount="indefinite" />
+                                                                <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="8s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="24" cy="40" r="1.5" fill={`url(#magicGrad${index})`}>
+                                                                <animate attributeName="opacity" values="0;1;0" dur="2s" begin="1s" repeatCount="indefinite" />
+                                                                <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="8s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="8" cy="24" r="1.5" fill={`url(#magicGrad${index})`}>
+                                                                <animate attributeName="opacity" values="0;1;0" dur="2s" begin="1.5s" repeatCount="indefinite" />
+                                                                <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="8s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Energy glow */}
+                                                            <circle cx="24" cy="24" r="18" fill={`url(#magicRadial${index})`}>
+                                                                <animate attributeName="opacity" values="0.3;0.6;0.3" dur="3s" repeatCount="indefinite" />
+                                                            </circle>
+                                                        </svg>
+                                                    );
+                                                } else if (lowerName.includes('over') && lowerName.includes('rec')) {
+                                                    return (
+                                                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <defs>
+                                                                <linearGradient id={`overGrad${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                    <stop offset="0%" stopColor="#10b981" />
+                                                                    <stop offset="100%" stopColor="#059669" />
+                                                                </linearGradient>
+                                                            </defs>
+                                                            <path d="M8 32 L16 24 L24 28 L32 16 L40 20" stroke={`url(#overGrad${index})`} strokeWidth="3" fill="none" strokeLinecap="round">
+                                                                <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="3s" repeatCount="indefinite" />
+                                                            </path>
+                                                            <circle cx="16" cy="24" r="3" fill={`url(#overGrad${index})`}>
+                                                                <animate attributeName="cy" values="24;20;24" dur="2s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="24" cy="28" r="3" fill={`url(#overGrad${index})`}>
+                                                                <animate attributeName="cy" values="28;24;28" dur="2s" begin="0.3s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="32" cy="16" r="3" fill={`url(#overGrad${index})`}>
+                                                                <animate attributeName="cy" values="16;12;16" dur="2s" begin="0.6s" repeatCount="indefinite" />
+                                                            </circle>
+                                                        </svg>
+                                                    );
+                                                } else if (lowerName.includes('under 7') || lowerName.includes('under 5')) {
+                                                    return (
+                                                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <defs>
+                                                                <linearGradient id={`under75Grad${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                    <stop offset="0%" stopColor="#3b82f6" />
+                                                                    <stop offset="100%" stopColor="#1d4ed8" />
+                                                                </linearGradient>
+                                                            </defs>
+                                                            <text x="24" y="30" fontSize="20" fontWeight="bold" fill={`url(#under75Grad${index})`} textAnchor="middle">7</text>
+                                                            <text x="24" y="30" fontSize="14" fontWeight="bold" fill={`url(#under75Grad${index})`} textAnchor="middle" opacity="0.6">
+                                                                <animate attributeName="y" values="30;26;30" dur="2s" repeatCount="indefinite" />
+                                                                5
+                                                            </text>
+                                                            <path d="M12 36 L24 12 L36 36" stroke={`url(#under75Grad${index})`} strokeWidth="2" fill="none">
+                                                                <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="3s" repeatCount="indefinite" />
+                                                            </path>
+                                                            <circle cx="24" cy="24" r="18" stroke={`url(#under75Grad${index})`} strokeWidth="2" fill="none" opacity="0.3">
+                                                                <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="10s" repeatCount="indefinite" />
+                                                            </circle>
+                                                        </svg>
+                                                    );
+                                                } else if (lowerName.includes('under 8') || lowerName.includes('under 6')) {
+                                                    return (
+                                                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <defs>
+                                                                <linearGradient id={`under86Grad${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                    <stop offset="0%" stopColor="#8b5cf6" />
+                                                                    <stop offset="100%" stopColor="#6366f1" />
+                                                                </linearGradient>
+                                                            </defs>
+                                                            <text x="24" y="30" fontSize="20" fontWeight="bold" fill={`url(#under86Grad${index})`} textAnchor="middle">8</text>
+                                                            <text x="24" y="30" fontSize="14" fontWeight="bold" fill={`url(#under86Grad${index})`} textAnchor="middle" opacity="0.6">
+                                                                <animate attributeName="y" values="30;26;30" dur="2s" repeatCount="indefinite" />
+                                                                6
+                                                            </text>
+                                                            <path d="M12 36 L24 12 L36 36" stroke={`url(#under86Grad${index})`} strokeWidth="2" fill="none">
+                                                                <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="3s" repeatCount="indefinite" />
+                                                            </path>
+                                                            <rect x="8" y="8" width="32" height="32" rx="4" stroke={`url(#under86Grad${index})`} strokeWidth="2" fill="none" opacity="0.3">
+                                                                <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="12s" repeatCount="indefinite" />
+                                                            </rect>
+                                                        </svg>
+                                                    );
+                                                } else if (lowerName.includes('patel')) {
+                                                    // Iron Man Arc Reactor inspired
+                                                    return (
+                                                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <defs>
+                                                                <linearGradient id={`patelGrad${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                    <stop offset="0%" stopColor="#60a5fa" />
+                                                                    <stop offset="50%" stopColor="#3b82f6" />
+                                                                    <stop offset="100%" stopColor="#2563eb" />
+                                                                </linearGradient>
+                                                                <radialGradient id={`patelGlow${index}`}>
+                                                                    <stop offset="0%" stopColor="#93c5fd" stopOpacity="0.8" />
+                                                                    <stop offset="100%" stopColor="#3b82f6" stopOpacity="0" />
+                                                                </radialGradient>
+                                                            </defs>
+                                                            
+                                                            {/* Outer reactor ring */}
+                                                            <circle cx="24" cy="24" r="20" stroke={`url(#patelGrad${index})`} strokeWidth="2" fill="none">
+                                                                <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Rotating energy rings */}
+                                                            <circle cx="24" cy="24" r="16" stroke={`url(#patelGrad${index})`} strokeWidth="1.5" fill="none" strokeDasharray="8 4">
+                                                                <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="4s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="24" cy="24" r="13" stroke={`url(#patelGrad${index})`} strokeWidth="1.5" fill="none" strokeDasharray="6 3">
+                                                                <animateTransform attributeName="transform" type="rotate" from="360 24 24" to="0 24 24" dur="3s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Arc reactor core triangular pattern */}
+                                                            <g>
+                                                                <path d="M24 14 L30 24 L24 34 L18 24 Z" fill={`url(#patelGrad${index})`} opacity="0.7">
+                                                                    <animate attributeName="opacity" values="0.7;1;0.7" dur="1.5s" repeatCount="indefinite" />
+                                                                </path>
+                                                                <path d="M24 16 L28 24 L24 32 L20 24 Z" fill="none" stroke="#fff" strokeWidth="1">
+                                                                    <animate attributeName="opacity" values="0.8;1;0.8" dur="1.5s" repeatCount="indefinite" />
+                                                                </path>
+                                                            </g>
+                                                            
+                                                            {/* Central core */}
+                                                            <circle cx="24" cy="24" r="6" fill={`url(#patelGrad${index})`}>
+                                                                <animate attributeName="r" values="6;7;6" dur="2s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="24" cy="24" r="3" fill="#fff">
+                                                                <animate attributeName="opacity" values="1;0.7;1" dur="1s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Energy beams */}
+                                                            <line x1="24" y1="24" x2="24" y2="8" stroke={`url(#patelGrad${index})`} strokeWidth="2" opacity="0.5">
+                                                                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" repeatCount="indefinite" />
+                                                            </line>
+                                                            <line x1="24" y1="24" x2="38" y2="24" stroke={`url(#patelGrad${index})`} strokeWidth="2" opacity="0.5">
+                                                                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" begin="0.5s" repeatCount="indefinite" />
+                                                            </line>
+                                                            <line x1="24" y1="24" x2="24" y2="40" stroke={`url(#patelGrad${index})`} strokeWidth="2" opacity="0.5">
+                                                                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" begin="1s" repeatCount="indefinite" />
+                                                            </line>
+                                                            <line x1="24" y1="24" x2="10" y2="24" stroke={`url(#patelGrad${index})`} strokeWidth="2" opacity="0.5">
+                                                                <animate attributeName="opacity" values="0.3;0.7;0.3" dur="2s" begin="1.5s" repeatCount="indefinite" />
+                                                            </line>
+                                                            
+                                                            {/* Glow effect */}
+                                                            <circle cx="24" cy="24" r="18" fill={`url(#patelGlow${index})`}>
+                                                                <animate attributeName="opacity" values="0.4;0.7;0.4" dur="2s" repeatCount="indefinite" />
+                                                            </circle>
+                                                        </svg>
+                                                    );
                                                 } else if (lowerName.includes('raziel')) {
-                                                    icon = '😇';
-                                                    description = 'Divine trading strategy with heavenly accuracy';
-                                                } else if (
-                                                    lowerName.includes('noloss') ||
-                                                    lowerName.includes('no loss')
-                                                ) {
-                                                    icon = '🛡️';
-                                                    description =
-                                                        'Protected trading strategy with loss prevention system';
-                                                } else if (lowerName.includes('diff')) {
-                                                    icon = '🔢';
-                                                    description = 'Digit difference strategy with smart martingale';
-                                                } else if (lowerName.includes('auto') && lowerName.includes('c4')) {
-                                                    icon = '💣';
-                                                    description =
-                                                        'Explosive automated strategy with AI premium features';
-                                                } else if (
-                                                    lowerName.includes('dollar') ||
-                                                    lowerName.includes('printer')
-                                                ) {
-                                                    icon = '💵';
-                                                    description =
-                                                        'Money-making machine with consistent profit generation';
-                                                } else if (lowerName.includes('m27') || lowerName.includes('switch')) {
-                                                    icon = '🔀';
-                                                    description =
-                                                        'Auto-switching strategy that adapts to market changes';
-                                                } else if (lowerName.includes('green') || lowerName.includes('light')) {
-                                                    icon = '🟢';
-                                                    description = 'Green light strategy for safe and profitable trades';
-                                                } else if (lowerName.includes('odin')) {
-                                                    icon = '⚔️';
-                                                    description =
-                                                        'Powerful Norse-inspired strategy with warrior precision';
-                                                } else if (lowerName.includes('random') && lowerName.includes('ldp')) {
-                                                    icon = '🎰';
-                                                    description =
-                                                        'Random LDP strategy with state-based decision making';
-                                                } else if (lowerName.includes('rise') || lowerName.includes('fall')) {
-                                                    icon = '📉';
-                                                    description = 'Rise/Fall prediction with trend analysis';
-                                                } else if (lowerName.includes('delirium')) {
-                                                    icon = '🌀';
-                                                    description = 'Advanced Over 3 strategy with complex algorithms';
+                                                    // Thor's Mjolnir/Lightning inspired
+                                                    return (
+                                                        <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                            <defs>
+                                                                <linearGradient id={`razielGrad${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                    <stop offset="0%" stopColor="#a78bfa" />
+                                                                    <stop offset="50%" stopColor="#8b5cf6" />
+                                                                    <stop offset="100%" stopColor="#7c3aed" />
+                                                                </linearGradient>
+                                                                <radialGradient id={`razielRadial${index}`}>
+                                                                    <stop offset="0%" stopColor="#c4b5fd" stopOpacity="0.8" />
+                                                                    <stop offset="100%" stopColor="#8b5cf6" stopOpacity="0" />
+                                                                </radialGradient>
+                                                            </defs>
+                                                            
+                                                            {/* Energy field */}
+                                                            <circle cx="24" cy="24" r="20" fill={`url(#razielRadial${index})`}>
+                                                                <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Outer power ring */}
+                                                            <circle cx="24" cy="24" r="18" stroke={`url(#razielGrad${index})`} strokeWidth="2" fill="none" strokeDasharray="4 4">
+                                                                <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="6s" repeatCount="indefinite" />
+                                                                <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Lightning bolt - Mjolnir power */}
+                                                            <g>
+                                                                <path d="M24 8 L20 20 L26 20 L22 36 L30 22 L24 22 Z" fill={`url(#razielGrad${index})`}>
+                                                                    <animate attributeName="opacity" values="0.8;1;0.8" dur="1.5s" repeatCount="indefinite" />
+                                                                </path>
+                                                                <path d="M24 8 L20 20 L26 20 L22 36 L30 22 L24 22 Z" fill="none" stroke="#fff" strokeWidth="1.5" opacity="0.6">
+                                                                    <animate attributeName="opacity" values="0.4;0.8;0.4" dur="1.5s" repeatCount="indefinite" />
+                                                                </path>
+                                                            </g>
+                                                            
+                                                            {/* Energy sparks */}
+                                                            <circle cx="24" cy="12" r="2" fill={`url(#razielGrad${index})`}>
+                                                                <animate attributeName="opacity" values="0;1;0" dur="1.5s" repeatCount="indefinite" />
+                                                                <animate attributeName="r" values="2;3;2" dur="1.5s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="32" cy="18" r="1.5" fill={`url(#razielGrad${index})`}>
+                                                                <animate attributeName="opacity" values="0;1;0" dur="1.5s" begin="0.3s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="16" cy="18" r="1.5" fill={`url(#razielGrad${index})`}>
+                                                                <animate attributeName="opacity" values="0;1;0" dur="1.5s" begin="0.6s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="28" cy="32" r="1.5" fill={`url(#razielGrad${index})`}>
+                                                                <animate attributeName="opacity" values="0;1;0" dur="1.5s" begin="0.9s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="20" cy="32" r="1.5" fill={`url(#razielGrad${index})`}>
+                                                                <animate attributeName="opacity" values="0;1;0" dur="1.5s" begin="1.2s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Power core */}
+                                                            <circle cx="24" cy="24" r="5" fill={`url(#razielGrad${index})`}>
+                                                                <animate attributeName="r" values="5;6;5" dur="2s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            <circle cx="24" cy="24" r="3" fill="#fff">
+                                                                <animate attributeName="opacity" values="0.8;1;0.8" dur="1s" repeatCount="indefinite" />
+                                                            </circle>
+                                                            
+                                                            {/* Rotating runes */}
+                                                            <g opacity="0.6">
+                                                                <text x="24" y="6" fontSize="8" fill={`url(#razielGrad${index})`} textAnchor="middle" fontWeight="bold">⚡</text>
+                                                                <text x="42" y="26" fontSize="8" fill={`url(#razielGrad${index})`} textAnchor="middle" fontWeight="bold">⚡</text>
+                                                                <text x="24" y="46" fontSize="8" fill={`url(#razielGrad${index})`} textAnchor="middle" fontWeight="bold">⚡</text>
+                                                                <text x="6" y="26" fontSize="8" fill={`url(#razielGrad${index})`} textAnchor="middle" fontWeight="bold">⚡</text>
+                                                                <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="10s" repeatCount="indefinite" />
+                                                            </g>
+                                                        </svg>
+                                                    );
                                                 }
-
-                                                return { icon, description };
+                                                
+                                                // Default icon
+                                                return (
+                                                    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <defs>
+                                                            <linearGradient id={`defaultGrad${index}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                                                <stop offset="0%" stopColor="#6366f1" />
+                                                                <stop offset="100%" stopColor="#4f46e5" />
+                                                            </linearGradient>
+                                                        </defs>
+                                                        <circle cx="24" cy="24" r="18" fill={`url(#defaultGrad${index})`} opacity="0.2">
+                                                            <animate attributeName="r" values="18;20;18" dur="2s" repeatCount="indefinite" />
+                                                        </circle>
+                                                        <rect x="16" y="16" width="16" height="16" rx="2" fill={`url(#defaultGrad${index})`}>
+                                                            <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="6s" repeatCount="indefinite" />
+                                                        </rect>
+                                                    </svg>
+                                                );
                                             };
 
-                                            const botInfo = getBotInfo(bot.title);
+                                            // Function to get description based on bot name
+                                            const getBotDescription = name => {
+                                                const lowerName = name.toLowerCase();
+
+                                                if (lowerName.includes('patel')) {
+                                                    return 'Professional trading strategy with precise entry points and risk management';
+                                                } else if (lowerName.includes('game changer')) {
+                                                    return 'Revolutionary AI-powered strategy that adapts to market conditions';
+                                                } else if (lowerName.includes('cfx')) {
+                                                    return 'High-speed CFX trading with advanced pattern recognition';
+                                                } else if (lowerName.includes('over') || lowerName.includes('under')) {
+                                                    return 'Over/Under prediction strategy with statistical analysis';
+                                                } else if (lowerName.includes('raziel')) {
+                                                    return 'Divine trading strategy with heavenly accuracy';
+                                                } else if (lowerName.includes('strike')) {
+                                                    return 'Precision strike strategy with advanced targeting';
+                                                } else if (lowerName.includes('magic') || lowerName.includes('recovery')) {
+                                                    return 'Magic recovery system with loss prevention';
+                                                }
+                                                
+                                                return 'Advanced automated trading strategy with optimized entry and exit points';
+                                            };
+
+                                            const botIcon = getBotIcon(bot.title);
+                                            const description = getBotDescription(bot.title);
                                             // Generate a random success rate for demo
                                             const successRate = Math.floor(Math.random() * 20) + 80;
                                             // Determine if featured (random for demo)
@@ -3412,19 +3699,14 @@ const AppWrapper = observer(() => {
                                                     {/* Bot Icon */}
                                                     <div
                                                         style={{
-                                                            width: '40px',
-                                                            height: '40px',
-                                                            borderRadius: '10px',
-                                                            background:
-                                                                'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)',
+                                                            width: '48px',
+                                                            height: '48px',
                                                             display: 'flex',
                                                             alignItems: 'center',
                                                             justifyContent: 'center',
-                                                            fontSize: '20px',
-                                                            color: '#ffffff',
                                                         }}
                                                     >
-                                                        {botInfo.icon}
+                                                        {botIcon}
                                                     </div>
 
                                                     {/* Bot Name */}
@@ -3526,9 +3808,193 @@ const AppWrapper = observer(() => {
                                     }}
                                 >
                                     {[
-                                        { name: 'Premium Bot Alpha', icon: '⭐', rate: 95 },
-                                        { name: 'Premium Bot Beta', icon: '💎', rate: 92 },
-                                        { name: 'Premium Bot Gamma', icon: '🚀', rate: 97 },
+                                        { 
+                                            name: 'Novagrid 2026', 
+                                            icon: (
+                                                // Supernova / Cosmic Explosion
+                                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <defs>
+                                                        <radialGradient id="supernovaCore">
+                                                            <stop offset="0%" stopColor="#fef08a" />
+                                                            <stop offset="30%" stopColor="#fbbf24" />
+                                                            <stop offset="60%" stopColor="#f97316" />
+                                                            <stop offset="100%" stopColor="#dc2626" stopOpacity="0" />
+                                                        </radialGradient>
+                                                        <radialGradient id="supernovaGlow">
+                                                            <stop offset="0%" stopColor="#fef08a" stopOpacity="0.8" />
+                                                            <stop offset="50%" stopColor="#f97316" stopOpacity="0.4" />
+                                                            <stop offset="100%" stopColor="#dc2626" stopOpacity="0" />
+                                                        </radialGradient>
+                                                        <linearGradient id="supernovaRay" x1="0%" y1="0%" x2="100%" y2="0%">
+                                                            <stop offset="0%" stopColor="#fef08a" stopOpacity="0" />
+                                                            <stop offset="50%" stopColor="#fbbf24" stopOpacity="1" />
+                                                            <stop offset="100%" stopColor="#f97316" stopOpacity="0" />
+                                                        </linearGradient>
+                                                    </defs>
+                                                    
+                                                    {/* Outer explosion glow */}
+                                                    <circle cx="24" cy="24" r="22" fill="url(#supernovaGlow)">
+                                                        <animate attributeName="opacity" values="0.3;0.6;0.3" dur="2s" repeatCount="indefinite" />
+                                                    </circle>
+                                                    
+                                                    {/* Expanding energy rings */}
+                                                    <circle cx="24" cy="24" r="16" stroke="#fbbf24" strokeWidth="2" fill="none" opacity="0.6">
+                                                        <animate attributeName="r" values="16;20;16" dur="3s" repeatCount="indefinite" />
+                                                        <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" repeatCount="indefinite" />
+                                                    </circle>
+                                                    <circle cx="24" cy="24" r="12" stroke="#f97316" strokeWidth="2" fill="none" opacity="0.6">
+                                                        <animate attributeName="r" values="12;18;12" dur="3s" begin="0.5s" repeatCount="indefinite" />
+                                                        <animate attributeName="opacity" values="0.6;0;0.6" dur="3s" begin="0.5s" repeatCount="indefinite" />
+                                                    </circle>
+                                                    
+                                                    {/* Explosion rays */}
+                                                    <g opacity="0.8">
+                                                        <line x1="24" y1="24" x2="24" y2="4" stroke="url(#supernovaRay)" strokeWidth="3" strokeLinecap="round">
+                                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" repeatCount="indefinite" />
+                                                        </line>
+                                                        <line x1="24" y1="24" x2="41" y2="10" stroke="url(#supernovaRay)" strokeWidth="2.5" strokeLinecap="round">
+                                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" begin="0.2s" repeatCount="indefinite" />
+                                                        </line>
+                                                        <line x1="24" y1="24" x2="44" y2="24" stroke="url(#supernovaRay)" strokeWidth="3" strokeLinecap="round">
+                                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" begin="0.4s" repeatCount="indefinite" />
+                                                        </line>
+                                                        <line x1="24" y1="24" x2="41" y2="38" stroke="url(#supernovaRay)" strokeWidth="2.5" strokeLinecap="round">
+                                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" begin="0.6s" repeatCount="indefinite" />
+                                                        </line>
+                                                        <line x1="24" y1="24" x2="24" y2="44" stroke="url(#supernovaRay)" strokeWidth="3" strokeLinecap="round">
+                                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" begin="0.8s" repeatCount="indefinite" />
+                                                        </line>
+                                                        <line x1="24" y1="24" x2="7" y2="38" stroke="url(#supernovaRay)" strokeWidth="2.5" strokeLinecap="round">
+                                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" begin="1s" repeatCount="indefinite" />
+                                                        </line>
+                                                        <line x1="24" y1="24" x2="4" y2="24" stroke="url(#supernovaRay)" strokeWidth="3" strokeLinecap="round">
+                                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" begin="1.2s" repeatCount="indefinite" />
+                                                        </line>
+                                                        <line x1="24" y1="24" x2="7" y2="10" stroke="url(#supernovaRay)" strokeWidth="2.5" strokeLinecap="round">
+                                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="1.5s" begin="1.4s" repeatCount="indefinite" />
+                                                        </line>
+                                                    </g>
+                                                    
+                                                    {/* Core star */}
+                                                    <circle cx="24" cy="24" r="10" fill="url(#supernovaCore)">
+                                                        <animate attributeName="r" values="10;12;10" dur="2s" repeatCount="indefinite" />
+                                                    </circle>
+                                                    
+                                                    {/* Bright center */}
+                                                    <circle cx="24" cy="24" r="6" fill="#fef08a">
+                                                        <animate attributeName="r" values="6;8;6" dur="1.5s" repeatCount="indefinite" />
+                                                        <animate attributeName="opacity" values="0.8;1;0.8" dur="1.5s" repeatCount="indefinite" />
+                                                    </circle>
+                                                    
+                                                    {/* Energy particles */}
+                                                    <circle cx="30" cy="18" r="1.5" fill="#fbbf24">
+                                                        <animate attributeName="cx" values="30;36;30" dur="2s" repeatCount="indefinite" />
+                                                        <animate attributeName="cy" values="18;12;18" dur="2s" repeatCount="indefinite" />
+                                                        <animate attributeName="opacity" values="1;0;1" dur="2s" repeatCount="indefinite" />
+                                                    </circle>
+                                                    <circle cx="18" cy="30" r="1.5" fill="#f97316">
+                                                        <animate attributeName="cx" values="18;12;18" dur="2s" begin="0.5s" repeatCount="indefinite" />
+                                                        <animate attributeName="cy" values="30;36;30" dur="2s" begin="0.5s" repeatCount="indefinite" />
+                                                        <animate attributeName="opacity" values="1;0;1" dur="2s" begin="0.5s" repeatCount="indefinite" />
+                                                    </circle>
+                                                    <circle cx="30" cy="30" r="1.5" fill="#fbbf24">
+                                                        <animate attributeName="cx" values="30;38;30" dur="2s" begin="1s" repeatCount="indefinite" />
+                                                        <animate attributeName="cy" values="30;38;30" dur="2s" begin="1s" repeatCount="indefinite" />
+                                                        <animate attributeName="opacity" values="1;0;1" dur="2s" begin="1s" repeatCount="indefinite" />
+                                                    </circle>
+                                                </svg>
+                                            ), 
+                                            rate: 97,
+                                            price: '$1,099',
+                                            description: 'Ultimate AI-powered trading system with neural network analysis, real-time market adaptation, and premium 24/7 support'
+                                        },
+                                        { 
+                                            name: 'Novagrid Elite', 
+                                            icon: (
+                                                // Spiral Galaxy
+                                                <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <defs>
+                                                        <radialGradient id="galaxyCore">
+                                                            <stop offset="0%" stopColor="#fef08a" />
+                                                            <stop offset="40%" stopColor="#a78bfa" />
+                                                            <stop offset="70%" stopColor="#6366f1" />
+                                                            <stop offset="100%" stopColor="#1e1b4b" stopOpacity="0" />
+                                                        </radialGradient>
+                                                        <linearGradient id="galaxyArm" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                            <stop offset="0%" stopColor="#c4b5fd" stopOpacity="0" />
+                                                            <stop offset="30%" stopColor="#a78bfa" stopOpacity="0.8" />
+                                                            <stop offset="60%" stopColor="#8b5cf6" stopOpacity="0.6" />
+                                                            <stop offset="100%" stopColor="#6366f1" stopOpacity="0" />
+                                                        </linearGradient>
+                                                    </defs>
+                                                    
+                                                    {/* Galaxy glow */}
+                                                    <ellipse cx="24" cy="24" rx="20" ry="16" fill="url(#galaxyCore)" opacity="0.6">
+                                                        <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="20s" repeatCount="indefinite" />
+                                                        <animate attributeName="opacity" values="0.4;0.7;0.4" dur="4s" repeatCount="indefinite" />
+                                                    </ellipse>
+                                                    
+                                                    {/* Spiral arms */}
+                                                    <g>
+                                                        <path d="M24 24 Q 32 20, 40 18 Q 42 20, 42 24" stroke="url(#galaxyArm)" strokeWidth="3" fill="none" strokeLinecap="round">
+                                                            <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="15s" repeatCount="indefinite" />
+                                                        </path>
+                                                        <path d="M24 24 Q 28 28, 36 34 Q 38 36, 40 38" stroke="url(#galaxyArm)" strokeWidth="3" fill="none" strokeLinecap="round">
+                                                            <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="15s" repeatCount="indefinite" />
+                                                        </path>
+                                                        <path d="M24 24 Q 20 28, 12 30 Q 8 30, 6 28" stroke="url(#galaxyArm)" strokeWidth="3" fill="none" strokeLinecap="round">
+                                                            <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="15s" repeatCount="indefinite" />
+                                                        </path>
+                                                        <path d="M24 24 Q 20 16, 14 10 Q 12 8, 10 8" stroke="url(#galaxyArm)" strokeWidth="3" fill="none" strokeLinecap="round">
+                                                            <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="15s" repeatCount="indefinite" />
+                                                        </path>
+                                                    </g>
+                                                    
+                                                    {/* Stars in spiral arms */}
+                                                    <g>
+                                                        <circle cx="36" cy="18" r="1" fill="#fef08a">
+                                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite" />
+                                                            <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="15s" repeatCount="indefinite" />
+                                                        </circle>
+                                                        <circle cx="38" cy="36" r="1.5" fill="#c4b5fd">
+                                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="2.5s" repeatCount="indefinite" />
+                                                            <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="15s" repeatCount="indefinite" />
+                                                        </circle>
+                                                        <circle cx="10" cy="28" r="1" fill="#a78bfa">
+                                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="3s" repeatCount="indefinite" />
+                                                            <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="15s" repeatCount="indefinite" />
+                                                        </circle>
+                                                        <circle cx="12" cy="10" r="1.5" fill="#fef08a">
+                                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="2.2s" repeatCount="indefinite" />
+                                                            <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="15s" repeatCount="indefinite" />
+                                                        </circle>
+                                                        <circle cx="32" cy="14" r="1" fill="#c4b5fd">
+                                                            <animate attributeName="opacity" values="0.5;1;0.5" dur="2.8s" repeatCount="indefinite" />
+                                                            <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="15s" repeatCount="indefinite" />
+                                                        </circle>
+                                                    </g>
+                                                    
+                                                    {/* Galactic core */}
+                                                    <circle cx="24" cy="24" r="8" fill="url(#galaxyCore)">
+                                                        <animate attributeName="r" values="8;9;8" dur="3s" repeatCount="indefinite" />
+                                                    </circle>
+                                                    
+                                                    {/* Bright center */}
+                                                    <circle cx="24" cy="24" r="4" fill="#fef08a">
+                                                        <animate attributeName="r" values="4;5;4" dur="2s" repeatCount="indefinite" />
+                                                        <animate attributeName="opacity" values="0.8;1;0.8" dur="2s" repeatCount="indefinite" />
+                                                    </circle>
+                                                    
+                                                    {/* Accretion disk */}
+                                                    <ellipse cx="24" cy="24" rx="12" ry="3" fill="none" stroke="#a78bfa" strokeWidth="1" opacity="0.6">
+                                                        <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="8s" repeatCount="indefinite" />
+                                                    </ellipse>
+                                                </svg>
+                                            ), 
+                                            rate: 94,
+                                            price: '$499',
+                                            description: 'Advanced automated strategy with smart risk management, pattern recognition, and professional-grade analytics'
+                                        },
                                     ].map((bot, index) => (
                                         <div
                                             key={index}
@@ -3575,13 +4041,9 @@ const AppWrapper = observer(() => {
                                                 style={{
                                                     width: '48px',
                                                     height: '48px',
-                                                    borderRadius: '12px',
-                                                    background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
                                                     display: 'flex',
                                                     alignItems: 'center',
                                                     justifyContent: 'center',
-                                                    fontSize: '24px',
-                                                    color: '#ffffff',
                                                 }}
                                             >
                                                 {bot.icon}
@@ -3609,7 +4071,7 @@ const AppWrapper = observer(() => {
                                                     minHeight: '3rem',
                                                 }}
                                             >
-                                                Elite trading strategy with AI-powered analysis and premium support
+                                                {bot.description}
                                             </p>
 
                                             <div style={{ marginTop: '0.5rem' }}>
@@ -3663,12 +4125,12 @@ const AppWrapper = observer(() => {
                                             <p
                                                 style={{
                                                     margin: '0.5rem 0 0 0',
-                                                    color: '#6b7280',
-                                                    fontSize: '11px',
-                                                    textDecoration: 'line-through',
+                                                    color: '#1f2937',
+                                                    fontSize: '18px',
+                                                    fontWeight: '700',
                                                 }}
                                             >
-                                                ORIGINAL $299
+                                                {bot.price}
                                             </p>
 
                                             <button
