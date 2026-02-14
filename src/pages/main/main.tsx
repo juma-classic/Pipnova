@@ -3931,11 +3931,11 @@ const AppWrapper = observer(() => {
                                             description: 'Ultimate AI-powered trading system with neural network analysis, real-time market adaptation, and premium 24/7 support'
                                         },
                                         { 
-                                            name: 'The Dark Dynasty',
+                                            name: 'Novagrid Elite',
                                             xmlFile: '🖤⚜️ 𝓣𝓱𝓮 𝓓𝓪𝓻𝓴 𝓓𝔂𝓷𝓪𝓼𝓽𝔂 ⚜️🖤2.xml',
                                             rate: 94,
                                             price: '$499',
-                                            description: 'Elite dark-themed strategy with advanced pattern recognition, stealth execution, and professional-grade analytics',
+                                            description: 'Elite trading strategy with advanced pattern recognition, precision execution, and professional-grade analytics',
                                             icon: (
                                                 // Spiral Galaxy
                                                 <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -4016,11 +4016,7 @@ const AppWrapper = observer(() => {
                                                         <animateTransform attributeName="transform" type="rotate" from="0 24 24" to="360 24 24" dur="8s" repeatCount="indefinite" />
                                                     </ellipse>
                                                 </svg>
-                                            ), 
-                                            rate: 94,
-                                            rate: 94,
-                                            price: '$499',
-                                            description: 'Elite dark-themed strategy with advanced pattern recognition, stealth execution, and professional-grade analytics'
+                                            )
                                         },
                                     ].map((bot, index) => (
                                         <div
@@ -4251,10 +4247,10 @@ const AppWrapper = observer(() => {
                                                 onBlur={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
                                                 onKeyPress={async (e) => {
                                                     if (e.key === 'Enter' && premiumPassword === '6776') {
-                                                        // Check if user is whitelisted
-                                                        const hasAccess = await hasPremiumAccess();
+                                                        // Check if user is whitelisted for this specific bot
+                                                        const hasAccess = await hasPremiumAccess(premiumBotModal.botName);
                                                         if (!hasAccess) {
-                                                            alert('Access denied. Your account is not whitelisted for premium bots. Please contact admin for access.');
+                                                            alert(`Access denied. Your account is not whitelisted for ${premiumBotModal.botName}. Please contact admin for access.`);
                                                             return;
                                                         }
 
@@ -4295,10 +4291,10 @@ const AppWrapper = observer(() => {
                                             <button
                                                 onClick={async () => {
                                                     if (premiumPassword === '6776') {
-                                                        // Check if user is whitelisted
-                                                        const hasAccess = await hasPremiumAccess();
+                                                        // Check if user is whitelisted for this specific bot
+                                                        const hasAccess = await hasPremiumAccess(premiumBotModal.botName);
                                                         if (!hasAccess) {
-                                                            alert('Access denied. Your account is not whitelisted for premium bots. Please contact admin for access.');
+                                                            alert(`Access denied. Your account is not whitelisted for ${premiumBotModal.botName}. Please contact admin for access.`);
                                                             return;
                                                         }
 

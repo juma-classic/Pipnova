@@ -49,7 +49,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
             const response = await fetch('/premium-whitelist.json');
             if (response.ok) {
                 const data = await response.json();
-                setPremiumAccounts(data.premiumAccounts || []);
+                // Combine both lists for display
+                const combined = [
+                    ...(data.novagrid2026 || []).map((acc: string) => ({ account: acc, bot: 'Novagrid 2026' })),
+                    ...(data.novagridElite || []).map((acc: string) => ({ account: acc, bot: 'Novagrid Elite' }))
+                ];
+                // Extract unique accounts
+                const uniqueAccounts = Array.from(new Set(combined.map(item => item.account)));
+                setPremiumAccounts(uniqueAccounts);
             } else {
                 setPremiumAccounts([]);
             }
@@ -230,12 +237,18 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                             <h3>How to Add Premium Bot Access</h3>
                             <div style={{ background: '#f3f4f6', padding: '1rem', borderRadius: '8px', marginBottom: '1rem' }}>
                                 <p style={{ margin: '0 0 0.5rem 0', color: '#1f2937', fontSize: '14px', fontWeight: '600' }}>
-                                    To whitelist a client:
+                                    To whitelist a client for a specific bot:
                                 </p>
                                 <ol style={{ margin: '0', paddingLeft: '1.5rem', color: '#6b7280', fontSize: '13px' }}>
                                     <li>Get client's Deriv account number (CR##### or VRTC#####)</li>
                                     <li>Open <code style={{ background: '#e5e7eb', padding: '2px 6px', borderRadius: '4px' }}>public/premium-whitelist.json</code></li>
-                                    <li>Add their account to the "premiumAccounts" array</li>
+                                    <li>Add their account to:
+                                        <ul style={{ marginTop: '0.25rem' }}>
+                                            <li><code style={{ background: '#e5e7eb', padding: '2px 6px', borderRadius: '4px' }}>novagrid2026</code> array for Novagrid 2026 ($1,099)</li>
+                                            <li><code style={{ background: '#e5e7eb', padding: '2px 6px', borderRadius: '4px' }}>novagridElite</code> array for Novagrid Elite ($499)</li>
+                                            <li>Or both arrays if they have access to both bots</li>
+                                        </ul>
+                                    </li>
                                     <li>Run: <code style={{ background: '#e5e7eb', padding: '2px 6px', borderRadius: '4px' }}>git add . && git commit -m "feat: add client" && git push</code></li>
                                     <li>Client can access immediately after deployment</li>
                                 </ol>
