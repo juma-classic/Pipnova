@@ -56,7 +56,7 @@
         background-color: var(--general-section-2);
         flex-shrink: 0; /* Prevent statistics from shrinking */
         max-height: 120px; /* Limit height to make panel more compact */
-        margin-bottom: 100px !important; /* Add margin to prevent overlap with RESET button */
+        margin-bottom: 18px !important; /* Reduced margin to move closer to RESET button */
 
         @include mobile-or-tablet-screen {
             margin: 0;
@@ -106,26 +106,19 @@
 
     &__footer {
         text-align: center;
-        position: fixed !important; /* Fixed to viewport instead of absolute */
-        bottom: 4rem !important; /* Move higher - was 1rem, now 4rem from bottom */
-        left: 2rem !important; /* Align with panel position */
-        width: 36.6rem !important; /* Match panel width */
-        height: 90px !important; /* Increased height for better visibility */
-        background: linear-gradient(
-            135deg,
-            rgb(15 23 42 / 95%) 0%,
-            rgb(30 41 59 / 95%) 100%
-        ) !important; /* Dark gradient background */
+        position: fixed !important;
+        bottom: 3.4rem !important; /* Moved down 2px more (was 3.6rem) */
+        left: 2rem !important;
+        width: 36.6rem !important;
+        height: 90px !important;
+        background: transparent !important; /* Remove dark background */
 
-        border: 2px solid #14b8a6 !important; /* Teal border to match site branding */
-        border-radius: 12px !important; /* More rounded corners */
-        z-index: 1001 !important; /* Even higher z-index to ensure visibility */
-        box-shadow:
-            0 8px 32px rgb(0 0 0 / 40%),
-            0 0 20px rgb(20 184 166 / 20%) !important; /* Enhanced shadow with teal glow */
+        border: none !important; /* Remove teal border */
+        border-radius: 12px !important;
+        z-index: 1001 !important;
+        box-shadow: none !important; /* Remove shadow */
 
-        pointer-events: auto !important; /* Ensure events are captured */
-        backdrop-filter: blur(10px) !important; /* Glass effect */
+        pointer-events: auto !important;
 
         @include flex-center(center);
 
@@ -137,46 +130,62 @@
         }
 
         &-button {
-            width: 280px !important; /* Slightly smaller to fit better */
-            height: 50px !important; /* Increased height for better visibility */
-            margin: 8px !important; /* Reduced margin */
-            background: linear-gradient(
-                135deg,
-                #0d9488 0%,
-                #14b8a6 100%
-            ) !important; /* Teal gradient matching site branding */
+            width: 280px !important;
+            height: 50px !important;
+            margin: 8px !important;
+            background: transparent !important; /* Remove teal gradient */
 
-            color: #fff !important; /* Pure white text - forced with high specificity */
-            font-weight: 700 !important; /* Bolder text */
-            font-size: 18px !important; /* Larger text for better visibility */
-            border-radius: 8px !important; /* More rounded corners */
-            box-shadow:
-                0 4px 12px rgb(13 148 136 / 40%),
-                0 0 20px rgb(20 184 166 / 20%) !important; /* Teal glow effect */
+            color: #14b8a6 !important; /* Teal text color */
+            font-weight: 700 !important;
+            font-size: 18px !important;
+            border-radius: 8px !important;
+            box-shadow: none !important; /* Remove glow effect */
 
-            cursor: pointer !important; /* Ensure button is clickable */
-            border: 2px solid rgb(255 255 255 / 20%) !important; /* Subtle white border */
-            text-transform: uppercase; /* Make text more prominent */
-            letter-spacing: 1px !important; /* Better letter spacing */
-            pointer-events: auto !important; /* Ensure button events work */
-            transition: all 0.3s ease !important; /* Smooth transitions */
+            cursor: pointer !important;
+            border: 2px solid #14b8a6 !important; /* Teal border only */
+            text-transform: uppercase;
+            letter-spacing: 1px !important;
+            pointer-events: auto !important;
+            transition: all 0.3s ease !important;
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
-            /* Override shared button component styles - target all text elements */
+            /* Override shared button component styles */
             .dc-btn__text,
             .dc-btn__icon,
             span,
             & > * {
-                color: #fff !important;
+                color: #14b8a6 !important; /* Teal text */
                 text-decoration: none !important;
             }
+            
+            svg {
+                flex-shrink: 0;
+            }
 
-            /* Ensure white text with maximum specificity */
+            /* Compact variant */
+            &--compact {
+                width: auto !important;
+                padding: 8px 16px !important;
+                height: 40px !important;
+                font-size: 14px !important;
+                min-width: 120px;
+            }
+            
+            /* Hover effect */
+            &:hover {
+                background: rgba(20, 184, 166, 0.1) !important;
+            }
+
+            /* Ensure teal text with maximum specificity */
             &,
             &:link,
             &:visited,
             &:focus,
             &:active {
-                color: #fff !important;
+                color: #14b8a6 !important;
                 text-decoration: none !important;
             }
 
