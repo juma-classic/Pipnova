@@ -120,7 +120,9 @@
 
         &:not(.dc-tabs__active) {
             cursor: pointer;
-            color: #fff;
+            color: var(--text-prominent);
+            font-weight: 700;
+            opacity: 1;
         }
 
         &:not(&--header-fit-content) {
@@ -131,6 +133,7 @@
     &__active {
         font-weight: 700;
         color: var(--text-prominent);
+        opacity: 1;
     }
 
     &__active-line {
