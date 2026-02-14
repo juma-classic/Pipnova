@@ -214,7 +214,11 @@ export default class RunPanelStore {
         runInAction(() => {
             this.setIsRunning(true);
             ui.setPromptHandler(true);
-            this.toggleDrawer(true);
+            // Ensure drawer is closed first, then open it to make it visible
+            this.toggleDrawer(false);
+            setTimeout(() => {
+                this.toggleDrawer(true);
+            }, 100);
             this.run_id = `run-${Date.now()}`;
 
             summary_card.clear();
