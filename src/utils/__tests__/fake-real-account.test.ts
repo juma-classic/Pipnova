@@ -37,7 +37,7 @@ describe('Fake Real Account Utilities', () => {
             const id2 = generateStaticTransactionId(originalId);
             
             expect(id1).toBe(id2);
-            expect(id1).toMatch(/^1441003\d{4}1$/);
+            expect(id1).toMatch(/^1461\d{8}$/);
         });
 
         it('should generate different IDs for different inputs', () => {
@@ -45,19 +45,19 @@ describe('Fake Real Account Utilities', () => {
             const id2 = generateStaticTransactionId('6987654321');
             
             expect(id1).not.toBe(id2);
-            expect(id1).toMatch(/^1441003\d{4}1$/);
-            expect(id2).toMatch(/^1441003\d{4}1$/);
+            expect(id1).toMatch(/^1461\d{8}$/);
+            expect(id2).toMatch(/^1461\d{8}$/);
         });
 
         it('should generate IDs in the correct range', () => {
             const originalId = '6123456789';
             const transformedId = generateStaticTransactionId(originalId);
             
-            // Extract the middle 4 digits
-            const middleDigits = parseInt(transformedId.substring(7, 11));
+            // Extract the 8 digits after 1461
+            const digits = parseInt(transformedId.substring(4, 12));
             
-            expect(middleDigits).toBeGreaterThanOrEqual(1796);
-            expect(middleDigits).toBeLessThanOrEqual(2596);
+            expect(digits).toBeGreaterThanOrEqual(10000000);
+            expect(digits).toBeLessThanOrEqual(99999999);
         });
     });
 
@@ -80,7 +80,7 @@ describe('Fake Real Account Utilities', () => {
             const transformed2 = transformTransactionId(demoId);
             
             expect(transformed1).toBe(transformed2);
-            expect(transformed1).toMatch(/^1441003\d{4}1$/);
+            expect(transformed1).toMatch(/^1461\d{8}$/);
             expect(transformed1).not.toBe(demoId);
         });
 
@@ -99,7 +99,7 @@ describe('Fake Real Account Utilities', () => {
             const demoId = 6123456789;
             const transformed = transformTransactionId(demoId);
             
-            expect(transformed).toMatch(/^1441003\d{4}1$/);
+            expect(transformed).toMatch(/^1461\d{8}$/);
         });
     });
 
