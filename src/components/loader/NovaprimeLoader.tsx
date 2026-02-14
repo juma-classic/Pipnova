@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import './PipnovaLoader.scss';
+import './NovaprimeLoader.scss';
 
-interface PipnovaLoaderProps {
+interface NovaprimeLoaderProps {
     onLoadComplete?: () => void;
     duration?: number;
 }
 
-export const PipnovaLoader: React.FC<PipnovaLoaderProps> = ({ onLoadComplete, duration = 6000 }) => {
+export const NovaprimeLoader: React.FC<NovaprimeLoaderProps> = ({ onLoadComplete, duration = 6000 }) => {
     const [progress, setProgress] = useState(0);
     const [isComplete, setIsComplete] = useState(false);
     const [chartBars, setChartBars] = useState<number[]>([]);
@@ -45,7 +45,7 @@ export const PipnovaLoader: React.FC<PipnovaLoaderProps> = ({ onLoadComplete, du
     }, [duration, onLoadComplete]);
 
     return (
-        <div className={`pipnova-loader ${isComplete ? 'fade-out' : ''}`}>
+        <div className={`novaprime-loader ${isComplete ? 'fade-out' : ''}`}>
             {/* Background circles */}
             <div className="bg-circle circle-1"></div>
             <div className="bg-circle circle-2"></div>
@@ -57,7 +57,7 @@ export const PipnovaLoader: React.FC<PipnovaLoaderProps> = ({ onLoadComplete, du
                     <div className="logo-icon">
                         <div className="icon-p">P</div>
                     </div>
-                    <h1 className="logo-text">PIPNOVA</h1>
+                    <h1 className="logo-text">NOVAPRIME</h1>
                 </div>
 
                 {/* Trading Interface Mockup */}
@@ -121,4 +121,4 @@ export const PipnovaLoader: React.FC<PipnovaLoaderProps> = ({ onLoadComplete, du
     );
 };
 
-export default PipnovaLoader;
+export default NovaprimeLoader;

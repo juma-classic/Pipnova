@@ -18,7 +18,7 @@ const initializeWhitelist = () => {
 };
 
 // Admin password for API access
-const ADMIN_PASSWORD = process.env.ADMIN_API_PASSWORD || 'pipnova_admin_2024';
+const ADMIN_PASSWORD = process.env.ADMIN_API_PASSWORD || 'novaprime_admin_2024';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
     // Enable CORS

@@ -102,7 +102,7 @@ git push
 
 ## File Location
 ```
-Pipnova/
+Novaprime/
 ├── public/
 │   └── premium-whitelist.json  ← Edit this file
 ```

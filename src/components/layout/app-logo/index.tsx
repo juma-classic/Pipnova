@@ -21,11 +21,11 @@ export const AppLogo = () => {
         // Mobile version with tap handler
         return (
             <div
-                className='app-header__logo pipnova-logo'
+                className='app-header__logo novaprime-logo'
                 onTouchEnd={handleLogoTap}
                 style={{ cursor: 'pointer' }}
             >
-                <span className='pipnova-text'>PIPNOVA</span>
+                <span className='novaprime-text'>NOVAPRIME</span>
             </div>
         );
     }

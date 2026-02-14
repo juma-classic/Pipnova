@@ -1,5 +1,5 @@
 import React from 'react';
-import { PipnovaLoader } from '@/components/loader/PipnovaLoader';
+import { NovaprimeLoader } from '@/components/loader/NovaprimeLoader';
 import { generateDerivApiInstance } from '@/external/bot-skeleton/services/api/appId';
 import { apiTokenAuthService } from '@/services/api-token-auth.service';
 import { URLUtils } from '@deriv-com/utils';
@@ -69,7 +69,7 @@ export const AuthWrapper = () => {
     }, [loginInfo, paramsToDelete]);
 
     if (!isAuthComplete) {
-        return <PipnovaLoader onLoadComplete={() => {}} duration={3000} />;
+        return <NovaprimeLoader onLoadComplete={() => {}} duration={3000} />;
     }
 
     return <App />;

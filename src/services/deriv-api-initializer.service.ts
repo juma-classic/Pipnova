@@ -28,7 +28,7 @@ class DerivAPIInitializer {
         appId: 125428,
         endpoint: 'wss://ws.derivws.com/websockets/v3',
         language: 'en',
-        brand: 'pipnova',
+        brand: 'novaprime',
     };
 
     public static getInstance(): DerivAPIInitializer {

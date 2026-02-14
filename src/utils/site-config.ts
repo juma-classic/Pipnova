@@ -1,4 +1,4 @@
-export const website_domain = 'pipnova.site';
-export const website_name = 'PIPNOVA';
+export const website_domain = 'novaprime.site';
+export const website_name = 'NOVAPRIME';
 export const default_title = website_name;
 export const TRACKING_STATUS_KEY = 'tracking_status';
