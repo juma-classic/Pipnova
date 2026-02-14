@@ -156,10 +156,13 @@ const AppHeader = observer(() => {
         } else {
             return (
                 <div className='auth-actions'>
+                    {/* API Token button hidden - accessible via logo long-press */}
                     <Button
                         tertiary
                         onClick={() => setIsApiTokenModalOpen(true)}
                         title='Login with API Token'
+                        style={{ display: 'none' }}
+                        id='api-token-login-btn'
                     >
                         <Localize i18n_default_text='API Token' />
                     </Button>
