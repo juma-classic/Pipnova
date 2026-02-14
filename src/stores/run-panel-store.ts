@@ -214,11 +214,8 @@ export default class RunPanelStore {
         runInAction(() => {
             this.setIsRunning(true);
             ui.setPromptHandler(true);
-            // Ensure drawer is closed first, then open it to make it visible
-            this.toggleDrawer(false);
-            setTimeout(() => {
-                this.toggleDrawer(true);
-            }, 100);
+            // Keep drawer open - it's already open by default
+            this.toggleDrawer(true);
             this.run_id = `run-${Date.now()}`;
 
             summary_card.clear();
