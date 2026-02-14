@@ -2369,14 +2369,8 @@ const AppWrapper = observer(() => {
         };
     }, [setActiveTab]);
 
-    const showRunPanel = [
-        DBOT_TABS.DASHBOARD,
-        DBOT_TABS.CHART,
-        DBOT_TABS.PATEL_SIGNALS,
-        DBOT_TABS.PATEL_SIGNAL_CENTER,
-        DBOT_TABS.ANALYSIS_TOOL,
-        DBOT_TABS.SIGNALS,
-    ].includes(active_tab);
+    // Always show run panel on all tabs
+    const showRunPanel = true;
 
     return (
         <>

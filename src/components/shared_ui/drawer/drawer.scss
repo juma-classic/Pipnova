@@ -19,6 +19,11 @@
         display: flex;
         flex-direction: row;
         left: calc(100vw - 16px);
+        
+        /* Ensure drawer is visible when open */
+        &.dc-drawer--open {
+            left: calc(100vw - 366px - 16px); /* width + toggle button */
+        }
     }
 
     @include mobile-or-tablet-screen {
