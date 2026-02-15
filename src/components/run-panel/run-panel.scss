@@ -56,11 +56,17 @@
         background-color: var(--general-section-2);
         flex-shrink: 0; /* Prevent statistics from shrinking */
         max-height: 120px; /* Limit height to make panel more compact */
-        margin-bottom: 18px !important; /* Reduced margin to move closer to RESET button */
+        
+        /* Fixed positioning at bottom for desktop */
+        position: fixed !important;
+        bottom: 12rem !important; /* Above the Reset button */
+        left: 2rem !important;
+        z-index: 1000 !important;
 
         @include mobile-or-tablet-screen {
             margin: 0;
             position: fixed;
+            bottom: 15.7rem;
         }
 
         &--info {
