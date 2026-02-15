@@ -251,7 +251,7 @@
 
     &-tab {
         &__content {
-            height: calc((100vh - 42rem) * 0.5); /* Increased to match container height */
+            height: calc(100vh - 20rem) !important; /* Increased height for better visibility */
             overflow: auto; /* Allow scrolling if needed */
 
             &--no-stat {
