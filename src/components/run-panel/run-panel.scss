@@ -259,6 +259,7 @@
         &__content {
             height: calc(100vh - 20rem) !important; /* Increased height for better visibility */
             overflow: auto; /* Allow scrolling if needed */
+            padding-bottom: 24rem !important; /* Add space for stats panel and reset button */
 
             &--no-stat {
                 height: var(--drawer-content-height-no-stat);
@@ -275,7 +276,7 @@
 
             &--summary-tab {
                 padding: 0.8rem 1.6rem;
-                padding-bottom: 80px; /* More padding to account for fixed footer */
+                padding-bottom: 24rem !important; /* Add space for stats panel and reset button */
             }
         }
     }
