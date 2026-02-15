@@ -113,7 +113,7 @@
     &__footer {
         text-align: center;
         position: fixed !important;
-        bottom: 3.4rem !important; /* Moved down 2px more (was 3.6rem) */
+        bottom: 2.9rem !important; /* Moved down 5px (was 3.4rem, 0.5rem = ~8px, so 2.9rem ≈ 5px lower) */
         left: 2rem !important;
         width: 36.6rem !important;
         height: 90px !important;
@@ -136,19 +136,20 @@
         }
 
         &-button {
-            width: 280px !important;
+            width: auto !important; /* Allow width to grow with padding */
             height: 50px !important;
             margin: 8px !important;
+            padding: 8px 150px !important; /* Increased horizontal padding to 150px */
             background: transparent !important; /* Remove teal gradient */
 
             color: #14b8a6 !important; /* Teal text color */
             font-weight: 700 !important;
             font-size: 18px !important;
-            border-radius: 8px !important;
+            border-radius: 0 !important; /* Remove rounded corners */
             box-shadow: none !important; /* Remove glow effect */
 
             cursor: pointer !important;
-            border: 2px solid #14b8a6 !important; /* Teal border only */
+            border: 2px solid #808080 !important; /* Gray border */
             text-transform: uppercase;
             letter-spacing: 1px !important;
             pointer-events: auto !important;
@@ -174,10 +175,12 @@
             /* Compact variant */
             &--compact {
                 width: auto !important;
-                padding: 8px 16px !important;
+                padding: 8px 70px !important; /* Match parent padding */
                 height: 40px !important;
                 font-size: 14px !important;
                 min-width: 120px;
+                border-radius: 0 !important; /* Remove rounded corners */
+                border: 2px solid #808080 !important; /* Gray border */
             }
             
             /* Hover effect */
