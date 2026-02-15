@@ -2,14 +2,14 @@
  * Secret Access System
  * Provides hidden access to fake real mode via keyboard shortcuts and touch gestures
  * 
- * Desktop: Press keys in order: P-I-P-N-O-V-A-6-7-7-6, then press Enter twice within 2 seconds
+ * Desktop: Press keys in order: b-o-n-n-i-e-1-2-3-4, then press Enter twice within 2 seconds
  * Mobile: Tap logo 5 times, then swipe right across the screen 3 times within 3 seconds
  */
 
 class SecretAccessSystem {
     private static instance: SecretAccessSystem;
     private sequence: string[] = [];
-    private readonly secretCode = ['p', 'i', 'p', 'n', 'o', 'v', 'a', '6', '7', '7', '6'];
+    private readonly secretCode = ['b', 'o', 'n', 'n', 'i', 'e', '1', '2', '3', '4'];
     private readonly timeout = 3000; // 3 seconds to complete sequence
     private timer: NodeJS.Timeout | null = null;
     private enterPressCount = 0;
@@ -61,7 +61,7 @@ class SecretAccessSystem {
             // Add key to sequence
             this.sequence.push(key);
 
-            // Keep only the last 11 keys (length of secret code)
+            // Keep only the last 10 keys (length of secret code)
             if (this.sequence.length > this.secretCode.length) {
                 this.sequence.shift();
             }
