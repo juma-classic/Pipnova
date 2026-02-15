@@ -37,7 +37,8 @@ describe('Fake Real Account Utilities', () => {
             const id2 = generateStaticTransactionId(originalId);
             
             expect(id1).toBe(id2);
-            expect(id1).toMatch(/^1461\d{8}$/);
+            expect(id1).toMatch(/^1461\d{7}1$/); // 7 digits + ending with 1
+            expect(id1.endsWith('1')).toBe(true);
         });
 
         it('should generate different IDs for different inputs', () => {
@@ -45,19 +46,23 @@ describe('Fake Real Account Utilities', () => {
             const id2 = generateStaticTransactionId('6987654321');
             
             expect(id1).not.toBe(id2);
-            expect(id1).toMatch(/^1461\d{8}$/);
-            expect(id2).toMatch(/^1461\d{8}$/);
+            expect(id1).toMatch(/^1461\d{7}1$/);
+            expect(id2).toMatch(/^1461\d{7}1$/);
+            expect(id1.endsWith('1')).toBe(true);
+            expect(id2.endsWith('1')).toBe(true);
         });
 
-        it('should generate IDs in the correct range', () => {
+        it('should generate IDs in the correct range and always end with 1', () => {
             const originalId = '6123456789';
             const transformedId = generateStaticTransactionId(originalId);
             
-            // Extract the 8 digits after 1461
-            const digits = parseInt(transformedId.substring(4, 12));
+            // Extract the 7 digits after 1461 (before the final 1)
+            const digits = parseInt(transformedId.substring(4, 11));
             
-            expect(digits).toBeGreaterThanOrEqual(10000000);
-            expect(digits).toBeLessThanOrEqual(99999999);
+            expect(digits).toBeGreaterThanOrEqual(1000000);
+            expect(digits).toBeLessThanOrEqual(9999999);
+            expect(transformedId.endsWith('1')).toBe(true);
+            expect(transformedId.length).toBe(12); // 1461 + 7 digits + 1
         });
     });
 
@@ -72,7 +77,7 @@ describe('Fake Real Account Utilities', () => {
             expect(transformTransactionId(demoId)).toBe(demoId);
         });
 
-        it('should transform demo IDs consistently in fake real mode', () => {
+        it('should transform demo IDs consistently in fake real mode and end with 1', () => {
             localStorageMock.setItem('demo_icon_us_flag', 'true');
             
             const demoId = '6123456789';
@@ -80,8 +85,9 @@ describe('Fake Real Account Utilities', () => {
             const transformed2 = transformTransactionId(demoId);
             
             expect(transformed1).toBe(transformed2);
-            expect(transformed1).toMatch(/^1461\d{8}$/);
+            expect(transformed1).toMatch(/^1461\d{7}1$/);
             expect(transformed1).not.toBe(demoId);
+            expect(transformed1.endsWith('1')).toBe(true);
         });
 
         it('should not transform real account IDs in fake real mode', () => {
@@ -93,13 +99,14 @@ describe('Fake Real Account Utilities', () => {
             expect(transformed).toBe(realId);
         });
 
-        it('should handle numeric inputs', () => {
+        it('should handle numeric inputs and end with 1', () => {
             localStorageMock.setItem('demo_icon_us_flag', 'true');
             
             const demoId = 6123456789;
             const transformed = transformTransactionId(demoId);
             
-            expect(transformed).toMatch(/^1461\d{8}$/);
+            expect(transformed).toMatch(/^1461\d{7}1$/);
+            expect(transformed.endsWith('1')).toBe(true);
         });
     });
 

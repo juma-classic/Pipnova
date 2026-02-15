@@ -12,7 +12,7 @@ export const isFakeRealMode = (): boolean => {
 
 /**
  * Generate a static transaction ID for fake real mode based on original demo ID
- * Format: 1461[XXXXXXXX] where XXXXXXXX is derived from the original transaction ID
+ * Format: 1461[XXXXXXX1] where XXXXXXX1 is derived from the original transaction ID and always ends with 1
  */
 export const generateStaticTransactionId = (originalId: string): string => {
     // Create a consistent hash from the original ID
@@ -23,17 +23,17 @@ export const generateStaticTransactionId = (originalId: string): string => {
         hash = hash & hash; // Convert to 32-bit integer
     }
 
-    // Ensure positive number and map to range 10000000-99999999 (8 digits)
+    // Ensure positive number and map to range 1000000-9999999 (7 digits)
     const positiveHash = Math.abs(hash);
-    const baseNumber = 10000000;
-    const range = 89999999; // 99999999 - 10000000
+    const baseNumber = 1000000;
+    const range = 8999999; // 9999999 - 1000000
     const mappedNumber = baseNumber + (positiveHash % (range + 1));
 
-    // Ensure it's always 8 digits
-    const paddedDigits = mappedNumber.toString().padStart(8, '0');
+    // Ensure it's always 7 digits
+    const paddedDigits = mappedNumber.toString().padStart(7, '0');
 
-    // Construct the full ID: 1461 + [8 consistent digits]
-    return `1461${paddedDigits}`;
+    // Construct the full ID: 1461 + [7 consistent digits] + 1 (fixed last digit)
+    return `1461${paddedDigits}1`;
 };
 
 /**
