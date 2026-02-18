@@ -268,7 +268,7 @@
                     </value>
                     <value name="THEN">
                       <block type="math_number" id="HqhnF9I]7OZYlrK$?@Eo">
-                        <field name="NUM">5</field>
+                        <field name="NUM">7</field>
                       </block>
                     </value>
                     <value name="ELSE">
@@ -290,7 +290,7 @@
                         </value>
                         <value name="THEN">
                           <block type="math_number" id="`DW}[sAUV6krC9*K79Lc">
-                            <field name="NUM">5</field>
+                            <field name="NUM">6</field>
                           </block>
                         </value>
                         <value name="ELSE">
@@ -327,7 +327,7 @@
                                     </value>
                                     <value name="B">
                                       <block type="math_number" id="`QSxmnDM,_:;]Qd=#48K">
-                                        <field name="NUM">4</field>
+                                        <field name="NUM">3</field>
                                       </block>
                                     </value>
                                   </block>
@@ -339,7 +339,7 @@
                                 </value>
                                 <value name="ELSE">
                                   <block type="math_number" id="THDULG``x^?2M,WxeY+#">
-                                    <field name="NUM">5</field>
+                                    <field name="NUM">7</field>
                                   </block>
                                 </value>
                               </block>
@@ -394,7 +394,7 @@
                     </value>
                     <value name="THEN">
                       <block type="math_number" id="qN:b8jzq]}A,x4oVi*@K">
-                        <field name="NUM">4</field>
+                        <field name="NUM">2</field>
                       </block>
                     </value>
                     <value name="ELSE">
@@ -416,7 +416,7 @@
                         </value>
                         <value name="THEN">
                           <block type="math_number" id="AZdH@$~T@5NNO9h#=wBz">
-                            <field name="NUM">4</field>
+                            <field name="NUM">3</field>
                           </block>
                         </value>
                         <value name="ELSE">
@@ -453,19 +453,19 @@
                                     </value>
                                     <value name="B">
                                       <block type="math_number" id="gX~j|7Fv]3p}uIO{H6|6">
-                                        <field name="NUM">4</field>
+                                        <field name="NUM">3</field>
                                       </block>
                                     </value>
                                   </block>
                                 </value>
                                 <value name="THEN">
                                   <block type="math_number" id=":YK:g2`Zk}Ti;SLnFn{9">
-                                    <field name="NUM">5</field>
+                                    <field name="NUM">4</field>
                                   </block>
                                 </value>
                                 <value name="ELSE">
                                   <block type="math_number" id="_1A$PJ|ZYatP]-z](3pU">
-                                    <field name="NUM">5</field>
+                                    <field name="NUM">2</field>
                                   </block>
                                 </value>
                               </block>
@@ -483,7 +483,7 @@
       </block>
     </statement>
   </block>
-  <block type="after_purchase" id="leXna=dZ|?aw|-]c1g=@" x="846" y="0">
+  <block type="after_purchase" id="leXna=dZ|?aw|-]c1g=@" x="714" y="0">
     <statement name="AFTERPURCHASE_STACK">
       <block type="variables_set" id="ap5eESPw*Ea{Crt%fo-1">
         <field name="VAR" id="@Ch4^{il9CYuw4nO$}B9">runCounter</field>
@@ -1305,7 +1305,7 @@
       </block>
     </statement>
   </block>
-  <block type="math_number" id="QR,!erSfOcArf|QAV}s)" disabled="true" x="0" y="3532">
+  <block type="math_number" id="QR,!erSfOcArf|QAV}s)" disabled="true" x="0" y="1292">
     <field name="NUM">0</field>
   </block>
 </xml>
