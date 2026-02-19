@@ -8,6 +8,7 @@ import { requestOidcAuthentication } from '@deriv-com/auth-client';
 import { useDevice } from '@deriv-com/ui';
 import { FakeRealModeIndicator } from '../fake-real-account-toggle/FakeRealModeIndicator';
 import { crypto_currencies_display_order, fiat_currencies_display_order } from '../shared';
+import { SignalOverlay } from '../signal-overlay';
 import Footer from './footer';
 import AppHeader from './header';
 import Body from './main-body';
@@ -93,6 +94,7 @@ const Layout = () => {
         <div className={clsx('layout', { responsive: isDesktop })}>
             {!isCallbackPage && <AppHeader />}
             <FakeRealModeIndicator />
+            <SignalOverlay />
             <Body>
                 <Outlet />
             </Body>
