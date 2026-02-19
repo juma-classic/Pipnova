@@ -108,7 +108,7 @@
     <variable id="0vhV{u[rAV=(N}*xfudU">Over 7 /Under 8 Calculate</variable>
     <variable id="%PHI%sK5d,5mE)mS7y+w">Over 8 /Under 9 Calculate</variable>
   </variables>
-  <block type="trade_definition" id="C200nC(zOZM4uu=h?Yh/" deletable="false" x="0" y="60">
+  <block type="trade_definition" id="C200nC(zOZM4uu=h?Yh/" deletable="false" x="0" y="0">
     <statement name="TRADE_OPTIONS">
       <block type="trade_definition_market" id="Hb12N9#,-)Z-cE_Ovjk4" deletable="false" movable="false">
         <field name="MARKET_LIST">synthetic_index</field>
@@ -249,7 +249,7 @@
                                                     </value>
                                                     <value name="B">
                                                       <block type="logic_boolean" id="I4p[Ck.PRF7D6aK!lE7j">
-                                                        <field name="BOOL">FALSE</field>
+                                                        <field name="BOOL">TRUE</field>
                                                       </block>
                                                     </value>
                                                   </block>
@@ -259,7 +259,7 @@
                                                     <field name="VAR" id=")i^Kxy3yfKVBREsTT;W%">S2</field>
                                                     <value name="VALUE">
                                                       <block type="logic_boolean" id="~w7sR|O]hIs1e6OEb=+(">
-                                                        <field name="BOOL">TRUE</field>
+                                                        <field name="BOOL">FALSE</field>
                                                       </block>
                                                     </value>
                                                     <next>
@@ -286,7 +286,7 @@
                                                         </value>
                                                         <value name="B">
                                                           <block type="logic_boolean" id="?nB@sB6}/T;^C$,!OX!g">
-                                                            <field name="BOOL">FALSE</field>
+                                                            <field name="BOOL">TRUE</field>
                                                           </block>
                                                         </value>
                                                       </block>
@@ -296,7 +296,7 @@
                                                         <field name="VAR" id="#Kyn~?nw(HB[8,`7N]1*">S1</field>
                                                         <value name="VALUE">
                                                           <block type="logic_boolean" id="W7;{;sa8r4}NMxEA2rwb">
-                                                            <field name="BOOL">TRUE</field>
+                                                            <field name="BOOL">FALSE</field>
                                                           </block>
                                                         </value>
                                                         <next>
@@ -366,7 +366,7 @@
       </block>
     </statement>
   </block>
-  <block type="after_purchase" id=",F*Ur?J$`44`L_8xOv}W" x="993" y="60">
+  <block type="after_purchase" id=",F*Ur?J$`44`L_8xOv}W" x="828" y="0">
     <statement name="AFTERPURCHASE_STACK">
       <block type="controls_if" id="l4`^^W#NE#,pN0o=u?-A">
         <mutation xmlns="http://www.w3.org/1999/xhtml" elseif="1"></mutation>
@@ -747,7 +747,7 @@
       </block>
     </statement>
   </block>
-  <block type="before_purchase" id="{Flx;uXi/si`F[Li1;Z|" deletable="false" x="0" y="1584">
+  <block type="before_purchase" id="{Flx;uXi/si`F[Li1;Z|" deletable="false" x="0" y="1524">
     <statement name="BEFOREPURCHASE_STACK">
       <block type="controls_if" id="h!I5K`hd8aff5^YoEX@.">
         <value name="IF0">
@@ -2677,7 +2677,7 @@
       </block>
     </statement>
   </block>
-  <block type="procedures_defnoreturn" id="5Bl|28zC,VINVrKRP[#." x="0" y="7738">
+  <block type="procedures_defnoreturn" id="5Bl|28zC,VINVrKRP[#." x="0" y="7678">
     <field name="NAME">Constant Configurations</field>
     <comment pinned="false" h="80" w="160">Describe this function...</comment>
     <statement name="STACK">
@@ -2820,7 +2820,7 @@
       </block>
     </statement>
   </block>
-  <block type="tick_analysis" id="hy4m,S^f|2W`!B6615j]" x="0" y="8496">
+  <block type="tick_analysis" id="hy4m,S^f|2W`!B6615j]" x="0" y="8436">
     <statement name="TICKANALYSIS_STACK">
       <block type="variables_set" id=").[SfY0d`O,~]qNkI%}2" collapsed="true">
         <field name="VAR" id="dp+9b0ztP^fZfWau3LXk">Digits analysed</field>
@@ -5731,7 +5731,7 @@
       </block>
     </statement>
   </block>
-  <block type="tick_analysis" id="~WH420.]d}E91P3SEYm1" x="0" y="11792">
+  <block type="tick_analysis" id="~WH420.]d}E91P3SEYm1" x="0" y="11732">
     <statement name="TICKANALYSIS_STACK">
       <block type="text_join" id="3W4.q$*Jcg-e@;iQYc?!">
         <field name="VARIABLE" id="R6tJ@(QkBan?{MSD5/p!">text</field>
