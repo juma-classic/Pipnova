@@ -14,8 +14,11 @@ export const SignalOverlay: React.FC = () => {
     // Dragging state
     const [position, setPosition] = useState({ x: window.innerWidth - 270, y: 70 });
     const [isDragging, setIsDragging] = useState(false);
+    const [isDragMode, setIsDragMode] = useState(false); // Double-tap mode for mobile
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
     const overlayRef = useRef<HTMLDivElement>(null);
+    const lastTapTime = useRef<number>(0);
+    const DOUBLE_TAP_DELAY = 300; // ms
 
     // Handle signal updates from engine
     const handleSignalUpdate = useCallback((signal: SignalData | null) => {
@@ -65,7 +68,22 @@ export const SignalOverlay: React.FC = () => {
         setSelectedSignal(signal);
     }, []);
 
-    // Drag handlers
+    // Handle double-tap for mobile drag mode
+    const handleDoubleTap = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+        const currentTime = Date.now();
+        const tapGap = currentTime - lastTapTime.current;
+        
+        if (tapGap < DOUBLE_TAP_DELAY && tapGap > 0) {
+            // Double tap detected
+            e.preventDefault();
+            setIsDragMode(prev => !prev);
+            console.log('🔄 Drag mode:', !isDragMode ? 'ENABLED' : 'DISABLED');
+        }
+        
+        lastTapTime.current = currentTime;
+    }, [isDragMode, DOUBLE_TAP_DELAY]);
+
+    // Drag handlers for desktop
     const handleMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
         if ((e.target as HTMLElement).closest('.signal-overlay__header')) {
             setIsDragging(true);
@@ -76,8 +94,44 @@ export const SignalOverlay: React.FC = () => {
         }
     }, [position]);
 
+    // Touch handlers for mobile
+    const handleTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+        if (!isDragMode) return; // Only allow dragging in drag mode
+        
+        if ((e.target as HTMLElement).closest('.signal-overlay__header')) {
+            const touch = e.touches[0];
+            setIsDragging(true);
+            setDragOffset({
+                x: touch.clientX - position.x,
+                y: touch.clientY - position.y,
+            });
+            e.preventDefault(); // Prevent scrolling
+        }
+    }, [position, isDragMode]);
+
+    const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+        if (isDragging && isDragMode) {
+            e.preventDefault(); // Prevent page scrolling
+            const touch = e.touches[0];
+            const newX = touch.clientX - dragOffset.x;
+            const newY = touch.clientY - dragOffset.y;
+            
+            const maxX = window.innerWidth - (overlayRef.current?.offsetWidth || 250);
+            const maxY = window.innerHeight - (overlayRef.current?.offsetHeight || 100);
+            
+            setPosition({
+                x: Math.max(0, Math.min(newX, maxX)),
+                y: Math.max(0, Math.min(newY, maxY)),
+            });
+        }
+    }, [isDragging, isDragMode, dragOffset]);
+
+    const handleTouchEnd = useCallback(() => {
+        setIsDragging(false);
+    }, []);
+
     const handleMouseMove = useCallback((e: MouseEvent) => {
-        if (isDragging) {
+        if (isDragging && !isDragMode) { // Desktop only (not in mobile drag mode)
             const newX = e.clientX - dragOffset.x;
             const newY = e.clientY - dragOffset.y;
             const maxX = window.innerWidth - (overlayRef.current?.offsetWidth || 250);
@@ -87,14 +141,14 @@ export const SignalOverlay: React.FC = () => {
                 y: Math.max(0, Math.min(newY, maxY)),
             });
         }
-    }, [isDragging, dragOffset]);
+    }, [isDragging, isDragMode, dragOffset]);
 
     const handleMouseUp = useCallback(() => {
         setIsDragging(false);
     }, []);
 
     useEffect(() => {
-        if (isDragging) {
+        if (isDragging && !isDragMode) { // Desktop dragging
             document.addEventListener('mousemove', handleMouseMove);
             document.addEventListener('mouseup', handleMouseUp);
             document.body.style.cursor = 'grabbing';
@@ -106,7 +160,19 @@ export const SignalOverlay: React.FC = () => {
                 document.body.style.userSelect = '';
             };
         }
-    }, [isDragging, handleMouseMove, handleMouseUp]);
+    }, [isDragging, isDragMode, handleMouseMove, handleMouseUp]);
+
+    // Prevent page scrolling when in drag mode
+    useEffect(() => {
+        if (isDragMode) {
+            document.body.style.overflow = 'hidden';
+            document.body.style.touchAction = 'none';
+            return () => {
+                document.body.style.overflow = '';
+                document.body.style.touchAction = '';
+            };
+        }
+    }, [isDragMode]);
 
     useEffect(() => {
         return () => {
@@ -141,16 +207,25 @@ export const SignalOverlay: React.FC = () => {
     return (
         <div 
             ref={overlayRef}
-            className={`signal-overlay ${isDragging ? 'signal-overlay--dragging' : ''}`}
+            className={`signal-overlay ${isDragging ? 'signal-overlay--dragging' : ''} ${isDragMode ? 'signal-overlay--drag-mode' : ''}`}
             style={{
                 position: 'fixed',
                 left: `${position.x}px`,
                 top: `${position.y}px`,
             }}
             onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
         >
-            <div className="signal-overlay__header">
-                <h3 className="signal-overlay__title">Signal Panel</h3>
+            <div 
+                className="signal-overlay__header"
+                onTouchEnd={handleDoubleTap}
+            >
+                <h3 className="signal-overlay__title">
+                    Signal Panel
+                    {isDragMode && <span className="signal-overlay__drag-indicator"> 🔓</span>}
+                </h3>
                 <div className="signal-overlay__status">
                     {isEngineRunning && (
                         <span className="signal-overlay__status-indicator signal-overlay__status-indicator--active">

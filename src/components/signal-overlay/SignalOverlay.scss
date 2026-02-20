@@ -27,6 +27,17 @@
         cursor: grabbing;
     }
 
+    &--drag-mode {
+        border: 2px solid #667eea;
+        box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.2);
+    }
+
+    &__drag-indicator {
+        font-size: 12px;
+        margin-left: 4px;
+        animation: pulse-lock 1.5s infinite;
+    }
+
     &__header {
         display: flex;
         align-items: center;
@@ -311,6 +322,18 @@
     }
     50% {
         opacity: 0.5;
+    }
+}
+
+@keyframes pulse-lock {
+    0%,
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    50% {
+        opacity: 0.7;
+        transform: scale(1.1);
     }
 }
 
