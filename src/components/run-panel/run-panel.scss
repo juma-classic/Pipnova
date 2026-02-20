@@ -55,7 +55,7 @@
         width: 35rem;
         background-color: var(--general-section-2);
         flex-shrink: 0; /* Prevent statistics from shrinking */
-        max-height: 120px; /* Limit height to make panel more compact */
+        max-height: 1px; /* Limit height to make panel more compact */
         
         /* Fixed positioning at bottom for desktop */
         position: fixed !important;
@@ -66,7 +66,8 @@
         @include mobile-or-tablet-screen {
             margin: 0;
             position: fixed;
-            bottom: 15.7rem;
+            bottom: -5px !important; /* Moved 100px higher - positioned well above the Run button */
+            left: -1px !important; /* Moved 20px to the left */
         }
 
         &--info {
@@ -106,7 +107,8 @@
 
         &--mobile {
             width: 100%;
-            bottom: 0;
+            bottom: 20rem !important; /* Moved 100px higher - positioned well above the Run button */
+            left: -20px !important; /* Moved 20px to the left */
         }
     }
 

@@ -106,7 +106,8 @@
         .run-panel__stat {
             margin: 0;
             position: fixed;
-            bottom: 0;
+            bottom: 20rem !important; /* Moved 100px higher - positioned well above the Run button */
+            left: -20px !important; /* Moved 20px to the left */
             width: 100%;
         }
     }
