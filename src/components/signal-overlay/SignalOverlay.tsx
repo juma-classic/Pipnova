@@ -15,6 +15,7 @@ export const SignalOverlay: React.FC = () => {
     const [isEngineRunning, setIsEngineRunning] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [loadingSignalId, setLoadingSignalId] = useState<string | null>(null);
+    const [loadedSignalIds, setLoadedSignalIds] = useState<Set<string>>(new Set()); // Track loaded signals
     const [isModalOpen, setIsModalOpen] = useState(false); // Modal state for mobile
     const unsubscribeRef = useRef<(() => void) | null>(null);
     
@@ -96,22 +97,22 @@ export const SignalOverlay: React.FC = () => {
             razielBotLoaderService.loadNovagridBotWithPatelSignal(botSignal).then(() => {
                 console.log('✅ NOVAGRID 2026 bot loaded successfully with all parameters');
                 setLoadingSignalId(null);
+                // Mark signal as loaded
+                setLoadedSignalIds(prev => new Set(prev).add(signal.id));
             }).catch((error) => {
                 console.error('❌ Failed to load bot:', error);
                 setError('Failed to load bot. Please try again.');
                 setLoadingSignalId(null);
             });
             
-            // Close modal immediately on mobile for instant feedback
-            if (isMobile) {
-                setIsModalOpen(false);
-            }
+            // KEEP MODAL OPEN on mobile for rapid bot loading
+            // User can manually close when done
         } catch (error) {
             console.error('❌ Failed to load bot:', error);
             setError('Failed to load bot. Please try again.');
             setLoadingSignalId(null);
         }
-    }, [dashboard, isMobile]);
+    }, [dashboard]);
 
     // Select a signal
     const handleSelectSignal = useCallback((signal: PatelSignalWithTimer) => {
@@ -334,7 +335,7 @@ export const SignalOverlay: React.FC = () => {
                                     {availableSignals.map(signal => (
                                         <div
                                             key={signal.id}
-                                            className={`signal-overlay__signal-card ${selectedSignal?.id === signal.id ? 'signal-overlay__signal-card--selected' : ''} ${loadingSignalId === signal.id ? 'signal-overlay__signal-card--loading' : ''}`}
+                                            className={`signal-overlay__signal-card ${selectedSignal?.id === signal.id ? 'signal-overlay__signal-card--selected' : ''} ${loadingSignalId === signal.id ? 'signal-overlay__signal-card--loading' : ''} ${loadedSignalIds.has(signal.id) ? 'signal-overlay__signal-card--loaded' : ''}`}
                                             onClick={() => handleSelectSignal(signal)}
                                         >
                                             <div className="signal-overlay__signal-header">
@@ -370,7 +371,7 @@ export const SignalOverlay: React.FC = () => {
                                                     <circle cx="15" cy="10" r="1.5" fill="currentColor" className="bot-eye-2" />
                                                     <path d="M8 15h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="bot-mouth" />
                                                 </svg>
-                                                {loadingSignalId === signal.id ? 'Loading...' : 'Load Bot'}
+                                                {loadingSignalId === signal.id ? 'Loading...' : loadedSignalIds.has(signal.id) ? '✓ Loaded' : 'Load Bot'}
                                             </button>
                                         </div>
                                     ))}
@@ -507,7 +508,7 @@ export const SignalOverlay: React.FC = () => {
                     {availableSignals.map(signal => (
                         <div
                             key={signal.id}
-                            className={`signal-overlay__signal-card ${selectedSignal?.id === signal.id ? 'signal-overlay__signal-card--selected' : ''} ${loadingSignalId === signal.id ? 'signal-overlay__signal-card--loading' : ''}`}
+                            className={`signal-overlay__signal-card ${selectedSignal?.id === signal.id ? 'signal-overlay__signal-card--selected' : ''} ${loadingSignalId === signal.id ? 'signal-overlay__signal-card--loading' : ''} ${loadedSignalIds.has(signal.id) ? 'signal-overlay__signal-card--loaded' : ''}`}
                             onClick={() => handleSelectSignal(signal)}
                         >
                             <div className="signal-overlay__signal-header">
@@ -543,7 +544,7 @@ export const SignalOverlay: React.FC = () => {
                                     <circle cx="15" cy="10" r="1.5" fill="currentColor" className="bot-eye-2" />
                                     <path d="M8 15h8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" className="bot-mouth" />
                                 </svg>
-                                {loadingSignalId === signal.id ? 'Loading...' : 'Load Bot'}
+                                {loadingSignalId === signal.id ? 'Loading...' : loadedSignalIds.has(signal.id) ? '✓ Loaded' : 'Load Bot'}
                             </button>
                         </div>
                     ))}
