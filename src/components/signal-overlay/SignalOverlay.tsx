@@ -12,7 +12,7 @@ export const SignalOverlay: React.FC = () => {
     const engineInitialized = useRef(false);
     
     // Dragging state
-    const [position, setPosition] = useState({ x: window.innerWidth - 270, y: 20 });
+    const [position, setPosition] = useState({ x: window.innerWidth - 270, y: 70 });
     const [isDragging, setIsDragging] = useState(false);
     const [dragOffset, setDragOffset] = useState({ x: 0, y: 0 });
     const overlayRef = useRef<HTMLDivElement>(null);

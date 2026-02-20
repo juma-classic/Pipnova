@@ -187,10 +187,23 @@ class DerivAPIService {
             subscribe: 1,
         };
 
+        console.log('🔔 Subscribing to ticks for symbol:', symbol);
         const response = await api_base.api?.send(request);
+        console.log('📬 Subscription response:', response);
 
         if (response?.subscription) {
             const subscription = api_base.api?.onMessage().subscribe((message: any) => {
+                // Log ALL messages to debug
+                if (message.tick) {
+                    console.log('📨 Tick message received:', {
+                        symbol: message.tick.symbol,
+                        requestedSymbol: symbol,
+                        matches: message.tick.symbol === symbol,
+                        quote: message.tick.quote,
+                        epoch: message.tick.epoch
+                    });
+                }
+                
                 if (message.tick && message.tick.symbol === symbol) {
                     callback(message as TTicksSubscribeResponse);
                 }

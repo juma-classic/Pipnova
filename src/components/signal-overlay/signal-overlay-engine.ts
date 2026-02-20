@@ -78,20 +78,36 @@ class SignalOverlayEngine {
                 throw new Error('Deriv API not connected. Please ensure you are logged in.');
             }
 
+            console.log('🔌 API connection state:', api_base.api.connection.readyState);
+
             const subscriptionId = await derivAPIService.subscribeToTicks(this.MARKET, tickData => {
-                console.log('📊 Received tick data:', tickData);
+                console.log('📊 Raw tick data received:', tickData);
                 
-                if (tickData?.tick?.quote && tickData?.tick?.epoch) {
-                    this.handleTickData({
+                if (tickData?.tick) {
+                    console.log('✅ Tick structure valid:', {
                         quote: tickData.tick.quote,
                         epoch: tickData.tick.epoch,
+                        symbol: tickData.tick.symbol
                     });
+                    
+                    if (tickData.tick.quote && tickData.tick.epoch) {
+                        this.handleTickData({
+                            quote: tickData.tick.quote,
+                            epoch: tickData.tick.epoch,
+                        });
+                    } else {
+                        console.warn('⚠️ Tick missing quote or epoch:', tickData.tick);
+                    }
                 } else {
                     console.warn('⚠️ Invalid tick data structure:', tickData);
                 }
             });
 
             console.log('📡 Subscription ID:', subscriptionId);
+
+            if (!subscriptionId) {
+                throw new Error('Failed to create subscription - no subscription ID returned');
+            }
 
             // Store unsubscribe function
             this.unsubscribe = () => {
@@ -125,15 +141,22 @@ class SignalOverlayEngine {
             const checkAPI = () => {
                 const elapsed = Date.now() - startTime;
 
-                // Check if API is available and connected
-                if (api_base.api && api_base.api.connection && api_base.api.connection.readyState === 1) {
+                // Check multiple API availability patterns
+                const hasApiBase = api_base && api_base.api;
+                const hasConnection = hasApiBase && api_base.api.connection;
+                const isConnected = hasConnection && api_base.api.connection.readyState === 1;
+
+                // Also check if we can access the send method
+                const canSend = hasApiBase && typeof api_base.api.send === 'function';
+
+                if (isConnected || (hasApiBase && canSend)) {
                     console.log('✅ Deriv API is ready');
                     resolve();
                     return;
                 }
 
                 if (elapsed >= timeout) {
-                    reject(new Error('Timeout waiting for Deriv API to be ready'));
+                    reject(new Error('Timeout waiting for Deriv API. Please ensure you are logged in.'));
                     return;
                 }
 
