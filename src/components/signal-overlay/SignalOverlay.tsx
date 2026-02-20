@@ -45,7 +45,7 @@ export const SignalOverlay: React.FC = () => {
                         expiresAt: s.timestamp + 120000, // 2 minutes from creation
                     }));
                     console.log('✅ OVER signals (2min validity):', validSignals.length);
-                    setAvailableSignals(validSignals.slice(0, 5)); // Keep max 5 OVER signals
+                    setAvailableSignals(validSignals.slice(0, 8)); // Increased from 5 to 8 signals
                 });
                 
                 // Start the real-time engine
@@ -79,6 +79,9 @@ export const SignalOverlay: React.FC = () => {
             setLoadingSignalId(signal.id);
             console.log('🤖 Loading NOVAGRID 2026 bot with Patel signal:', signal);
             
+            // Switch to Bot Builder tab IMMEDIATELY for instant feedback
+            dashboard.setActiveTab(1);
+            
             // Convert Patel signal to bot-compatible format
             const botSignal: PatelSignalForBot = {
                 market: signal.market,
@@ -90,20 +93,26 @@ export const SignalOverlay: React.FC = () => {
                 recommendedRuns: signal.recommendedRuns,
             };
             
-            // Use raziel bot loader service for comprehensive injection
-            await razielBotLoaderService.loadNovagridBotWithPatelSignal(botSignal);
+            // Load bot in background (non-blocking)
+            razielBotLoaderService.loadNovagridBotWithPatelSignal(botSignal).then(() => {
+                console.log('✅ NOVAGRID 2026 bot loaded successfully with all parameters');
+                setLoadingSignalId(null);
+            }).catch((error) => {
+                console.error('❌ Failed to load bot:', error);
+                setError('Failed to load bot. Please try again.');
+                setLoadingSignalId(null);
+            });
             
-            // Switch to Bot Builder tab
-            dashboard.setActiveTab(1);
-            
-            console.log('✅ NOVAGRID 2026 bot loaded successfully with all parameters');
-            setLoadingSignalId(null);
+            // Close modal immediately on mobile for instant feedback
+            if (isMobile) {
+                setIsModalOpen(false);
+            }
         } catch (error) {
             console.error('❌ Failed to load bot:', error);
             setError('Failed to load bot. Please try again.');
             setLoadingSignalId(null);
         }
-    }, [dashboard]);
+    }, [dashboard, isMobile]);
 
     // Select a signal
     const handleSelectSignal = useCallback((signal: PatelSignalWithTimer) => {

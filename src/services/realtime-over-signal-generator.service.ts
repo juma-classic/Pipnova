@@ -34,10 +34,10 @@ class RealtimeOverSignalGeneratorService {
     private isRunning: boolean = false;
 
     // Configuration
-    private readonly TICK_HISTORY_SIZE = 100; // Analyze last 100 ticks
-    private readonly SIGNAL_GENERATION_INTERVAL = 3000; // Generate signals every 3 seconds
-    private readonly MIN_CONFIDENCE = 60; // Minimum confidence percentage
-    private readonly MAX_SIGNALS = 5; // Maximum concurrent signals
+    private readonly TICK_HISTORY_SIZE = 50; // Reduced from 100 for faster analysis
+    private readonly SIGNAL_GENERATION_INTERVAL = 1500; // Reduced from 3000ms to 1.5s for faster signals
+    private readonly MIN_CONFIDENCE = 55; // Reduced from 60 for more signals
+    private readonly MAX_SIGNALS = 8; // Increased from 5 for more options
 
     private readonly MARKETS = [
         '1HZ10V',  // Volatility 10 (1s) Index
@@ -173,8 +173,8 @@ class RealtimeOverSignalGeneratorService {
         const signals: PatelSignal[] = [];
 
         for (const [market, data] of this.marketData.entries()) {
-            // Need minimum ticks for analysis
-            if (data.ticks.length < 30) {
+            // Reduced minimum ticks from 30 to 20 for faster signal generation
+            if (data.ticks.length < 20) {
                 continue;
             }
 
@@ -234,9 +234,9 @@ class RealtimeOverSignalGeneratorService {
     ): PatelSignal[] {
         const signals: PatelSignal[] = [];
 
-        // Strategy 1: Hot High Digits (5-9 with high frequency)
+        // Strategy 1: Hot High Digits (5-9 with high frequency) - RELAXED THRESHOLD
         const highDigits = frequencies.filter(f => f.digit >= 5);
-        const hotHighDigits = highDigits.filter(f => f.frequency > 12); // Above 10% expected
+        const hotHighDigits = highDigits.filter(f => f.frequency > 11); // Reduced from 12 for more signals
 
         for (const freq of hotHighDigits) {
             const confidence = this.calculateConfidence(freq, 'hot_high');
@@ -245,8 +245,8 @@ class RealtimeOverSignalGeneratorService {
             }
         }
 
-        // Strategy 2: Cold High Digits (5-9 overdue for reversal)
-        const coldHighDigits = highDigits.filter(f => f.lastSeen > 15 && f.frequency < 8);
+        // Strategy 2: Cold High Digits (5-9 overdue for reversal) - RELAXED THRESHOLD
+        const coldHighDigits = highDigits.filter(f => f.lastSeen > 12 && f.frequency < 9); // Reduced from 15 and 8
 
         for (const freq of coldHighDigits) {
             const confidence = this.calculateConfidence(freq, 'cold_reversal');
@@ -255,12 +255,12 @@ class RealtimeOverSignalGeneratorService {
             }
         }
 
-        // Strategy 3: Zone Clustering (High zone dominance)
+        // Strategy 3: Zone Clustering (High zone dominance) - RELAXED THRESHOLD
         const highZoneFreq = highDigits.reduce((sum, f) => sum + f.frequency, 0);
-        if (highZoneFreq > 55) {
+        if (highZoneFreq > 52) { // Reduced from 55 for more signals
             // High zone is dominant
             const bestHighDigit = highDigits.sort((a, b) => b.frequency - a.frequency)[0];
-            const confidence = Math.min(95, 60 + (highZoneFreq - 55) * 1.5);
+            const confidence = Math.min(95, 58 + (highZoneFreq - 52) * 1.5); // Adjusted base
             signals.push(this.createSignal(market, bestHighDigit.digit, confidence, 'High Zone Clustering', ticks));
         }
 
