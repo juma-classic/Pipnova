@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import PatelSignalGenerator from '@/services/patel-signal-generator.service';
-import RealtimeOverSignalGenerator from '@/services/realtime-over-signal-generator.service';
+import FastOverSignalGenerator from '@/services/fast-over-signal-generator.service';
 import type { PatelSignal } from '@/types/patel-signals';
 import { razielBotLoaderService, PatelSignalForBot } from '@/services/raziel-bot-loader.service';
 import { useStore } from '@/hooks/useStore';
@@ -33,11 +32,11 @@ export const SignalOverlay: React.FC = () => {
         if (!isEngineRunning) {
             try {
                 setError(null);
-                console.log('🚀 Starting Real-Time OVER Signal Generator (Deriv API)...');
+                console.log('🚀 Starting Fast OVER Signal Generator (Hot/Cold + Distribution)...');
                 
-                // Subscribe to real-time signals
-                const unsubscribe = RealtimeOverSignalGenerator.subscribe((signals) => {
-                    console.log('📊 Received real-time OVER signals:', signals.length);
+                // Subscribe to fast signals
+                const unsubscribe = FastOverSignalGenerator.subscribe((signals) => {
+                    console.log('📊 Received OVER signals:', signals.length);
                     // Ensure 2-minute validity
                     const validSignals = signals.map(s => ({
                         ...s,
@@ -45,15 +44,15 @@ export const SignalOverlay: React.FC = () => {
                         expiresAt: s.timestamp + 120000, // 2 minutes from creation
                     }));
                     console.log('✅ OVER signals (2min validity):', validSignals.length);
-                    setAvailableSignals(validSignals.slice(0, 8)); // Increased from 5 to 8 signals
+                    setAvailableSignals(validSignals.slice(0, 8)); // Up to 8 signals
                 });
                 
-                // Start the real-time engine
-                await RealtimeOverSignalGenerator.start();
+                // Start the fast engine
+                await FastOverSignalGenerator.start();
                 
                 unsubscribeRef.current = unsubscribe;
                 setIsEngineRunning(true);
-                console.log('✅ Real-Time OVER Signal Generator started - Live Deriv API, 2-minute validity');
+                console.log('✅ Fast OVER Signal Generator started - Hot/Cold + Distribution scanners active');
             } catch (err: any) {
                 console.error('❌ Failed to start engine:', err);
                 setError(err?.message || 'Failed to start. Please try again.');
@@ -64,10 +63,10 @@ export const SignalOverlay: React.FC = () => {
                 unsubscribeRef.current();
                 unsubscribeRef.current = null;
             }
-            await RealtimeOverSignalGenerator.stop();
+            await FastOverSignalGenerator.stop();
             setIsEngineRunning(false);
             setAvailableSignals([]);
-            console.log('⏸️ Real-Time OVER Signal Generator stopped');
+            console.log('⏸️ Fast OVER Signal Generator stopped');
         }
     }, [isEngineRunning]);
 
