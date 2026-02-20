@@ -69,6 +69,17 @@ export interface CustomBotSettings {
     martingale: number;
 }
 
+// Patel Signal interface for Signal Panel
+export interface PatelSignalForBot {
+    market: string;
+    type: 'OVER' | 'UNDER';
+    digit: number;
+    barrier?: number;
+    confidencePercentage: number;
+    recommendedStake: number;
+    recommendedRuns: number;
+}
+
 export interface RazielBotConfiguration {
     botFile: string;
     market: string;
@@ -83,6 +94,68 @@ export interface RazielBotConfiguration {
 
 class RazielBotLoaderService {
     private readonly RAZIEL_BOT_FILE = 'Raziel Over Under.xml'; // Changed back from CFX-EvenOdd.xml
+    private readonly NOVAGRID_BOT_FILE = 'NOVAGRID 2026.xml'; // NOVAGRID bot for Signal Panel
+
+    /**
+     * Load NOVAGRID 2026 bot with Patel Signal (for Signal Panel)
+     */
+    public async loadNovagridBotWithPatelSignal(
+        signal: PatelSignalForBot,
+        customSettings?: CustomBotSettings
+    ): Promise<void> {
+        console.log('🤖 Loading NOVAGRID 2026 bot with Patel Signal...');
+
+        // Start debugging session
+        botLoadingDebugger.startDebugging();
+        botLoadingDebugger.addStep('signal_analysis', 'success', 'Patel Signal received', {
+            market: signal.market,
+            type: signal.type,
+            digit: signal.digit,
+            confidence: signal.confidencePercentage,
+        });
+
+        try {
+            // Create bot configuration from signal
+            botLoadingDebugger.addStep('config_creation', 'pending', 'Creating bot configuration');
+            const botConfig = this.createNovagridBotConfiguration(signal, customSettings);
+            botLoadingDebugger.addStep('config_creation', 'success', 'Bot configuration created', botConfig);
+
+            // Load the bot XML
+            botLoadingDebugger.addStep('xml_loading', 'pending', 'Loading bot XML file');
+            const fileLoaded = await botLoadingDebugger.debugFileLoading(botConfig.botFile);
+            if (!fileLoaded) {
+                throw new Error(`Failed to load bot file: ${botConfig.botFile}`);
+            }
+
+            const botXML = await this.loadBotXML(botConfig.botFile);
+            botLoadingDebugger.addStep('xml_loading', 'success', 'Bot XML loaded successfully');
+
+            // Configure bot parameters
+            botLoadingDebugger.addStep('xml_config', 'pending', 'Configuring bot parameters');
+            botLoadingDebugger.debugXMLConfiguration(botXML, botConfig);
+            const configuredXML = this.configureNovagridBotXML(botXML, botConfig);
+            botLoadingDebugger.addStep('xml_config', 'success', 'Bot parameters configured');
+
+            // Debug available loading methods
+            botLoadingDebugger.debugBotLoadingMethods();
+
+            // Load bot into Deriv Bot Builder
+            botLoadingDebugger.addStep('bot_injection', 'pending', 'Injecting bot into Deriv Bot Builder');
+            await this.loadBotIntoBuilder(configuredXML, botConfig);
+            botLoadingDebugger.addStep('bot_injection', 'success', 'Bot injected successfully');
+
+            // Complete debugging
+            const debugInfo = botLoadingDebugger.completeDebugging(true);
+            console.log('✅ NOVAGRID 2026 bot loaded successfully with Patel Signal parameters');
+
+            // Show debug summary in a notification
+            this.showDebugSummary(debugInfo);
+        } catch (error) {
+            console.error('❌ Failed to load NOVAGRID 2026 bot:', error);
+            botLoadingDebugger.completeDebugging(false, (error as Error).message);
+            throw error;
+        }
+    }
 
     /**
      * Load Raziel Over Under bot with Distribution Deviation signal
@@ -679,6 +752,74 @@ class RazielBotLoaderService {
     }
 
     /**
+     * Create NOVAGRID bot configuration from Patel Signal
+     */
+    private createNovagridBotConfiguration(
+        signal: PatelSignalForBot,
+        customSettings?: CustomBotSettings
+    ): RazielBotConfiguration {
+        const contractType = signal.type === 'OVER' ? 'DIGITOVER' : 'DIGITUNDER';
+        
+        // Determine barrier from signal type and digit
+        let barrier: number;
+        if (signal.type === 'OVER') {
+            // For OVER signals, barrier is typically the digit or digit-1
+            barrier = signal.barrier || Math.max(0, signal.digit - 1);
+        } else {
+            // For UNDER signals, barrier is typically the digit or digit+1
+            barrier = signal.barrier || Math.min(9, signal.digit + 1);
+        }
+
+        // Use custom settings if provided, otherwise use signal recommendations
+        const stake = customSettings?.stake || signal.recommendedStake || 1;
+        const martingale = customSettings?.martingale || 2.2;
+
+        // Enhanced prediction logic for NOVAGRID
+        let predictionBeforeLoss: number;
+        let predictionAfterLoss: number;
+
+        if (signal.type === 'OVER') {
+            predictionBeforeLoss = barrier;
+            // Unified recovery: OVER 2,3,4 all recover with OVER 4
+            if (barrier >= 2 && barrier <= 4) {
+                predictionAfterLoss = 4;
+            } else {
+                predictionAfterLoss = Math.min(barrier + 1, 9);
+            }
+        } else {
+            // UNDER
+            predictionBeforeLoss = barrier;
+            // Unified recovery: UNDER 7,6,5 all recover with UNDER 5
+            if (barrier >= 5 && barrier <= 7) {
+                predictionAfterLoss = 5;
+            } else {
+                predictionAfterLoss = Math.max(barrier - 1, 0);
+            }
+        }
+
+        return {
+            botFile: this.NOVAGRID_BOT_FILE,
+            market: signal.market,
+            contractType: contractType,
+            barrier: barrier,
+            stake: stake,
+            prediction: signal.type,
+            parameters: {
+                // NOVAGRID specific parameters
+                initialStake: stake,
+                martingaleSplit: martingale,
+                predictionBeforeLoss: predictionBeforeLoss,
+                predictionAfterLoss: predictionAfterLoss,
+
+                // Patel Signal specific parameters
+                targetDigit: signal.digit,
+                confidence: signal.confidencePercentage,
+                recommendedRuns: signal.recommendedRuns,
+            },
+        };
+    }
+
+    /**
      * Load bot XML file
      */
     private async loadBotXML(botFile: string): Promise<string> {
@@ -850,6 +991,156 @@ class RazielBotLoaderService {
             this.validateXMLConfiguration(configuredXML, config);
         } catch (error) {
             console.warn('Failed to parse/modify Raziel Over Under XML, using string replacement fallback:', error);
+            // Fall back to string replacement if XML parsing fails
+            configuredXML = this.configureXMLWithStringReplacement(xmlContent, config);
+        }
+
+        return configuredXML;
+    }
+
+    /**
+     * Configure NOVAGRID 2026 bot XML with signal parameters
+     */
+    private configureNovagridBotXML(xmlContent: string, config: RazielBotConfiguration): string {
+        let configuredXML = xmlContent;
+
+        try {
+            console.log('🔧 Configuring NOVAGRID 2026 bot XML with parameters:', {
+                stake: config.stake,
+                martingale: config.parameters.martingaleSplit,
+                contractType: config.contractType,
+                market: config.market,
+                predictionBeforeLoss: config.parameters.predictionBeforeLoss,
+                predictionAfterLoss: config.parameters.predictionAfterLoss,
+            });
+
+            // Parse XML to modify parameters
+            const parser = new DOMParser();
+            const xmlDoc = parser.parseFromString(xmlContent, 'text/xml');
+
+            // Check for parsing errors
+            const parseError = xmlDoc.querySelector('parsererror');
+            if (parseError) {
+                throw new Error(`XML parsing failed: ${parseError.textContent}`);
+            }
+
+            // Track configuration success
+            const configResults = {
+                market: false,
+                contractType: false,
+                initialStake: false,
+                martingaleSplit: false,
+                predictionBeforeLoss: false,
+                predictionAfterLoss: false,
+                purchaseType: false,
+            };
+
+            // Update market symbol (SYMBOL_LIST field)
+            const symbolField = xmlDoc.querySelector('field[name="SYMBOL_LIST"]');
+            if (symbolField) {
+                symbolField.textContent = config.market;
+                configResults.market = true;
+                console.log(`✅ Updated market symbol to: ${config.market}`);
+            } else {
+                console.warn('❌ Could not find SYMBOL_LIST field');
+            }
+
+            // Update contract type (TYPE_LIST field) - NOVAGRID uses "both" but we need to set purchase type
+            const contractField = xmlDoc.querySelector('field[name="TYPE_LIST"]');
+            if (contractField) {
+                contractField.textContent = 'both'; // NOVAGRID uses both
+                configResults.contractType = true;
+                console.log(`✅ Updated contract type to: both`);
+            } else {
+                console.warn('❌ Could not find TYPE_LIST field');
+            }
+
+            // Update Amount variable (initial stake) - NOVAGRID uses "Amount" variable
+            const amountBlocks = xmlDoc.querySelectorAll('variable[id="iR9MIP@+P-(|!EWdy:H4"]');
+            if (amountBlocks.length > 0) {
+                // Find the block that sets the Amount variable
+                const amountSetBlock = xmlDoc.querySelector('block[id="su?Hn*_+v4I%{vk7;+i="] field[name="NUM"]');
+                if (amountSetBlock) {
+                    amountSetBlock.textContent = config.stake.toString();
+                    configResults.initialStake = true;
+                    console.log(`✅ Updated Amount (initial stake) to: ${config.stake}`);
+                }
+            } else {
+                console.warn('❌ Could not find Amount variable');
+            }
+
+            // Update Mart Splits variable (martingale) - NOVAGRID uses "Mart Splits" variable
+            const martSplitsBlock = xmlDoc.querySelector('block[id="I}GOH4k1J7J}d]Z-B+9$"] field[name="NUM"]');
+            if (martSplitsBlock) {
+                const martingaleValue =
+                    typeof config.parameters.martingaleSplit === 'number' ? config.parameters.martingaleSplit : 2;
+                martSplitsBlock.textContent = martingaleValue.toString();
+                configResults.martingaleSplit = true;
+                console.log(`✅ Updated Mart Splits (martingale) to: ${martingaleValue}`);
+            } else {
+                console.warn('❌ Could not find Mart Splits block');
+            }
+
+            // Update 1st Digit (prediction before loss) - NOVAGRID uses "1st Digit" variable
+            const firstDigitBlock = xmlDoc.querySelector('block[id=":%]KJOpvj`cH,.2P^?,F"] field[name="NUM"]');
+            if (firstDigitBlock) {
+                const predictionValue =
+                    typeof config.parameters.predictionBeforeLoss === 'number'
+                        ? config.parameters.predictionBeforeLoss
+                        : 2;
+                firstDigitBlock.textContent = predictionValue.toString();
+                configResults.predictionBeforeLoss = true;
+                console.log(`✅ Updated 1st Digit (prediction before loss) to: ${predictionValue}`);
+            } else {
+                console.warn('❌ Could not find 1st Digit block');
+            }
+
+            // Update 2nd Digit (prediction after loss) - NOVAGRID uses "2nd Digit" variable
+            const secondDigitBlock = xmlDoc.querySelector('block[id="q[Kk~w1yxxze1*{e9Y6a"] field[name="NUM"]');
+            if (secondDigitBlock) {
+                const predictionValue =
+                    typeof config.parameters.predictionAfterLoss === 'number'
+                        ? config.parameters.predictionAfterLoss
+                        : 4;
+                secondDigitBlock.textContent = predictionValue.toString();
+                configResults.predictionAfterLoss = true;
+                console.log(`✅ Updated 2nd Digit (prediction after loss) to: ${predictionValue}`);
+            } else {
+                console.warn('❌ Could not find 2nd Digit block');
+            }
+
+            // Update purchase type in purchase blocks - NOVAGRID uses PREDICTION field
+            const predictionFields = xmlDoc.querySelectorAll('field[name="PREDICTION"]');
+            if (predictionFields.length > 0) {
+                // NOVAGRID uses variables for prediction, so we don't need to update PREDICTION fields directly
+                configResults.purchaseType = true;
+                console.log(`✅ Purchase type will use variable-based predictions`);
+            }
+
+            // Serialize back to string
+            const serializer = new XMLSerializer();
+            configuredXML = serializer.serializeToString(xmlDoc);
+
+            // Log configuration results
+            const successCount = Object.values(configResults).filter(Boolean).length;
+            const totalCount = Object.keys(configResults).length;
+
+            console.log(
+                `🔧 NOVAGRID 2026 Configuration Results: ${successCount}/${totalCount} successful`,
+                configResults
+            );
+
+            if (successCount < totalCount) {
+                console.warn('⚠️ Some XML configurations failed - using string replacement fallback');
+                configuredXML = this.configureXMLWithStringReplacement(configuredXML, config);
+            } else {
+                console.log('✅ NOVAGRID 2026 XML configuration completed successfully');
+            }
+
+            // Validate the configuration
+            this.validateXMLConfiguration(configuredXML, config);
+        } catch (error) {
+            console.warn('Failed to parse/modify NOVAGRID 2026 XML, using string replacement fallback:', error);
             // Fall back to string replacement if XML parsing fails
             configuredXML = this.configureXMLWithStringReplacement(xmlContent, config);
         }

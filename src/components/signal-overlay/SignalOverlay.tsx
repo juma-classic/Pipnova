@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PatelSignalGenerator from '@/services/patel-signal-generator.service';
 import type { PatelSignal } from '@/types/patel-signals';
-import { load } from '@/external/bot-skeleton';
+import { razielBotLoaderService, PatelSignalForBot } from '@/services/raziel-bot-loader.service';
 import { useStore } from '@/hooks/useStore';
 import './SignalOverlay.scss';
 
@@ -92,55 +92,26 @@ export const SignalOverlay: React.FC = () => {
         
         try {
             setLoadingSignalId(signal.id);
-            console.log('🤖 Loading NOVAGRID 2026 bot with signal:', signal);
+            console.log('🤖 Loading NOVAGRID 2026 bot with Patel signal:', signal);
             
-            // Load NOVAGRID 2026 bot
-            const botPath = 'public/NOVAGRID 2026.xml';
-            await load({
-                block_string: botPath,
-                file_name: 'NOVAGRID 2026.xml',
-                strategy_id: null,
-                from: 'local',
-                workspace: (window as any).Blockly?.derivWorkspace,
-                drop_event: null,
-                showIncompatibleStrategyDialog: null,
-            });
+            // Convert Patel signal to bot-compatible format
+            const botSignal: PatelSignalForBot = {
+                market: signal.market,
+                type: signal.type as 'OVER' | 'UNDER',
+                digit: signal.digit,
+                barrier: signal.barrier,
+                confidencePercentage: signal.confidencePercentage,
+                recommendedStake: signal.recommendedStake,
+                recommendedRuns: signal.recommendedRuns,
+            };
             
-            // Wait a bit for bot to load
-            await new Promise(resolve => setTimeout(resolve, 500));
-            
-            // Update market in the bot
-            const workspace = (window as any).Blockly?.derivWorkspace;
-            if (workspace) {
-                // Find the market block and update it
-                const blocks = workspace.getAllBlocks();
-                const marketBlock = blocks.find((block: any) => 
-                    block.type === 'trade_definition_market' || 
-                    block.type === 'market'
-                );
-                
-                if (marketBlock) {
-                    // Map Patel market format to Deriv format
-                    const marketMap: Record<string, string> = {
-                        'R_10': 'R_10',
-                        'R_25': 'R_25',
-                        'R_50': 'R_50',
-                        'R_75': 'R_75',
-                        'R_100': 'R_100',
-                        'R_15': '1HZ150V',
-                        'R_90': '1HZ200V',
-                    };
-                    
-                    const derivMarket = marketMap[signal.market] || signal.market;
-                    marketBlock.setFieldValue(derivMarket, 'MARKET_LIST');
-                    console.log('✅ Market set to:', derivMarket);
-                }
-            }
+            // Use raziel bot loader service for comprehensive injection
+            await razielBotLoaderService.loadNovagridBotWithPatelSignal(botSignal);
             
             // Switch to Bot Builder tab
             dashboard.setActiveTab(1);
             
-            console.log('✅ Bot loaded successfully with market:', signal.market);
+            console.log('✅ NOVAGRID 2026 bot loaded successfully with all parameters');
             setLoadingSignalId(null);
         } catch (error) {
             console.error('❌ Failed to load bot:', error);
