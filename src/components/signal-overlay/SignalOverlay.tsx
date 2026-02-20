@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import PatelSignalGenerator from '@/services/patel-signal-generator.service';
+import RealtimeOverSignalGenerator from '@/services/realtime-over-signal-generator.service';
 import type { PatelSignal } from '@/types/patel-signals';
 import { razielBotLoaderService, PatelSignalForBot } from '@/services/raziel-bot-loader.service';
 import { useStore } from '@/hooks/useStore';
@@ -31,45 +32,27 @@ export const SignalOverlay: React.FC = () => {
         if (!isEngineRunning) {
             try {
                 setError(null);
-                console.log('🚀 Starting Patel Signal Generator...');
+                console.log('🚀 Starting Real-Time OVER Signal Generator (Deriv API)...');
                 
-                // Configure for OVER signals only, all volatility markets
-                PatelSignalGenerator.setConfig({
-                    enabledTypes: ['OVER'], // Only OVER signals
-                    enabledMarkets: [
-                        // Volatility Indices
-                        'R_10', 'R_25', 'R_50', 'R_75', 'R_100',
-                        // 1s Volatility Indices
-                        'R_15', 'R_90',
-                        // Additional volatility markets
-                        '1HZ10V', '1HZ25V', '1HZ50V', '1HZ75V', '1HZ100V',
-                        // Crash/Boom indices (if available)
-                        'CRASH_300', 'CRASH_500', 'CRASH_1000',
-                        'BOOM_300', 'BOOM_500', 'BOOM_1000'
-                    ] as any,
-                    minConfidence: 60, // Minimum 60% confidence
-                    maxSignalsPerHour: 10, // Limit to 10 best signals
-                    sensitivity: 'balanced'
+                // Subscribe to real-time signals
+                const unsubscribe = RealtimeOverSignalGenerator.subscribe((signals) => {
+                    console.log('📊 Received real-time OVER signals:', signals.length);
+                    // Ensure 2-minute validity
+                    const validSignals = signals.map(s => ({
+                        ...s,
+                        validityDuration: 120, // Force 2 minutes (120 seconds)
+                        expiresAt: s.timestamp + 120000, // 2 minutes from creation
+                    }));
+                    console.log('✅ OVER signals (2min validity):', validSignals.length);
+                    setAvailableSignals(validSignals.slice(0, 5)); // Keep max 5 OVER signals
                 });
                 
-                // Subscribe to Patel signals
-                const unsubscribe = PatelSignalGenerator.subscribe((signals) => {
-                    console.log('📊 Received Patel signals:', signals.length);
-                    // Filter to only OVER signals and ensure 2-minute validity
-                    const overSignals = signals
-                        .filter(s => s.type === 'OVER')
-                        .map(s => ({
-                            ...s,
-                            validityDuration: 120, // Force 2 minutes (120 seconds)
-                            expiresAt: s.timestamp + 120000, // 2 minutes from creation
-                        }));
-                    console.log('✅ OVER signals (2min validity):', overSignals.length);
-                    setAvailableSignals(overSignals.slice(0, 5)); // Keep max 5 OVER signals
-                });
+                // Start the real-time engine
+                await RealtimeOverSignalGenerator.start();
                 
                 unsubscribeRef.current = unsubscribe;
                 setIsEngineRunning(true);
-                console.log('✅ Patel Signal Generator started - OVER signals only, 2-minute validity, all volatility markets');
+                console.log('✅ Real-Time OVER Signal Generator started - Live Deriv API, 2-minute validity');
             } catch (err: any) {
                 console.error('❌ Failed to start engine:', err);
                 setError(err?.message || 'Failed to start. Please try again.');
@@ -80,9 +63,10 @@ export const SignalOverlay: React.FC = () => {
                 unsubscribeRef.current();
                 unsubscribeRef.current = null;
             }
+            await RealtimeOverSignalGenerator.stop();
             setIsEngineRunning(false);
             setAvailableSignals([]);
-            console.log('⏸️ Patel Signal Generator stopped');
+            console.log('⏸️ Real-Time OVER Signal Generator stopped');
         }
     }, [isEngineRunning]);
 
