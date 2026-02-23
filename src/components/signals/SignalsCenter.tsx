@@ -190,7 +190,6 @@ export const SignalsCenter: React.FC = () => {
     const [showDashboard, setShowDashboard] = useState(false);
     const [showRiskSettings, setShowRiskSettings] = useState(false);
     const [showAutoTradeSettings, setShowAutoTradeSettings] = useState(false);
-    const [isMyTradesExpanded, setIsMyTradesExpanded] = useState(true);
     const [autoTradeEnabled, setAutoTradeEnabled] = useState(signalTradingService.getAutoTradeConfig().enabled);
     const [, forceUpdate] = useState({});
     const [tradeRuns, setTradeRuns] = useState<Record<string, number>>({});
@@ -366,6 +365,13 @@ export const SignalsCenter: React.FC = () => {
             entryDigit: preservedEntryDigit, // Keep original hot entry digit
             reason: `${signal.reason || ''} [Risk Mode: ${riskMode === 'lessRisky' ? 'Less Risky (OVER2/UNDER7)' : 'Over3/Under6'} - Entry Digit: ${preservedEntryDigit}]`.trim(),
         };
+    };
+
+    // Helper function to extract last two digits from price
+    const extractLastTwoDigits = (price: number): number[] => {
+        const priceStr = (price * 100).toFixed(0); // Convert to cents and remove decimals
+        const lastTwoDigits = priceStr.slice(-2);
+        return [parseInt(lastTwoDigits[0]), parseInt(lastTwoDigits[1])];
     };
 
     // Request notification permission
@@ -819,7 +825,7 @@ export const SignalsCenter: React.FC = () => {
                           : 'ai',
                     status: 'ACTIVE',
                     entryDigit: signalResult.entryDigit,
-                    digitPattern: signalResult.digitPattern,
+                    digitPattern: signalResult.digitPattern || extractLastTwoDigits(currentPrice),
                     reason: signalResult.reason,
                     entryAnalysis,
                     recentPattern,
@@ -3617,6 +3623,60 @@ export const SignalsCenter: React.FC = () => {
 
                                     <div className='signal-details'>
                                         <div className='detail-item'>
+                                            <span className='detail-label'>📊 Volatility:</span>
+                                            <span className='detail-value'>
+                                                {signal.market.includes('10') && 'Vol 10 (1s)'}
+                                                {signal.market.includes('25') && 'Vol 25 (1s)'}
+                                                {signal.market.includes('50') && 'Vol 50 (1s)'}
+                                                {signal.market.includes('75') && 'Vol 75 (1s)'}
+                                                {signal.market.includes('100') && 'Vol 100 (1s)'}
+                                                {!signal.market.includes('10') &&
+                                                    !signal.market.includes('25') &&
+                                                    !signal.market.includes('50') &&
+                                                    !signal.market.includes('75') &&
+                                                    !signal.market.includes('100') &&
+                                                    signal.marketDisplay}
+                                            </span>
+                                        </div>
+                                        <div className='detail-item'>
+                                            <span className='detail-label'>📋 Contract Type:</span>
+                                            <span className='detail-value'>
+                                                {signal.type.startsWith('OVER') && 'Over'}
+                                                {signal.type.startsWith('UNDER') && 'Under'}
+                                                {signal.type === 'EVEN' && 'Even'}
+                                                {signal.type === 'ODD' && 'Odd'}
+                                                {signal.type === 'RISE' && 'Rise'}
+                                                {signal.type === 'FALL' && 'Fall'}
+                                            </span>
+                                        </div>
+                                        {signal.digitPattern && signal.digitPattern.length >= 2 && (
+                                            <>
+                                                <div className='detail-item'>
+                                                    <span className='detail-label'>1️⃣ 1st Digit:</span>
+                                                    <span className='detail-value digit-highlight'>
+                                                        {signal.digitPattern[signal.digitPattern.length - 2]}
+                                                    </span>
+                                                </div>
+                                                <div className='detail-item'>
+                                                    <span className='detail-label'>2️⃣ 2nd Digit:</span>
+                                                    <span className='detail-value digit-highlight'>
+                                                        {signal.digitPattern[signal.digitPattern.length - 1]}
+                                                    </span>
+                                                </div>
+                                            </>
+                                        )}
+                                        <div className='detail-item'>
+                                            <span className='detail-label'>🔄 Preferred Runs:</span>
+                                            <span className='detail-value runs-highlight'>
+                                                {signal.confidence === 'HIGH'
+                                                    ? '3-5'
+                                                    : signal.confidence === 'MEDIUM'
+                                                      ? '2-3'
+                                                      : '1-2'}{' '}
+                                                runs
+                                            </span>
+                                        </div>
+                                        <div className='detail-item'>
                                             <span className='detail-label'>Strategy:</span>
                                             <span className='detail-value'>{signal.strategy}</span>
                                         </div>
@@ -3822,64 +3882,6 @@ export const SignalsCenter: React.FC = () => {
                             </div>
                         );
                     })
-                )}
-            </div>
-
-            {/* My Trades Section */}
-            <div className='my-trades-section'>
-                <div className='my-trades-header' onClick={() => setIsMyTradesExpanded(!isMyTradesExpanded)}>
-                    <h3>📝 My Signal Trades</h3>
-                    <div className='header-actions'>
-                        {isMyTradesExpanded && (
-                            <button
-                                className='view-all-btn'
-                                onClick={e => {
-                                    e.stopPropagation();
-                                    setShowDashboard(true);
-                                }}
-                            >
-                                View All
-                            </button>
-                        )}
-                        <button className='toggle-btn'>{isMyTradesExpanded ? '▼' : '▶'}</button>
-                    </div>
-                </div>
-                {isMyTradesExpanded && (
-                    <div className='my-trades-list'>
-                        {signalTradingService.getHistory().length === 0 ? (
-                            <div className='no-trades-message'>
-                                <span className='no-trades-icon'>📭</span>
-                                <p>No trades yet. Click &quot;Trade Now&quot; on a signal to start!</p>
-                            </div>
-                        ) : (
-                            signalTradingService
-                                .getHistory()
-                                .slice(0, 5)
-                                .map((trade, idx) => (
-                                    <div key={idx} className='trade-item'>
-                                        <div className='trade-time'>
-                                            {new Date(trade.timestamp).toLocaleTimeString()}
-                                        </div>
-                                        <div className='trade-contract'>
-                                            {trade.contractId ? `#${trade.contractId}` : 'Pending'}
-                                        </div>
-                                        <div className='trade-signal'>Signal: {trade.signalId.slice(0, 12)}...</div>
-                                        <div
-                                            className={`trade-result ${trade.isWon ? 'success' : trade.profit !== undefined ? 'danger' : 'pending'}`}
-                                        >
-                                            {trade.profit !== undefined
-                                                ? `${trade.profit >= 0 ? '+' : ''}${trade.profit.toFixed(2)} USD`
-                                                : trade.error
-                                                  ? 'Failed'
-                                                  : 'Pending'}
-                                        </div>
-                                        <div className='trade-status'>
-                                            {trade.isWon ? '✅' : trade.profit !== undefined ? '❌' : '⏳'}
-                                        </div>
-                                    </div>
-                                ))
-                        )}
-                    </div>
                 )}
             </div>
 

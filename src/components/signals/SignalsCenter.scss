@@ -960,6 +960,7 @@
             .detail-item {
                 display: flex;
                 justify-content: space-between;
+                align-items: center;
 
                 .detail-label {
                     color: #64748b;
@@ -971,6 +972,26 @@
                     color: #1e293b;
                     font-weight: 600;
                     font-size: 0.8rem;
+
+                    &.digit-highlight {
+                        background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+                        color: #fff;
+                        padding: 0.25rem 0.6rem;
+                        border-radius: 8px;
+                        font-size: 0.85rem;
+                        font-weight: 700;
+                        box-shadow: 0 2px 6px rgb(59 130 246 / 25%);
+                    }
+
+                    &.runs-highlight {
+                        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+                        color: #fff;
+                        padding: 0.25rem 0.6rem;
+                        border-radius: 8px;
+                        font-size: 0.8rem;
+                        font-weight: 700;
+                        box-shadow: 0 2px 6px rgb(16 185 129 / 25%);
+                    }
                 }
             }
         }
@@ -1282,182 +1303,6 @@
     }
 }
 
-// My Trades Section
-.my-trades-section {
-    background: #f8f9fa;
-    border-top: 2px solid #e9ecef;
-    padding: 1.5rem;
-    flex-shrink: 0;
-
-    .my-trades-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-        cursor: pointer;
-        padding: 0.5rem;
-        border-radius: 6px;
-        transition: background 0.2s;
-        user-select: none;
-
-        &:hover {
-            background: rgb(0 0 0 / 3%);
-        }
-
-        h3 {
-            margin: 0;
-            color: #212529;
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .view-all-btn {
-            padding: 0.5rem 1rem;
-            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
-            border: none;
-            border-radius: 6px;
-            color: #fff;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-
-            &:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgb(33 150 243 / 30%);
-            }
-        }
-
-        .toggle-btn {
-            background: none;
-            border: none;
-            font-size: 1rem;
-            cursor: pointer;
-            padding: 0.25rem 0.5rem;
-            color: #666;
-            transition: color 0.2s;
-
-            &:hover {
-                color: #333;
-            }
-        }
-    }
-
-    .my-trades-list {
-        display: flex;
-        flex-direction: column;
-        gap: 0.75rem;
-        max-height: 300px;
-        overflow-y: auto;
-
-        &::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        &::-webkit-scrollbar-track {
-            background: #e9ecef;
-            border-radius: 3px;
-        }
-
-        &::-webkit-scrollbar-thumb {
-            background: #adb5bd;
-            border-radius: 3px;
-
-            &:hover {
-                background: #6c757d;
-            }
-        }
-
-        .no-trades-message {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: #495057;
-
-            .no-trades-icon {
-                font-size: 3rem;
-                display: block;
-                margin-bottom: 1rem;
-            }
-
-            p {
-                margin: 0;
-                font-size: 0.95rem;
-                color: #212529;
-                font-weight: 500;
-            }
-        }
-
-        .trade-item {
-            display: grid;
-            grid-template-columns: 100px 120px 1fr 120px 40px;
-            align-items: center;
-            gap: 1rem;
-            padding: 0.75rem 1rem;
-            background: #fff;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-            transition: all 0.2s;
-
-            &:hover {
-                transform: translateX(4px);
-                box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
-                border-color: #adb5bd;
-            }
-
-            .trade-time {
-                font-size: 0.85rem;
-                color: #212529;
-                font-weight: 600;
-            }
-
-            .trade-contract {
-                font-size: 0.85rem;
-                color: #212529;
-                font-family: monospace;
-                font-weight: 700;
-            }
-
-            .trade-signal {
-                font-size: 0.8rem;
-                color: #495057;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                font-weight: 500;
-            }
-
-            .trade-result {
-                font-size: 0.9rem;
-                font-weight: 700;
-                text-align: right;
-
-                &.success {
-                    color: #4caf50;
-                }
-
-                &.danger {
-                    color: #f44336;
-                }
-
-                &.pending {
-                    color: #ff9800;
-                }
-            }
-
-            .trade-status {
-                font-size: 1.2rem;
-                text-align: center;
-            }
-        }
-    }
-}
-
 // Mobile Responsive Styles - Elegant & Optimized
 @media (width <= 768px) {
     .signals-center-container {
@@ -1653,47 +1498,6 @@
         }
     }
 
-    // My Trades Section
-    .my-trades-section {
-        padding: 0.9rem 1rem;
-
-        .my-trades-header {
-            h3 {
-                font-size: 1rem;
-            }
-
-            .view-all-btn {
-                padding: 0.4rem 0.8rem;
-                font-size: 0.75rem;
-            }
-        }
-
-        .my-trades-list {
-            .trade-item {
-                grid-template-columns: 1fr;
-                gap: 0.5rem;
-                padding: 0.75rem;
-
-                .trade-time,
-                .trade-contract,
-                .trade-signal {
-                    font-size: 0.8rem;
-                }
-
-                .trade-result {
-                    text-align: left;
-                    font-size: 0.85rem;
-                }
-
-                .trade-status {
-                    position: absolute;
-                    top: 0.75rem;
-                    right: 0.75rem;
-                }
-            }
-        }
-    }
-
     // Footer
     .signals-footer {
         padding: 0.9rem 1rem;
@@ -1803,23 +1607,6 @@
                         font-size: 1.1rem;
                         padding: 0.35rem 0.7rem;
                     }
-                }
-            }
-        }
-    }
-
-    .my-trades-section {
-        padding: 0.75rem 0.9rem;
-
-        .my-trades-list {
-            .trade-item {
-                padding: 0.65rem;
-
-                .trade-time,
-                .trade-contract,
-                .trade-signal,
-                .trade-result {
-                    font-size: 0.75rem;
                 }
             }
         }
@@ -3184,22 +2971,6 @@
 
             .footer-value {
                 font-size: 1rem; // Reduced from 1.2rem
-            }
-        }
-    }
-
-    // My trades section optimizations
-    .my-trades-section {
-        padding: 1rem; // Reduced from 1.5rem
-
-        .my-trades-header {
-            h3 {
-                font-size: 1rem; // Reduced from 1.1rem
-            }
-
-            .view-all-btn {
-                padding: 0.4rem 0.8rem; // Reduced padding
-                font-size: 0.75rem; // Reduced from 0.85rem
             }
         }
     }
