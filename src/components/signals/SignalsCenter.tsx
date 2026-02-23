@@ -1862,10 +1862,10 @@ export const SignalsCenter: React.FC = () => {
         }
     };
 
-    // Load PATEL (with Entry) Bot for OVER/UNDER signals
-    const loadPatelBot = async (signal: SignalsCenterSignal) => {
+    // Load NOVAGRID 2026 Bot for OVER/UNDER signals
+    const loadNovagridBot = async (signal: SignalsCenterSignal) => {
         try {
-            console.log('🎯 Loading PATEL (with Entry) Bot for', signal.type);
+            console.log('🎯 Loading NOVAGRID 2026 Bot for', signal.type);
             console.log('📋 Signal details:', {
                 type: signal.type,
                 market: signal.market,
@@ -1931,10 +1931,10 @@ export const SignalsCenter: React.FC = () => {
                 }
             }
 
-            // Fetch PATEL (with Entry) Bot XML
-            const response = await fetch('/PATEL (with Entry).xml');
+            // Fetch NOVAGRID 2026 Bot XML
+            const response = await fetch('/NOVAGRID 2026.xml');
             if (!response.ok) {
-                throw new Error(`Failed to fetch PATEL Bot: ${response.statusText}`);
+                throw new Error(`Failed to fetch NOVAGRID 2026 Bot: ${response.statusText}`);
             }
 
             let botXml = await response.text();
@@ -1976,12 +1976,12 @@ export const SignalsCenter: React.FC = () => {
                 console.log('💰 Set purchase type to:', contractType);
             });
 
-            // PATEL Bot specific: Set search number to entry digit
-            // In PATEL bot, the search number is the entry point (hot digit)
+            // NOVAGRID 2026 Bot specific: Set search number to entry digit
+            // In NOVAGRID bot, the search number is the entry point (hot digit)
             if (signal.entryDigit !== undefined) {
-                console.log('🎯 PATEL Bot: Setting search number to entry digit:', signal.entryDigit);
+                console.log('🎯 NOVAGRID 2026 Bot: Setting search number to entry digit:', signal.entryDigit);
 
-                // Find and update search number fields in PATEL bot
+                // Find and update search number fields in NOVAGRID bot
                 const searchNumberFields = xmlDoc.querySelectorAll('field[name="NUM"]');
                 searchNumberFields.forEach(field => {
                     const parentBlock = field.closest('block');
@@ -2091,7 +2091,7 @@ export const SignalsCenter: React.FC = () => {
 
                 // Log the distinction between barrier and entry digit
                 if (signal.entryDigit !== undefined && signal.entryDigit !== predictionDigit) {
-                    console.log('📋 PATEL Bot Signal Analysis:');
+                    console.log('📋 NOVAGRID 2026 Bot Signal Analysis:');
                     console.log('   - Signal Type:', signal.type);
                     console.log('   - Barrier (threshold):', predictionDigit);
                     console.log('   - Search Number (Entry Digit):', signal.entryDigit);
@@ -2328,7 +2328,7 @@ export const SignalsCenter: React.FC = () => {
 
             // Load the bot
             if (window.load_modal && typeof window.load_modal.loadStrategyToBuilder === 'function') {
-                console.log('📤 Loading PATEL (with Entry) Bot to builder...');
+                console.log('📤 Loading NOVAGRID 2026 Bot to builder...');
                 console.log('🎯 Configuration Summary:');
                 console.log(`   Market: ${signal.market} (${signal.marketDisplay})`);
                 console.log(`   Type: ${signal.type} (${contractType})`);
@@ -2337,14 +2337,14 @@ export const SignalsCenter: React.FC = () => {
                 console.log(`   Martingale: ${stakeManager.getMartingale()}x (from StakeManager)`);
 
                 await window.load_modal.loadStrategyToBuilder({
-                    id: `patel-${signal.id}`,
-                    name: `PATEL - ${signal.marketDisplay} - ${signal.type} Entry:${signal.entryDigit}`,
+                    id: `novagrid-${signal.id}`,
+                    name: `NOVAGRID 2026 - ${signal.marketDisplay} - ${signal.type} Entry:${signal.entryDigit}`,
                     xml: botXml,
                     save_type: 'LOCAL',
                     timestamp: Date.now(),
                 });
 
-                console.log('✅ PATEL (with Entry) Bot loaded successfully!');
+                console.log('✅ NOVAGRID 2026 Bot loaded successfully!');
                 console.log(`✅ Bot is now configured for ${signal.marketDisplay}`);
                 console.log(`🎯 Search number set to entry digit: ${signal.entryDigit}`);
 
@@ -2358,11 +2358,11 @@ export const SignalsCenter: React.FC = () => {
                         if (runButton) {
                             console.log('✅ AUTO-RUN: Run button found, clicking now...');
                             runButton.click();
-                            console.log('🎉 AUTO-RUN: PATEL Bot auto-started successfully!');
+                            console.log('🎉 AUTO-RUN: NOVAGRID 2026 Bot auto-started successfully!');
 
                             // Show a brief success notification
                             console.log(
-                                `🎯 AUTO-RUN COMPLETE: ${signal.type} PATEL bot is now running for ${signal.marketDisplay}`
+                                `🎯 AUTO-RUN COMPLETE: ${signal.type} NOVAGRID 2026 bot is now running for ${signal.marketDisplay}`
                             );
                         } else {
                             console.warn('⚠️ AUTO-RUN: Run button not found, trying alternative method...');
@@ -2372,19 +2372,19 @@ export const SignalsCenter: React.FC = () => {
                             console.log('🔄 AUTO-RUN: Dispatched alternative run event');
                         }
                     } catch (error) {
-                        console.error('❌ AUTO-RUN ERROR: Failed to auto-run PATEL Bot:', error);
+                        console.error('❌ AUTO-RUN ERROR: Failed to auto-run NOVAGRID 2026 Bot:', error);
                     }
                 }, 0); // Run immediately
 
                 // Optional: Show a success notification
                 // You can uncomment this if you want a visual confirmation
-                // alert(`✅ PATEL Bot loaded!\n\nMarket: ${signal.marketDisplay}\nType: ${signal.type}\nEntry: ${signal.entryDigit}`);
+                // alert(`✅ NOVAGRID 2026 Bot loaded!\n\nMarket: ${signal.marketDisplay}\nType: ${signal.type}\nEntry: ${signal.entryDigit}`);
             } else {
                 throw new Error('Bot loader not available');
             }
         } catch (error) {
-            console.error('❌ Failed to load PATEL Bot:', error);
-            alert(`Failed to load PATEL bot: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            console.error('❌ Failed to load NOVAGRID 2026 Bot:', error);
+            alert(`Failed to load NOVAGRID 2026 bot: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     };
 
@@ -2428,9 +2428,9 @@ export const SignalsCenter: React.FC = () => {
 
             if (isOverUnderSignal) {
                 if (signal.entryDigit !== undefined) {
-                    // Auto-load PATEL (with Entry) Bot for OVER/UNDER signals WITH entry point
-                    console.log('🎯 Auto-loading PATEL (with Entry) Bot for signal with entry point:', signal.type);
-                    console.log('📋 Signal details for PATEL Bot:', {
+                    // Auto-load NOVAGRID 2026 Bot for OVER/UNDER signals WITH entry point
+                    console.log('🎯 Auto-loading NOVAGRID 2026 Bot for signal with entry point:', signal.type);
+                    console.log('📋 Signal details for NOVAGRID 2026 Bot:', {
                         id: signal.id,
                         type: signal.type,
                         market: signal.market,
@@ -2439,10 +2439,10 @@ export const SignalsCenter: React.FC = () => {
                         searchNumber: signal.entryDigit, // Entry digit becomes search number in PATEL
                         status: signal.status,
                     });
-                    await loadPatelBot(signal);
+                    await loadNovagridBot(signal);
                 } else {
-                    // Auto-load PATEL (with Entry) Bot for OVER/UNDER signals WITHOUT entry point
-                    console.log('🎯 Auto-loading PATEL (with Entry) Bot for signal without entry point:', signal.type);
+                    // Auto-load NOVAGRID 2026 Bot for OVER/UNDER signals WITHOUT entry point
+                    console.log('🎯 Auto-loading NOVAGRID 2026 Bot for signal without entry point:', signal.type);
                     console.log('📋 Signal details (no entry point):', {
                         id: signal.id,
                         type: signal.type,
@@ -2451,7 +2451,7 @@ export const SignalsCenter: React.FC = () => {
                         entryDigit: 'undefined (will use bot default)',
                         status: signal.status,
                     });
-                    await loadPatelBot(signal);
+                    await loadNovagridBot(signal);
                 }
             } else if (isEvenOddSignal) {
                 // Auto-load CFX Even Odd Bot for EVEN/ODD signals
@@ -3227,7 +3227,7 @@ export const SignalsCenter: React.FC = () => {
                                                 const isEvenOdd = signal.type === 'EVEN' || signal.type === 'ODD';
 
                                                 if (isOverUnder) {
-                                                    loadPatelBot(signal);
+                                                    loadNovagridBot(signal);
                                                 } else if (isRiseFall) {
                                                     loadCFXRiseFallBot(signal);
                                                 } else if (isEvenOdd) {
