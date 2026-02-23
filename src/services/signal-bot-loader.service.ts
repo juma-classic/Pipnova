@@ -921,6 +921,83 @@ class SignalBotLoaderService {
             isCustom: stakeManager.hasCustomSettings(),
         };
     }
+
+    /**
+     * Set "Amount" variable equal to "Initial Stake" variable in bot XML
+     * This ensures both variables have the same value for consistent stake management
+     */
+    public setAmountEqualToInitialStake(xmlDoc: Document): {
+        success: boolean;
+        amountUpdated: boolean;
+        initialStakeValue: number | null;
+        details: string[];
+    } {
+        console.log('🎯 [SignalBotLoader] Setting Amount = Initial Stake...');
+
+        const result = {
+            success: false,
+            amountUpdated: false,
+            initialStakeValue: null as number | null,
+            details: [] as string[],
+        };
+
+        try {
+            // Step 1: Find the "Initial Stake" variable value
+            const allVariableFields = xmlDoc.querySelectorAll('block[type="variables_set"] field[name="VAR"]');
+            let initialStakeValue: number | null = null;
+
+            allVariableFields.forEach(varField => {
+                const varName = varField.textContent?.trim();
+                if (varName === 'Initial Stake') {
+                    const block = varField.closest('block[type="variables_set"]');
+                    if (block) {
+                        const numField = block.querySelector('block[type="math_number"] field[name="NUM"]');
+                        if (numField && numField.textContent) {
+                            initialStakeValue = parseFloat(numField.textContent);
+                            result.initialStakeValue = initialStakeValue;
+                            result.details.push(`Found Initial Stake value: ${initialStakeValue}`);
+                            console.log(`✅ Found Initial Stake value: ${initialStakeValue}`);
+                        }
+                    }
+                }
+            });
+
+            // Step 2: If Initial Stake found, update Amount to match
+            if (initialStakeValue !== null) {
+                allVariableFields.forEach(varField => {
+                    const varName = varField.textContent?.trim();
+                    if (varName === 'Amount') {
+                        const block = varField.closest('block[type="variables_set"]');
+                        if (block) {
+                            const numField = block.querySelector('block[type="math_number"] field[name="NUM"]');
+                            if (numField) {
+                                const oldValue = numField.textContent;
+                                numField.textContent = initialStakeValue.toString();
+                                result.amountUpdated = true;
+                                result.success = true;
+                                result.details.push(`Updated Amount: ${oldValue} → ${initialStakeValue}`);
+                                console.log(`✅ Updated Amount from ${oldValue} to ${initialStakeValue}`);
+                            }
+                        }
+                    }
+                });
+            } else {
+                result.details.push('Initial Stake variable not found in bot XML');
+                console.warn('⚠️ Initial Stake variable not found in bot XML');
+            }
+
+            if (result.success) {
+                console.log(`🎉 SUCCESS: Amount set equal to Initial Stake (${initialStakeValue})`);
+            } else {
+                console.warn('⚠️ Could not set Amount equal to Initial Stake');
+            }
+        } catch (error) {
+            result.details.push(`Error: ${error}`);
+            console.error('❌ Error setting Amount equal to Initial Stake:', error);
+        }
+
+        return result;
+    }
 }
 
 export const signalBotLoader = new SignalBotLoaderService();

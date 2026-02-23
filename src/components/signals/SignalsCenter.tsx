@@ -1636,6 +1636,15 @@ export const SignalsCenter: React.FC = () => {
                 details: updateResult.details,
             });
 
+            // Set Amount equal to Initial Stake
+            const amountResult = signalBotLoader.setAmountEqualToInitialStake(xmlDoc);
+            console.log('✅ Amount = Initial Stake Update Results (CFX Even Odd):', {
+                success: amountResult.success,
+                amountUpdated: amountResult.amountUpdated,
+                initialStakeValue: amountResult.initialStakeValue,
+                details: amountResult.details,
+            });
+
             if (!updateResult.martingaleUpdated) {
                 console.warn('⚠️ Martingale was not updated by centralized service');
                 console.warn('⚠️ Bot will use default martingale value');
@@ -1787,6 +1796,15 @@ export const SignalsCenter: React.FC = () => {
                 stakeUpdated: updateResult.stakeUpdated,
                 martingaleUpdated: updateResult.martingaleUpdated,
                 details: updateResult.details,
+            });
+
+            // Set Amount equal to Initial Stake
+            const amountResult = signalBotLoader.setAmountEqualToInitialStake(xmlDoc);
+            console.log('✅ Amount = Initial Stake Update Results (CFX Rise Fall):', {
+                success: amountResult.success,
+                amountUpdated: amountResult.amountUpdated,
+                initialStakeValue: amountResult.initialStakeValue,
+                details: amountResult.details,
             });
 
             if (!updateResult.martingaleUpdated) {
@@ -2309,6 +2327,15 @@ export const SignalsCenter: React.FC = () => {
                 details: updateResult.details,
             });
 
+            // Set Amount equal to Initial Stake
+            const amountResult = signalBotLoader.setAmountEqualToInitialStake(xmlDoc);
+            console.log('✅ Amount = Initial Stake Update Results:', {
+                success: amountResult.success,
+                amountUpdated: amountResult.amountUpdated,
+                initialStakeValue: amountResult.initialStakeValue,
+                details: amountResult.details,
+            });
+
             if (!updateResult.martingaleUpdated) {
                 console.warn('⚠️ Martingale was not updated by centralized service');
                 console.warn('⚠️ Bot will use default martingale value');
@@ -2714,343 +2741,380 @@ export const SignalsCenter: React.FC = () => {
                             return (
                                 <>
                                     <div className='signals-header'>
-                        <div className='header-controls'>
-                            <button
-                                className={`control-btn ${autoTradeEnabled ? 'active' : ''}`}
-                                onClick={() => setShowAutoTradeSettings(true)}
-                                title='Configure auto-trade settings'
-                            >
-                                🤖 Auto-Trade {autoTradeEnabled && '(ON)'}
-                            </button>
-                            <button
-                                className='control-btn'
-                                onClick={() => setShowRiskSettings(true)}
-                                title='Configure risk management'
-                            >
-                                ⚠️ Risk
-                            </button>
-                            <button
-                                className='control-btn'
-                                onClick={() => setShowDashboard(true)}
-                                title='View performance analytics'
-                            >
-                                📊 Analytics
-                            </button>
-                            <button
-                                className='control-btn'
-                                onClick={() => setShowConnectionPool(true)}
-                                title='View connection pool status'
-                            >
-                                🔗 Connections
-                            </button>
-                            <button
-                                className='control-btn stake-settings-btn'
-                                onClick={() => setShowStakeModal(true)}
-                                title='Configure stake and martingale settings'
-                            >
-                                💰 Stake Settings
-                            </button>
-                            <button
-                                className='control-btn debug-btn'
-                                onClick={() => {
-                                    console.log('🧪 Debug: Manual signal generation test');
-                                    console.log('Current signal counts:', {
-                                        evenOdd: evenOddSignals.length,
-                                        riseFall: riseFallSignals.length,
-                                        total: allSignals.length,
-                                    });
-                                }}
-                                title='Debug signal generation'
-                            >
-                                🧪 Debug Signals
-                            </button>
-                            <button
-                                className={`control-btn risk-mode-btn ${riskMode === 'lessRisky' ? 'active less-risky' : ''}`}
-                                onClick={() => setRiskMode(riskMode === 'lessRisky' ? 'normal' : 'lessRisky')}
-                                title='Less Risky Mode: All OVER signals → OVER2, All UNDER signals → UNDER7 (70% win probability)'
-                            >
-                                🛡️ Less Risky {riskMode === 'lessRisky' && '(ON)'}
-                            </button>
-                            <button
-                                className={`control-btn risk-mode-btn ${riskMode === 'over3under6' ? 'active over3under6' : ''}`}
-                                onClick={() => setRiskMode(riskMode === 'over3under6' ? 'normal' : 'over3under6')}
-                                title='Over3/Under6 Mode: All OVER signals → OVER3, All UNDER signals → UNDER6 (60% win probability)'
-                            >
-                                🎯 Over3 & Under6 {riskMode === 'over3under6' && '(ON)'}
-                            </button>
-                        </div>
+                                        <div className='header-controls'>
+                                            <button
+                                                className={`control-btn ${autoTradeEnabled ? 'active' : ''}`}
+                                                onClick={() => setShowAutoTradeSettings(true)}
+                                                title='Configure auto-trade settings'
+                                            >
+                                                🤖 Auto-Trade {autoTradeEnabled && '(ON)'}
+                                            </button>
+                                            <button
+                                                className='control-btn'
+                                                onClick={() => setShowRiskSettings(true)}
+                                                title='Configure risk management'
+                                            >
+                                                ⚠️ Risk
+                                            </button>
+                                            <button
+                                                className='control-btn'
+                                                onClick={() => setShowDashboard(true)}
+                                                title='View performance analytics'
+                                            >
+                                                📊 Analytics
+                                            </button>
+                                            <button
+                                                className='control-btn'
+                                                onClick={() => setShowConnectionPool(true)}
+                                                title='View connection pool status'
+                                            >
+                                                🔗 Connections
+                                            </button>
+                                            <button
+                                                className='control-btn stake-settings-btn'
+                                                onClick={() => setShowStakeModal(true)}
+                                                title='Configure stake and martingale settings'
+                                            >
+                                                💰 Stake Settings
+                                            </button>
+                                            <button
+                                                className='control-btn debug-btn'
+                                                onClick={() => {
+                                                    console.log('🧪 Debug: Manual signal generation test');
+                                                    console.log('Current signal counts:', {
+                                                        evenOdd: evenOddSignals.length,
+                                                        riseFall: riseFallSignals.length,
+                                                        total: allSignals.length,
+                                                    });
+                                                }}
+                                                title='Debug signal generation'
+                                            >
+                                                🧪 Debug Signals
+                                            </button>
+                                            <button
+                                                className={`control-btn risk-mode-btn ${riskMode === 'lessRisky' ? 'active less-risky' : ''}`}
+                                                onClick={() =>
+                                                    setRiskMode(riskMode === 'lessRisky' ? 'normal' : 'lessRisky')
+                                                }
+                                                title='Less Risky Mode: All OVER signals → OVER2, All UNDER signals → UNDER7 (70% win probability)'
+                                            >
+                                                🛡️ Less Risky {riskMode === 'lessRisky' && '(ON)'}
+                                            </button>
+                                            <button
+                                                className={`control-btn risk-mode-btn ${riskMode === 'over3under6' ? 'active over3under6' : ''}`}
+                                                onClick={() =>
+                                                    setRiskMode(riskMode === 'over3under6' ? 'normal' : 'over3under6')
+                                                }
+                                                title='Over3/Under6 Mode: All OVER signals → OVER3, All UNDER signals → UNDER6 (60% win probability)'
+                                            >
+                                                🎯 Over3 & Under6 {riskMode === 'over3under6' && '(ON)'}
+                                            </button>
+                                        </div>
 
-                        {/* Signal Generator Toggles */}
-                        <div className='generator-toggles'>
-                            <div className='toggles-header'>
-                                <span>🎛️ Signal Generators</span>
-                                <span className='toggles-hint'>(Turn off to reduce API load)</span>
-                            </div>
-                            <div className='toggles-grid'>
-                                <button
-                                    className={`toggle-btn ${enabledGenerators.evenOdd ? 'active' : 'inactive'}`}
-                                    onClick={() => setEnabledGenerators(prev => ({ ...prev, evenOdd: !prev.evenOdd }))}
-                                    title='Toggle Even/Odd signal generator'
-                                >
-                                    🎲 Even/Odd {enabledGenerators.evenOdd && '✓'}
-                                </button>
-                                <button
-                                    className={`toggle-btn ${enabledGenerators.riseFall ? 'active' : 'inactive'}`}
-                                    onClick={() =>
-                                        setEnabledGenerators(prev => ({ ...prev, riseFall: !prev.riseFall }))
-                                    }
-                                    title='Toggle Rise/Fall signal generator'
-                                >
-                                    📈 Rise/Fall {enabledGenerators.riseFall && '✓'}
-                                </button>
-                                <button
-                                    className={`toggle-btn ${enabledGenerators.dynamic ? 'active' : 'inactive'}`}
-                                    onClick={() => setEnabledGenerators(prev => ({ ...prev, dynamic: !prev.dynamic }))}
-                                    title='Toggle Dynamic AI signal generator'
-                                >
-                                    🤖 Dynamic {enabledGenerators.dynamic && '✓'}
-                                </button>
-                                <button
-                                    className={`toggle-btn ${enabledGenerators.digitHacker ? 'active' : 'inactive'}`}
-                                    onClick={() =>
-                                        setEnabledGenerators(prev => ({ ...prev, digitHacker: !prev.digitHacker }))
-                                    }
-                                    title='Toggle Digit Hacker signal generator'
-                                >
-                                    🎯 Digit Hacker {enabledGenerators.digitHacker && '✓'}
-                                </button>
-                                <button
-                                    className={`toggle-btn ${enabledGenerators.hotCold ? 'active' : 'inactive'}`}
-                                    onClick={() => setEnabledGenerators(prev => ({ ...prev, hotCold: !prev.hotCold }))}
-                                    title='Toggle Hot/Cold Zone signal generator'
-                                >
-                                    🔥 Hot/Cold {enabledGenerators.hotCold && '✓'}
-                                </button>
-                                <button
-                                    className={`toggle-btn ${enabledGenerators.flipping ? 'active' : 'inactive'}`}
-                                    onClick={() =>
-                                        setEnabledGenerators(prev => ({ ...prev, flipping: !prev.flipping }))
-                                    }
-                                    title='Toggle Flipping Tool signal generator (High API load)'
-                                >
-                                    🔄 Flipping {enabledGenerators.flipping && '✓'}
-                                </button>
-                                <button
-                                    className={`toggle-btn ${enabledGenerators.patelDistribution ? 'active' : 'inactive'}`}
-                                    onClick={() =>
-                                        setEnabledGenerators(prev => ({
-                                            ...prev,
-                                            patelDistribution: !prev.patelDistribution,
-                                        }))
-                                    }
-                                    title='Toggle Patel Distribution signal generator'
-                                >
-                                    📊 Patel {enabledGenerators.patelDistribution && '✓'}
-                                </button>
-                                <button
-                                    className={`toggle-btn ${enabledGenerators.aiIntelligence ? 'active' : 'inactive'}`}
-                                    onClick={() =>
-                                        setEnabledGenerators(prev => ({
-                                            ...prev,
-                                            aiIntelligence: !prev.aiIntelligence,
-                                        }))
-                                    }
-                                    title='Toggle AI Signal Intelligence generator (Neural network-based analysis)'
-                                >
-                                    🧠 AI Intelligence {enabledGenerators.aiIntelligence && '✓'}
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                                        {/* Signal Generator Toggles */}
+                                        <div className='generator-toggles'>
+                                            <div className='toggles-header'>
+                                                <span>🎛️ Signal Generators</span>
+                                                <span className='toggles-hint'>(Turn off to reduce API load)</span>
+                                            </div>
+                                            <div className='toggles-grid'>
+                                                <button
+                                                    className={`toggle-btn ${enabledGenerators.evenOdd ? 'active' : 'inactive'}`}
+                                                    onClick={() =>
+                                                        setEnabledGenerators(prev => ({
+                                                            ...prev,
+                                                            evenOdd: !prev.evenOdd,
+                                                        }))
+                                                    }
+                                                    title='Toggle Even/Odd signal generator'
+                                                >
+                                                    🎲 Even/Odd {enabledGenerators.evenOdd && '✓'}
+                                                </button>
+                                                <button
+                                                    className={`toggle-btn ${enabledGenerators.riseFall ? 'active' : 'inactive'}`}
+                                                    onClick={() =>
+                                                        setEnabledGenerators(prev => ({
+                                                            ...prev,
+                                                            riseFall: !prev.riseFall,
+                                                        }))
+                                                    }
+                                                    title='Toggle Rise/Fall signal generator'
+                                                >
+                                                    📈 Rise/Fall {enabledGenerators.riseFall && '✓'}
+                                                </button>
+                                                <button
+                                                    className={`toggle-btn ${enabledGenerators.dynamic ? 'active' : 'inactive'}`}
+                                                    onClick={() =>
+                                                        setEnabledGenerators(prev => ({
+                                                            ...prev,
+                                                            dynamic: !prev.dynamic,
+                                                        }))
+                                                    }
+                                                    title='Toggle Dynamic AI signal generator'
+                                                >
+                                                    🤖 Dynamic {enabledGenerators.dynamic && '✓'}
+                                                </button>
+                                                <button
+                                                    className={`toggle-btn ${enabledGenerators.digitHacker ? 'active' : 'inactive'}`}
+                                                    onClick={() =>
+                                                        setEnabledGenerators(prev => ({
+                                                            ...prev,
+                                                            digitHacker: !prev.digitHacker,
+                                                        }))
+                                                    }
+                                                    title='Toggle Digit Hacker signal generator'
+                                                >
+                                                    🎯 Digit Hacker {enabledGenerators.digitHacker && '✓'}
+                                                </button>
+                                                <button
+                                                    className={`toggle-btn ${enabledGenerators.hotCold ? 'active' : 'inactive'}`}
+                                                    onClick={() =>
+                                                        setEnabledGenerators(prev => ({
+                                                            ...prev,
+                                                            hotCold: !prev.hotCold,
+                                                        }))
+                                                    }
+                                                    title='Toggle Hot/Cold Zone signal generator'
+                                                >
+                                                    🔥 Hot/Cold {enabledGenerators.hotCold && '✓'}
+                                                </button>
+                                                <button
+                                                    className={`toggle-btn ${enabledGenerators.flipping ? 'active' : 'inactive'}`}
+                                                    onClick={() =>
+                                                        setEnabledGenerators(prev => ({
+                                                            ...prev,
+                                                            flipping: !prev.flipping,
+                                                        }))
+                                                    }
+                                                    title='Toggle Flipping Tool signal generator (High API load)'
+                                                >
+                                                    🔄 Flipping {enabledGenerators.flipping && '✓'}
+                                                </button>
+                                                <button
+                                                    className={`toggle-btn ${enabledGenerators.patelDistribution ? 'active' : 'inactive'}`}
+                                                    onClick={() =>
+                                                        setEnabledGenerators(prev => ({
+                                                            ...prev,
+                                                            patelDistribution: !prev.patelDistribution,
+                                                        }))
+                                                    }
+                                                    title='Toggle Patel Distribution signal generator'
+                                                >
+                                                    📊 Patel {enabledGenerators.patelDistribution && '✓'}
+                                                </button>
+                                                <button
+                                                    className={`toggle-btn ${enabledGenerators.aiIntelligence ? 'active' : 'inactive'}`}
+                                                    onClick={() =>
+                                                        setEnabledGenerators(prev => ({
+                                                            ...prev,
+                                                            aiIntelligence: !prev.aiIntelligence,
+                                                        }))
+                                                    }
+                                                    title='Toggle AI Signal Intelligence generator (Neural network-based analysis)'
+                                                >
+                                                    🧠 AI Intelligence {enabledGenerators.aiIntelligence && '✓'}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
 
-                    {/* Signal Sources */}
-                    <div className='signal-sources'>
-                        <button
-                            className={activeSource === 'all' ? 'active' : ''}
-                            onClick={() => setActiveSource('all')}
-                        >
-                            🌐 All Sources
-                        </button>
-                        <button className={activeSource === 'ai' ? 'active' : ''} onClick={() => setActiveSource('ai')}>
-                            🤖 AI Signals
-                        </button>
-                        <button
-                            className={activeSource === 'pattern' ? 'active' : ''}
-                            onClick={() => setActiveSource('pattern')}
-                        >
-                            🔍 Pattern Signals
-                        </button>
-                        <button
-                            className={activeSource === 'technical' ? 'active' : ''}
-                            onClick={() => setActiveSource('technical')}
-                        >
-                            📊 Technical Signals
-                        </button>
-                        <button
-                            className={activeSource === 'flipping' ? 'active' : ''}
-                            onClick={() => setActiveSource('flipping')}
-                        >
-                            🔄 Flipping Tool Signals
-                        </button>
-                        <button
-                            className={activeSource === 'evenodd' ? 'active' : ''}
-                            onClick={() => setActiveSource('evenodd')}
-                        >
-                            🎲 EVEN/ODD Signals
-                        </button>
-                        <button
-                            className={activeSource === 'dynamic' ? 'active' : ''}
-                            onClick={() => setActiveSource('dynamic')}
-                        >
-                            🧲 Dynamic Signals
-                        </button>
-                        <button
-                            className={activeSource === 'risefall' ? 'active' : ''}
-                            onClick={() => setActiveSource('risefall')}
-                        >
-                            📊 RISE/FALL Signals
-                        </button>
-                        <button
-                            className={activeSource === 'patternpredictor' ? 'active' : ''}
-                            onClick={() => setActiveSource('patternpredictor')}
-                        >
-                            🔮 Pattern Predictor
-                        </button>
-                        <button
-                            className={activeSource === 'exact_digit' ? 'active' : ''}
-                            onClick={() => setActiveSource('exact_digit')}
-                        >
-                            🎯 Exact Digits
-                        </button>
-                        <button
-                            className={activeSource === 'range_prediction' ? 'active' : ''}
-                            onClick={() => setActiveSource('range_prediction')}
-                        >
-                            📊 Range Predictions
-                        </button>
-                        <button
-                            className={activeSource === 'hotcoldzone' ? 'active' : ''}
-                            onClick={() => setActiveSource('hotcoldzone')}
-                        >
-                            🔥❄️ Raziel (Hot/Cold)
-                        </button>
-                        <button
-                            className={activeSource === 'digitdistribution' ? 'active' : ''}
-                            onClick={() => setActiveSource('digitdistribution')}
-                        >
-                            📊 Patel (Distribution)
-                        </button>
-                    </div>
+                                    {/* Signal Sources */}
+                                    <div className='signal-sources'>
+                                        <button
+                                            className={activeSource === 'all' ? 'active' : ''}
+                                            onClick={() => setActiveSource('all')}
+                                        >
+                                            🌐 All Sources
+                                        </button>
+                                        <button
+                                            className={activeSource === 'ai' ? 'active' : ''}
+                                            onClick={() => setActiveSource('ai')}
+                                        >
+                                            🤖 AI Signals
+                                        </button>
+                                        <button
+                                            className={activeSource === 'pattern' ? 'active' : ''}
+                                            onClick={() => setActiveSource('pattern')}
+                                        >
+                                            🔍 Pattern Signals
+                                        </button>
+                                        <button
+                                            className={activeSource === 'technical' ? 'active' : ''}
+                                            onClick={() => setActiveSource('technical')}
+                                        >
+                                            📊 Technical Signals
+                                        </button>
+                                        <button
+                                            className={activeSource === 'flipping' ? 'active' : ''}
+                                            onClick={() => setActiveSource('flipping')}
+                                        >
+                                            🔄 Flipping Tool Signals
+                                        </button>
+                                        <button
+                                            className={activeSource === 'evenodd' ? 'active' : ''}
+                                            onClick={() => setActiveSource('evenodd')}
+                                        >
+                                            🎲 EVEN/ODD Signals
+                                        </button>
+                                        <button
+                                            className={activeSource === 'dynamic' ? 'active' : ''}
+                                            onClick={() => setActiveSource('dynamic')}
+                                        >
+                                            🧲 Dynamic Signals
+                                        </button>
+                                        <button
+                                            className={activeSource === 'risefall' ? 'active' : ''}
+                                            onClick={() => setActiveSource('risefall')}
+                                        >
+                                            📊 RISE/FALL Signals
+                                        </button>
+                                        <button
+                                            className={activeSource === 'patternpredictor' ? 'active' : ''}
+                                            onClick={() => setActiveSource('patternpredictor')}
+                                        >
+                                            🔮 Pattern Predictor
+                                        </button>
+                                        <button
+                                            className={activeSource === 'exact_digit' ? 'active' : ''}
+                                            onClick={() => setActiveSource('exact_digit')}
+                                        >
+                                            🎯 Exact Digits
+                                        </button>
+                                        <button
+                                            className={activeSource === 'range_prediction' ? 'active' : ''}
+                                            onClick={() => setActiveSource('range_prediction')}
+                                        >
+                                            📊 Range Predictions
+                                        </button>
+                                        <button
+                                            className={activeSource === 'hotcoldzone' ? 'active' : ''}
+                                            onClick={() => setActiveSource('hotcoldzone')}
+                                        >
+                                            🔥❄️ Raziel (Hot/Cold)
+                                        </button>
+                                        <button
+                                            className={activeSource === 'digitdistribution' ? 'active' : ''}
+                                            onClick={() => setActiveSource('digitdistribution')}
+                                        >
+                                            📊 Patel (Distribution)
+                                        </button>
+                                    </div>
 
-                    {/* Filters Toggle Button */}
-                    <div className='filters-toggle-container'>
-                        <button
-                            className='filters-toggle-btn'
-                            onClick={() => setShowFilters(!showFilters)}
-                            title={showFilters ? 'Hide Filters' : 'Show Filters'}
-                        >
-                            {showFilters ? '🔼 Hide Filters' : '� Show Filters'}
-                        </button>
-                    </div>
+                                    {/* Filters Toggle Button */}
+                                    <div className='filters-toggle-container'>
+                                        <button
+                                            className='filters-toggle-btn'
+                                            onClick={() => setShowFilters(!showFilters)}
+                                            title={showFilters ? 'Hide Filters' : 'Show Filters'}
+                                        >
+                                            {showFilters ? '🔼 Hide Filters' : '� Show Filters'}
+                                        </button>
+                                    </div>
 
-                    {/* Filters - Collapsible */}
-                    {showFilters && (
-                        <div className='signal-filters'>
-                            <div className='filter-group'>
-                                <label>Market:</label>
-                                <select value={filterMarket} onChange={e => setFilterMarket(e.target.value)}>
-                                    <option value='all'>🌐 All Markets</option>
-                                    <optgroup label='⚡ 1-Second Indices'>
-                                        <option value='1HZ10V'>� Volatility 10 (1s)</option>
-                                        <option value='1HZ25V'>📊 Volatility 25 (1s)</option>
-                                        <option value='1HZ50V'>📊 Volatility 50 (1s)</option>
-                                        <option value='1HZ75V'>📊 Volatility 75 (1s)</option>
-                                        <option value='1HZ100V'>📊 Volatility 100 (1s)</option>
-                                    </optgroup>
-                                    <optgroup label='📈 Standard Indices'>
-                                        <option value='R_10'>📉 Volatility 10</option>
-                                        <option value='R_25'>� Volatility 25</option>
-                                        <option value='R_50'>� Volatility 50</option>
-                                        <option value='R_75'>📉 Volatility 75</option>
-                                        <option value='R_100'>� Volatility 100</option>
-                                    </optgroup>
-                                </select>
-                            </div>
+                                    {/* Filters - Collapsible */}
+                                    {showFilters && (
+                                        <div className='signal-filters'>
+                                            <div className='filter-group'>
+                                                <label>Market:</label>
+                                                <select
+                                                    value={filterMarket}
+                                                    onChange={e => setFilterMarket(e.target.value)}
+                                                >
+                                                    <option value='all'>🌐 All Markets</option>
+                                                    <optgroup label='⚡ 1-Second Indices'>
+                                                        <option value='1HZ10V'>� Volatility 10 (1s)</option>
+                                                        <option value='1HZ25V'>📊 Volatility 25 (1s)</option>
+                                                        <option value='1HZ50V'>📊 Volatility 50 (1s)</option>
+                                                        <option value='1HZ75V'>📊 Volatility 75 (1s)</option>
+                                                        <option value='1HZ100V'>📊 Volatility 100 (1s)</option>
+                                                    </optgroup>
+                                                    <optgroup label='📈 Standard Indices'>
+                                                        <option value='R_10'>📉 Volatility 10</option>
+                                                        <option value='R_25'>� Volatility 25</option>
+                                                        <option value='R_50'>� Volatility 50</option>
+                                                        <option value='R_75'>📉 Volatility 75</option>
+                                                        <option value='R_100'>� Volatility 100</option>
+                                                    </optgroup>
+                                                </select>
+                                            </div>
 
-                            <div className='filter-group'>
-                                <label>Strategy:</label>
-                                <select value={filterStrategy} onChange={e => setFilterStrategy(e.target.value)}>
-                                    <option value='all'>All Strategies</option>
-                                    <option value='Trend Following'>📈 Trend Following</option>
-                                    <option value='Mean Reversion'>🔄 Mean Reversion</option>
-                                    <option value='Pattern Recognition'>🎯 Pattern Recognition</option>
-                                    <option value='Hot Digits'>🔥 Hot Digits</option>
-                                    <option value='Cold Digits'>❄️ Cold Digits</option>
-                                    <option value='Martingale'>💰 Martingale</option>
-                                    <option value='Anti-Martingale'>💎 Anti-Martingale</option>
-                                    <option value='Fibonacci'>🌀 Fibonacci</option>
-                                    <option value='Breakout'>⚡ Breakout</option>
-                                    <option value='Support/Resistance'>🎚️ Support/Resistance</option>
-                                </select>
-                            </div>
+                                            <div className='filter-group'>
+                                                <label>Strategy:</label>
+                                                <select
+                                                    value={filterStrategy}
+                                                    onChange={e => setFilterStrategy(e.target.value)}
+                                                >
+                                                    <option value='all'>All Strategies</option>
+                                                    <option value='Trend Following'>📈 Trend Following</option>
+                                                    <option value='Mean Reversion'>🔄 Mean Reversion</option>
+                                                    <option value='Pattern Recognition'>🎯 Pattern Recognition</option>
+                                                    <option value='Hot Digits'>🔥 Hot Digits</option>
+                                                    <option value='Cold Digits'>❄️ Cold Digits</option>
+                                                    <option value='Martingale'>💰 Martingale</option>
+                                                    <option value='Anti-Martingale'>💎 Anti-Martingale</option>
+                                                    <option value='Fibonacci'>🌀 Fibonacci</option>
+                                                    <option value='Breakout'>⚡ Breakout</option>
+                                                    <option value='Support/Resistance'>🎚️ Support/Resistance</option>
+                                                </select>
+                                            </div>
 
-                            <div className='filter-group'>
-                                <label>Time:</label>
-                                <div className='time-buttons'>
-                                    <button
-                                        className={filterTime === '1m' ? 'active' : ''}
-                                        onClick={() => setFilterTime('1m')}
-                                    >
-                                        1M
-                                    </button>
-                                    <button
-                                        className={filterTime === '2m' ? 'active' : ''}
-                                        onClick={() => setFilterTime('2m')}
-                                    >
-                                        2M
-                                    </button>
-                                    <button
-                                        className={filterTime === '3m' ? 'active' : ''}
-                                        onClick={() => setFilterTime('3m')}
-                                    >
-                                        3M
-                                    </button>
-                                    <button
-                                        className={filterTime === '5m' ? 'active' : ''}
-                                        onClick={() => setFilterTime('5m')}
-                                    >
-                                        5M
-                                    </button>
-                                    <button
-                                        className={filterTime === '10m' ? 'active' : ''}
-                                        onClick={() => setFilterTime('10m')}
-                                    >
-                                        10M
-                                    </button>
-                                    <button
-                                        className={filterTime === 'all' ? 'active' : ''}
-                                        onClick={() => setFilterTime('all')}
-                                    >
-                                        All
-                                    </button>
+                                            <div className='filter-group'>
+                                                <label>Time:</label>
+                                                <div className='time-buttons'>
+                                                    <button
+                                                        className={filterTime === '1m' ? 'active' : ''}
+                                                        onClick={() => setFilterTime('1m')}
+                                                    >
+                                                        1M
+                                                    </button>
+                                                    <button
+                                                        className={filterTime === '2m' ? 'active' : ''}
+                                                        onClick={() => setFilterTime('2m')}
+                                                    >
+                                                        2M
+                                                    </button>
+                                                    <button
+                                                        className={filterTime === '3m' ? 'active' : ''}
+                                                        onClick={() => setFilterTime('3m')}
+                                                    >
+                                                        3M
+                                                    </button>
+                                                    <button
+                                                        className={filterTime === '5m' ? 'active' : ''}
+                                                        onClick={() => setFilterTime('5m')}
+                                                    >
+                                                        5M
+                                                    </button>
+                                                    <button
+                                                        className={filterTime === '10m' ? 'active' : ''}
+                                                        onClick={() => setFilterTime('10m')}
+                                                    >
+                                                        10M
+                                                    </button>
+                                                    <button
+                                                        className={filterTime === 'all' ? 'active' : ''}
+                                                        onClick={() => setFilterTime('all')}
+                                                    >
+                                                        All
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </>
+                            );
+                        } catch (error) {
+                            console.error('❌ Error rendering collapsible controls:', error);
+                            return (
+                                <div className='error-fallback'>
+                                    <div className='error-message'>
+                                        <span className='error-icon'>⚠️</span>
+                                        <span>Error loading controls. Please refresh the page.</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    )}
-                </>
-            );
-        } catch (error) {
-            console.error('❌ Error rendering collapsible controls:', error);
-            return (
-                <div className='error-fallback'>
-                    <div className='error-message'>
-                        <span className='error-icon'>⚠️</span>
-                        <span>Error loading controls. Please refresh the page.</span>
-                    </div>
-                </div>
-            );
-        }
-    })()}
+                            );
+                        }
+                    })()}
                 </React.Fragment>
             )}
 
