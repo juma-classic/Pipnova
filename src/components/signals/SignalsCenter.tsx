@@ -2123,7 +2123,7 @@ export const SignalsCenter: React.FC = () => {
                     );
                 }
             } else {
-                console.log('ℹ️ No prediction digit found - PATEL bot will use default or prompt user');
+                console.log('ℹ️ No prediction digit found - NOVAGRID 2026 bot will use default or prompt user');
             }
 
             if (predictionDigit !== undefined) {
@@ -2150,12 +2150,12 @@ export const SignalsCenter: React.FC = () => {
                     console.warn('⚠️ PREDICTION field found but could not update');
                 }
             } else {
-                console.log('ℹ️ No prediction digit to set - PATEL Bot will use default behavior');
+                console.log('ℹ️ No prediction digit to set - NOVAGRID 2026 Bot will use default behavior');
             }
 
             // Apply Adaptive Recovery Strategy for OVER/UNDER signals
             if (recoveryStrategy && recoveryStrategy.isValid) {
-                console.log('🧠 Applying Adaptive Recovery Strategy to PATEL Bot XML...');
+                console.log('🧠 Applying Adaptive Recovery Strategy to NOVAGRID 2026 Bot XML...');
                 console.log('🎯 Target values:', {
                     predictionBeforeLoss: recoveryStrategy.predictionBeforeLoss,
                     predictionAfterLoss: recoveryStrategy.predictionAfterLoss,
@@ -2273,7 +2273,7 @@ export const SignalsCenter: React.FC = () => {
 
                 if (!predictionBeforeLossUpdated || !predictionAfterLossUpdated) {
                     console.warn('⚠️ Some adaptive recovery values could not be set in XML');
-                    console.warn('   This might be due to different variable names in the PATEL bot XML');
+                    console.warn('   This might be due to different variable names in the NOVAGRID 2026 bot XML');
                     console.warn('   The bot will use default values for missing fields');
 
                     // Let's try a more direct approach - find the exact field IDs from the XML
@@ -2377,7 +2377,7 @@ export const SignalsCenter: React.FC = () => {
 
                 // Auto-run the bot after loading (run immediately)
                 setTimeout(() => {
-                    console.log('🚀 AUTO-RUN: Starting PATEL Bot after configuration...');
+                    console.log('🚀 AUTO-RUN: Starting NOVAGRID 2026 Bot after configuration...');
                     console.log('🎯 AUTO-RUN: Looking for run button...');
                     try {
                         // Trigger the run button click programmatically
@@ -2463,7 +2463,7 @@ export const SignalsCenter: React.FC = () => {
                         market: signal.market,
                         marketDisplay: signal.marketDisplay,
                         entryDigit: signal.entryDigit,
-                        searchNumber: signal.entryDigit, // Entry digit becomes search number in PATEL
+                        searchNumber: signal.entryDigit, // Entry digit becomes search number in NOVAGRID 2026
                         status: signal.status,
                     });
                     await loadNovagridBot(signal);
@@ -3300,7 +3300,7 @@ export const SignalsCenter: React.FC = () => {
                                             }}
                                             title={
                                                 signal.type.startsWith('OVER') || signal.type.startsWith('UNDER')
-                                                    ? `Load PATEL (with Entry) Bot for ${signal.type}`
+                                                    ? `Load NOVAGRID 2026 Bot for ${signal.type}`
                                                     : signal.type === 'RISE' || signal.type === 'FALL'
                                                       ? `Load CFX Rise Fall Bot for ${signal.type}`
                                                       : `Load CFX Even Odd Bot for ${signal.type}`
