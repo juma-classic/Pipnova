@@ -74,35 +74,40 @@ class HotColdZoneScannerService {
 
     private readonly HOT_ZONE_THRESHOLD = 0.15; // 15% frequency = hot
     private readonly COLD_ZONE_THRESHOLD = 0.05; // 5% frequency = cold
-    private readonly ANALYSIS_WINDOW = 200; // Increased from 100 for better statistics
+    private readonly ANALYSIS_WINDOW = 100; // Reduced from 200 for faster analysis
     private readonly MIN_CONFIDENCE_THRESHOLD = 45; // Reduced from 65% to 45% for more signals
     private readonly MEDIUM_CONFIDENCE_THRESHOLD = 65; // Medium quality signals
     private readonly HIGH_CONFIDENCE_THRESHOLD = 80; // Premium signals 80%+
-    private readonly MIN_SAMPLE_SIZE = 50; // Reduced from 100 to 50 for more market coverage
+    private readonly MIN_SAMPLE_SIZE = 30; // Reduced from 50 for faster coverage
+    
+    // Cache for tick data to avoid repeated API calls
+    private tickCache: Map<string, { data: TickData[]; timestamp: number }> = new Map();
+    private readonly CACHE_DURATION = 3000; // Cache for 3 seconds
 
     /**
-     * Scan all markets for hot/cold zone opportunities
+     * Scan all markets for hot/cold zone opportunities (parallel processing)
      */
     public async scanForHotColdZones(): Promise<HotColdZoneSignal | null> {
         console.log('🔥❄️ Scanning markets for Hot/Cold Zone opportunities...');
 
-        const signals: Array<{ signal: HotColdZoneSignal; score: number }> = [];
-
-        for (const market of this.MARKETS_TO_SCAN) {
+        // Analyze markets in parallel for faster results
+        const signalPromises = this.MARKETS_TO_SCAN.map(async (market) => {
             try {
                 const signal = await this.analyzeMarketZones(market.symbol, market.name);
-                if (signal) {
-                    // Apply enhanced confidence thresholds
-                    if (signal.confidence >= this.MIN_CONFIDENCE_THRESHOLD) {
-                        // Calculate intelligent signal score
-                        const score = this.calculateSignalScore(signal);
-                        signals.push({ signal, score });
-                    }
+                if (signal && signal.confidence >= this.MIN_CONFIDENCE_THRESHOLD) {
+                    const score = this.calculateSignalScore(signal);
+                    return { signal, score };
                 }
+                return null;
             } catch (error) {
                 console.warn(`Failed to analyze ${market.name}:`, error);
+                return null;
             }
-        }
+        });
+
+        // Wait for all analyses to complete
+        const results = await Promise.all(signalPromises);
+        const signals = results.filter((r): r is { signal: HotColdZoneSignal; score: number } => r !== null);
 
         // Sort by intelligent score instead of simple confidence
         signals.sort((a, b) => b.score - a.score);
@@ -230,9 +235,18 @@ class HotColdZoneScannerService {
     }
 
     /**
-     * Get tick history and extract last digits
+     * Get tick history and extract last digits (with caching)
      */
     private async getTickHistory(symbol: string, count: number): Promise<TickData[]> {
+        // Check cache first
+        const cached = this.tickCache.get(symbol);
+        const now = Date.now();
+        
+        if (cached && (now - cached.timestamp) < this.CACHE_DURATION) {
+            console.log(`📦 Using cached data for ${symbol}`);
+            return cached.data;
+        }
+        
         try {
             const response = await derivAPIService.getTicksHistory({
                 symbol: symbol,
@@ -249,6 +263,10 @@ class HotColdZoneScannerService {
                     source: 'historical' as const,
                     localTime: new Date(response.history!.times[index] * 1000).toLocaleTimeString(),
                 }));
+                
+                // Cache the result
+                this.tickCache.set(symbol, { data: ticks, timestamp: now });
+                
                 return ticks;
             } else {
                 throw new Error('No history data received');

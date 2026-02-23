@@ -15,7 +15,7 @@ class FastOverSignalGeneratorService {
     private currentSignals: PatelSignal[] = [];
 
     // Configuration
-    private readonly SIGNAL_GENERATION_INTERVAL = 2000; // Generate every 2 seconds
+    private readonly SIGNAL_GENERATION_INTERVAL = 500; // Generate every 0.5 seconds (faster)
     private readonly MAX_SIGNALS = 8;
 
     private constructor() {}
