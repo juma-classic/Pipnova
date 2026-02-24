@@ -806,6 +806,70 @@
         }
     }
 
+    // Compact Signal Info Bar
+    .signal-info-bar {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-radius: 10px;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.35rem 0.65rem;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            font-size: 0.8rem;
+
+            .info-icon {
+                font-size: 0.9rem;
+            }
+
+            .info-label {
+                color: #64748b;
+                font-weight: 500;
+                font-size: 0.75rem;
+            }
+
+            .info-value {
+                color: #1e293b;
+                font-weight: 600;
+            }
+
+            .info-digit {
+                background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+                color: #fff;
+                padding: 0.2rem 0.5rem;
+                border-radius: 6px;
+                font-weight: 700;
+                font-size: 0.85rem;
+                min-width: 24px;
+                text-align: center;
+            }
+
+            &.digit-item {
+                background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+                border-color: #93c5fd;
+            }
+
+            &.runs-item {
+                background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+                border-color: #6ee7b7;
+
+                .info-value {
+                    color: #065f46;
+                    font-weight: 700;
+                }
+            }
+        }
+    }
+
     .signal-body {
         margin-bottom: 1rem;
 

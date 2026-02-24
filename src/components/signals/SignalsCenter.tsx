@@ -374,6 +374,23 @@ export const SignalsCenter: React.FC = () => {
         return [parseInt(lastTwoDigits[0]), parseInt(lastTwoDigits[1])];
     };
 
+    // Helper function to calculate digit pattern based on entry digit
+    const calculateDigitPattern = (entryDigit: number | undefined, currentPrice: number): number[] => {
+        if (entryDigit === undefined) {
+            // No entry digit, use actual last two digits from price
+            return extractLastTwoDigits(currentPrice);
+        }
+
+        if (entryDigit === 4) {
+            // Special case: if target is 4, set digits as [2, 4]
+            return [2, 4];
+        } else {
+            // For any other entry digit, keep 1st digit from current price, set 2nd digit to entry digit
+            const currentDigits = extractLastTwoDigits(currentPrice);
+            return [currentDigits[0], entryDigit];
+        }
+    };
+
     // Request notification permission
     useEffect(() => {
         signalTradingService.requestNotificationPermission();
@@ -825,7 +842,7 @@ export const SignalsCenter: React.FC = () => {
                           : 'ai',
                     status: 'ACTIVE',
                     entryDigit: signalResult.entryDigit,
-                    digitPattern: signalResult.digitPattern || extractLastTwoDigits(currentPrice),
+                    digitPattern: calculateDigitPattern(signalResult.entryDigit, currentPrice),
                     reason: signalResult.reason,
                     entryAnalysis,
                     recentPattern,
@@ -3354,6 +3371,53 @@ export const SignalsCenter: React.FC = () => {
                                     </div>
                                 </div>
 
+                                {/* Compact Signal Info Bar */}
+                                <div className='signal-info-bar'>
+                                    <div className='info-item'>
+                                        <span className='info-icon'>📊</span>
+                                        <span className='info-value'>
+                                            {signal.market.includes('10') && 'V10'}
+                                            {signal.market.includes('25') && 'V25'}
+                                            {signal.market.includes('50') && 'V50'}
+                                            {signal.market.includes('75') && 'V75'}
+                                            {signal.market.includes('100') && 'V100'}
+                                        </span>
+                                    </div>
+                                    <div className='info-item'>
+                                        <span className='info-icon'>📋</span>
+                                        <span className='info-value'>
+                                            {signal.type.startsWith('OVER') && 'Over'}
+                                            {signal.type.startsWith('UNDER') && 'Under'}
+                                            {signal.type === 'EVEN' && 'Even'}
+                                            {signal.type === 'ODD' && 'Odd'}
+                                            {signal.type === 'RISE' && 'Rise'}
+                                            {signal.type === 'FALL' && 'Fall'}
+                                        </span>
+                                    </div>
+                                    {signal.digitPattern && signal.digitPattern.length >= 2 && (
+                                        <>
+                                            <div className='info-item digit-item'>
+                                                <span className='info-label'>1st:</span>
+                                                <span className='info-digit'>{signal.digitPattern[0]}</span>
+                                            </div>
+                                            <div className='info-item digit-item'>
+                                                <span className='info-label'>2nd:</span>
+                                                <span className='info-digit'>{signal.digitPattern[1]}</span>
+                                            </div>
+                                        </>
+                                    )}
+                                    <div className='info-item runs-item'>
+                                        <span className='info-icon'>🔄</span>
+                                        <span className='info-value'>
+                                            {signal.confidence === 'HIGH'
+                                                ? '3-5'
+                                                : signal.confidence === 'MEDIUM'
+                                                  ? '2-3'
+                                                  : '1-2'}
+                                        </span>
+                                    </div>
+                                </div>
+
                                 <div className='signal-body'>
                                     <div className='signal-type'>
                                         {(() => {
@@ -3402,12 +3466,12 @@ export const SignalsCenter: React.FC = () => {
                                                     <div className='exact-digit-section'>
                                                         <div className='exact-digit-header'>
                                                             <span className='exact-icon'>🎯</span>
-                                                            <span className='exact-label'>TARGET DIGIT</span>
+                                                            <span className='exact-label'>2nd Digit</span>
                                                         </div>
                                                         <div className='exact-digit-display'>
                                                             <span className='target-digit'>{signal.entryDigit}</span>
                                                             <span className='exact-description'>
-                                                                Frequently appearing digit{' '}
+                                                                Dominant Market{' '}
                                                                 {isOver ? `(> ${barrier})` : `(< ${barrier})`}
                                                             </span>
                                                         </div>
@@ -3654,13 +3718,13 @@ export const SignalsCenter: React.FC = () => {
                                                 <div className='detail-item'>
                                                     <span className='detail-label'>1️⃣ 1st Digit:</span>
                                                     <span className='detail-value digit-highlight'>
-                                                        {signal.digitPattern[signal.digitPattern.length - 2]}
+                                                        {signal.digitPattern[0]}
                                                     </span>
                                                 </div>
                                                 <div className='detail-item'>
                                                     <span className='detail-label'>2️⃣ 2nd Digit:</span>
                                                     <span className='detail-value digit-highlight'>
-                                                        {signal.digitPattern[signal.digitPattern.length - 1]}
+                                                        {signal.digitPattern[1]}
                                                     </span>
                                                 </div>
                                             </>
