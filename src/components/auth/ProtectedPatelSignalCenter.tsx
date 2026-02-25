@@ -37,7 +37,7 @@ export const ProtectedPatelSignalCenter: React.FC<ProtectedPatelSignalCenterProp
                 title='🟣 Patel Signal Center - Premium Access'
                 subtitle='Enter password to access advanced statistical trading engine'
                 placeholder='Enter premium password...'
-                errorMessage='Incorrect password. Contact Elvis Trades for access.'
+                errorMessage='Incorrect password. Contact Bonnie for access.'
             />
         );
     }

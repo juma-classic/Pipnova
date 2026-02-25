@@ -26,7 +26,7 @@ export const UnderDevelopment: React.FC<UnderDevelopmentProps> = ({ featureName,
         const phone = '254745536264'; // Kenya format
         switch (type) {
             case 'whatsapp':
-                window.open(`https://wa.me/${phone}?text=Hi Elvis, I'm interested in ${featureName}`, '_blank');
+                window.open(`https://wa.me/${phone}?text=Hi Bonnie, I'm interested in ${featureName}`, '_blank');
                 break;
             case 'telegram':
                 window.open('https://t.me/StatesFX', '_blank');
@@ -146,7 +146,7 @@ export const UnderDevelopment: React.FC<UnderDevelopmentProps> = ({ featureName,
                 <div className='under-development__footer'>
                     <p className='under-development__tagline'>Continue Killing the Market! 🚀</p>
                     <p className='under-development__contact'>
-                        <strong>Elvis Trades</strong> - 0745536264
+                        <strong>Bonnie</strong> - 0745536264
                     </p>
                 </div>
             </div>

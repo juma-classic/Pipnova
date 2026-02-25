@@ -642,8 +642,13 @@ export const SignalsCenter: React.FC = () => {
             } catch (error) {
                 console.error('❌ Failed to subscribe to real ticks:', error);
                 setIsConnectedToRealData(false);
-                setConnectionError('Failed to connect to Deriv. Please check your connection and try again.');
-                // DO NOT generate demo ticks - this is a real money trading platform
+                setConnectionError('Reconnecting to Deriv...');
+
+                // Automatic retry after 3 seconds
+                setTimeout(() => {
+                    console.log('🔄 Retrying connection to Deriv...');
+                    subscribeToTicks();
+                }, 3000);
             }
         };
 
@@ -789,12 +794,21 @@ export const SignalsCenter: React.FC = () => {
         // Connection health check
         const healthCheckInterval = setInterval(() => {
             const now = Date.now();
-            // If no tick received in 30 seconds, mark as disconnected
+            // If no tick received in 30 seconds, reconnect
             if (lastTickTime && now - lastTickTime > 30000) {
+                console.log('⚠️ Connection stale - attempting reconnect...');
                 setIsConnectedToRealData(false);
-                setConnectionError('Connection stale - no data received in 30 seconds');
+                setConnectionError('Reconnecting...');
+
+                // Unsubscribe old connection
+                if (unsubscribeFunc) {
+                    unsubscribeFunc();
+                }
+
+                // Reconnect
+                subscribeToTicks();
             }
-        }, 10000);
+        }, 10000); // Check every 10 seconds
 
         return () => {
             if (unsubscribeFunc && typeof unsubscribeFunc === 'function') {
@@ -2744,10 +2758,10 @@ export const SignalsCenter: React.FC = () => {
                     <div className='connection-status-banner disconnected'>
                         <div className='status-icon'>⚠️</div>
                         <div className='status-text'>
-                            <strong>Waiting for Signals from Elvis&apos; Algo</strong>
+                            <strong>Waiting for Signals from Bonnie&apos;s Algo</strong>
                             <span>
                                 {connectionError ||
-                                    'Connecting to Deriv WebSocket... Signals will appear once Elvis&apos; Algo analyzes real tick data.'}
+                                    'Connecting to Deriv WebSocket... Signals will appear once Bonnie&apos;s Algo analyzes real tick data.'}
                             </span>
                             {tickCount > 0 && <span className='tick-info'>Ticks received: {tickCount}</span>}
                         </div>
@@ -2762,11 +2776,11 @@ export const SignalsCenter: React.FC = () => {
                         <p>
                             {isConnectedToRealData
                                 ? 'No signals match your filters'
-                                : 'Waiting for signals from Elvis&apos; Algo...'}
+                                : 'Waiting for signals from Bonnie&apos;s Algo...'}
                         </p>
                         {!isConnectedToRealData && (
                             <p className='waiting-hint'>
-                                Elvis&apos; Algo generates signals from REAL Deriv tick data only. No simulated data.
+                                Bonnie&apos;s Algo generates signals from REAL Deriv tick data only. No simulated data.
                             </p>
                         )}
                     </div>
