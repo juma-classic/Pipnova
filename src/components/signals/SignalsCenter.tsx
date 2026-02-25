@@ -2,35 +2,27 @@ import React, { useEffect, useState } from 'react';
 import { DBOT_TABS } from '@/constants/bot-contents';
 import { useStore } from '@/hooks/useStore';
 import { derivAPIService } from '@/services/deriv-api.service';
-import { digitDistributionScannerService } from '@/services/digit-distribution-scanner.service';
 import { hotColdZoneScannerService } from '@/services/hot-cold-zone-scanner.service';
 import { patternPredictor } from '@/services/pattern-predictor.service';
 import { signalAnalysisService } from '@/services/signal-analysis.service';
 import { SignalTradeResult, signalTradingService } from '@/services/signal-trading.service';
-import { aiSignalIntelligence } from '@/services/ai-signal-intelligence.service';
 import { EntryAnalysis, EvenOddEntrySuggester } from '@/utils/evenodd-entry-suggester';
 import { AutoTradeSettings } from './AutoTradeSettings';
 import { ConnectionPoolStatus } from './ConnectionPoolStatus';
 import { ConnectionStatus } from './ConnectionStatus';
 import { DigitHackerSignals } from './DigitHackerSignals';
 import { DynamicSignals } from './DynamicSignals';
-import { EvenOddSignals } from './EvenOddSignals';
-import { FlippingToolSignals } from './FlippingToolSignals';
-import { PatternDisplay } from './PatternDisplay';
 import { PerformanceDashboard } from './PerformanceDashboard';
-import { RiseFallSignals } from './RiseFallSignals';
 import { RiskManagementSettings } from './RiskManagementSettings';
 import { StakeMartingaleModal } from './StakeMartingaleModal';
 import './SignalsCenter.scss';
 import './SignalsCenter-enhanced.scss';
 import './SignalsCenter-visibility.scss';
-import './FlippingToolSignals.scss';
-import './EvenOddSignals.scss';
 import './DynamicSignals.scss';
-import './RiseFallSignals.scss';
 import './ConnectionPoolStatus.scss';
 import './DigitHackerSignals.scss';
 import './SignalGeneratorToggles.scss';
+import './ModernSignalCard.scss';
 
 interface DigitPercentageAnalysis {
     digit: number;
@@ -141,32 +133,19 @@ export const SignalsCenter: React.FC = () => {
     };
 
     const [signals, setSignals] = useState<SignalsCenterSignal[]>(loadSignalsFromStorage);
-    const [flippingSignals, setFlippingSignals] = useState<SignalsCenterSignal[]>([]);
-    const [evenOddSignals, setEvenOddSignals] = useState<SignalsCenterSignal[]>([]);
     const [dynamicSignals, setDynamicSignals] = useState<SignalsCenterSignal[]>([]);
-    const [riseFallSignals, setRiseFallSignals] = useState<SignalsCenterSignal[]>([]);
-    const [patternPredictorSignals, setPatternPredictorSignals] = useState<SignalsCenterSignal[]>([]);
     const [multiMarketSignals, setMultiMarketSignals] = useState<SignalsCenterSignal[]>([]);
     const [jumpSignals] = useState<SignalsCenterSignal[]>([]); // Removed jump signals as requested
     const [hotColdZoneSignals, setHotColdZoneSignals] = useState<SignalsCenterSignal[]>([]);
-    const [digitDistributionSignals, setDigitDistributionSignals] = useState<SignalsCenterSignal[]>([]);
     const [digitHackerSignals, setDigitHackerSignals] = useState<SignalsCenterSignal[]>([]);
-    const [aiSignals, setAiSignals] = useState<SignalsCenterSignal[]>([]);
     const [activeSource, setActiveSource] = useState<
         | 'all'
-        | 'ai'
-        | 'pattern'
         | 'technical'
-        | 'flipping'
-        | 'evenodd'
         | 'dynamic'
-        | 'risefall'
-        | 'patternpredictor'
         | 'multimarket'
         | 'exact_digit'
         | 'range_prediction'
         | 'hotcoldzone'
-        | 'digitdistribution'
     >('all');
     const [filterMarket, setFilterMarket] = useState<string>('all');
     const [filterStrategy, setFilterStrategy] = useState<string>('all');
@@ -176,14 +155,9 @@ export const SignalsCenter: React.FC = () => {
 
     // Signal Generator Toggles - Control which generators are active
     const [enabledGenerators, setEnabledGenerators] = useState({
-        flipping: false, // Disabled by default (high API load)
-        evenOdd: true,
         dynamic: true,
-        riseFall: true,
         digitHacker: true,
         hotCold: true,
-        patelDistribution: true,
-        aiIntelligence: true, // New AI Intelligence generator
     });
     const [latestSignal, setLatestSignal] = useState<SignalsCenterSignal | null>(null);
     const [, setTradeStats] = useState(signalTradingService.getStats());
@@ -753,77 +727,6 @@ export const SignalsCenter: React.FC = () => {
                     }
                 }
 
-                // Generate AI-enhanced signal if AI is enabled
-                if (enabledGenerators.aiIntelligence) {
-                    try {
-                        const recentTicks = (
-                            signalAnalysisService as unknown as {
-                                getRecentTicks: (count: number) => Array<{ quote: number }>;
-                            }
-                        ).getRecentTicks(100);
-
-                        if (recentTicks && recentTicks.length >= 20) {
-                            const quotes = recentTicks.map((t: { quote: number }) => t.quote);
-                            const aiPrediction = aiSignalIntelligence.generateAISignal(actualMarket, quotes);
-
-                            if (aiPrediction) {
-                                console.log('🧠 AI Signal Generated:', aiPrediction);
-
-                                // Create AI-enhanced signal
-                                const aiSignal: SignalsCenterSignal = {
-                                    id: `ai-${Date.now()}`,
-                                    timestamp: Date.now(),
-                                    market: actualMarket,
-                                    marketDisplay: getMarketDisplay(actualMarket),
-                                    type: aiPrediction.signalType,
-                                    entry: currentPrice,
-                                    duration: '5 ticks',
-                                    confidence:
-                                        aiPrediction.confidence >= 75
-                                            ? 'HIGH'
-                                            : aiPrediction.confidence >= 55
-                                              ? 'MEDIUM'
-                                              : 'LOW',
-                                    strategy: `AI Intelligence (Neural: ${(aiPrediction.neuralScore * 100).toFixed(1)}%)`,
-                                    source: 'ai',
-                                    status: 'ACTIVE',
-                                    reason: `AI Analysis: ${aiPrediction.reasoning.join(', ')}. Risk: ${aiPrediction.riskLevel}`,
-                                    entryAnalysis,
-                                    recentPattern,
-                                    digitPercentages: signalResult.digitPercentages,
-                                    targetDigitsAnalysis: signalResult.targetDigitsAnalysis,
-                                };
-
-                                // Add AI-specific data
-                                if (aiPrediction.marketSentiment) {
-                                    aiSignal.reason += ` | Sentiment: ${aiPrediction.marketSentiment.sentiment} (${aiPrediction.marketSentiment.strength.toFixed(1)}%)`;
-                                }
-
-                                // Add countdown validity
-                                const validityDuration = calculateValidityDuration(aiSignal);
-                                const expiresAt = Date.now() + validityDuration * 1000;
-
-                                const aiSignalWithCountdown: SignalsCenterSignal = {
-                                    ...aiSignal,
-                                    validityDuration,
-                                    expiresAt,
-                                    remainingTime: validityDuration,
-                                };
-
-                                // Apply risk mode transformation
-                                const transformedAiSignal = transformSignalForRiskMode(aiSignalWithCountdown);
-
-                                setAiSignals(prev => [transformedAiSignal, ...prev].slice(0, 10));
-                                setLatestSignal(transformedAiSignal);
-
-                                console.log('🧠 AI Signal added to state:', transformedAiSignal.id);
-                            }
-                        }
-                    } catch (error) {
-                        console.warn('AI signal generation failed:', error);
-                    }
-                }
-
                 // Continue with regular signal generation
                 const newSignal: SignalsCenterSignal = {
                     id: `signal-${Date.now()}-${realTickCount}`,
@@ -911,91 +814,6 @@ export const SignalsCenter: React.FC = () => {
             clearInterval(healthCheckInterval);
         };
     }, [showNotifications, lastTickTime]);
-
-    // Pattern Predictor Signal Generation - Uses REAL tick data only
-    useEffect(() => {
-        if (!isConnectedToRealData || tickCount < 15) return;
-
-        const generatePatternPredictorSignal = () => {
-            try {
-                // Get recent ticks from the analysis service
-                const recentTicks = (
-                    signalAnalysisService as unknown as {
-                        getRecentTicks: (count: number) => Array<{ quote: number; epoch: number }>;
-                    }
-                ).getRecentTicks(20);
-
-                if (!recentTicks || recentTicks.length < 10) return;
-
-                // Convert to pattern predictor format
-                const tickData = recentTicks.map((t, idx) => ({
-                    value: t.quote,
-                    timestamp: t.epoch * 1000 || Date.now() - (recentTicks.length - idx) * 2000,
-                }));
-
-                // Get prediction from pattern predictor
-                const prediction = patternPredictor.predict(tickData);
-
-                // Only create signal if confidence is high enough and action is TRADE
-                if (prediction.confidence >= 60 && prediction.recommendedAction === 'TRADE') {
-                    const currentPrice = recentTicks[recentTicks.length - 1].quote;
-                    const market = currentMarketData?.market || 'R_50';
-
-                    const newSignal: SignalsCenterSignal = {
-                        id: `pattern-pred-${Date.now()}`,
-                        timestamp: Date.now(),
-                        market: market,
-                        marketDisplay: getMarketDisplay(market),
-                        type:
-                            prediction.prediction === 'RISE'
-                                ? 'RISE'
-                                : prediction.prediction === 'FALL'
-                                  ? 'FALL'
-                                  : 'RISE',
-                        entry: currentPrice,
-                        duration: '5 ticks',
-                        confidence:
-                            prediction.confidence >= 70 ? 'HIGH' : prediction.confidence >= 55 ? 'MEDIUM' : 'LOW',
-                        strategy: `Pattern: ${prediction.patternType}`,
-                        source: 'patternpredictor',
-                        status: 'ACTIVE',
-                        reason: prediction.reasoning,
-                    };
-
-                    // Add countdown validity
-                    const validityDuration = calculateValidityDuration(newSignal);
-                    const expiresAt = Date.now() + validityDuration * 1000;
-
-                    const signalWithCountdown: SignalsCenterSignal = {
-                        ...newSignal,
-                        validityDuration,
-                        expiresAt,
-                        remainingTime: validityDuration,
-                    };
-
-                    // Only add if prediction is not UNCERTAIN
-                    if (prediction.prediction !== 'UNCERTAIN') {
-                        setPatternPredictorSignals(prev => [signalWithCountdown, ...prev].slice(0, 20));
-                        console.log(
-                            '🔮 Pattern Predictor Signal:',
-                            prediction.prediction,
-                            `(${prediction.confidence}%)`
-                        );
-                    }
-                }
-            } catch (error) {
-                console.warn('Pattern predictor signal generation failed:', error);
-            }
-        };
-
-        // Generate pattern predictor signals every 20 seconds
-        const patternInterval = setInterval(generatePatternPredictorSignal, 20000);
-
-        // Initial generation
-        generatePatternPredictorSignal();
-
-        return () => clearInterval(patternInterval);
-    }, [isConnectedToRealData, tickCount, currentMarketData]);
 
     // Multi-Market Automatic Scanning - Generates signals from pattern analysis
     useEffect(() => {
@@ -1131,179 +949,14 @@ export const SignalsCenter: React.FC = () => {
         return () => clearInterval(hotColdInterval);
     }, [isConnectedToRealData, tickCount, enabledGenerators.hotCold]);
 
-    // Digit Distribution Signal Generation - Superior statistical analysis
-    useEffect(() => {
-        if (!isConnectedToRealData || tickCount < 20 || !enabledGenerators.patelDistribution) return;
-
-        const generateDigitDistributionSignal = async () => {
-            try {
-                console.log('📊 Generating Digit Distribution signal...');
-
-                const distributionSignal = await digitDistributionScannerService.scanForDistributionDeviations();
-
-                if (distributionSignal) {
-                    const newSignal: SignalsCenterSignal = {
-                        id: `distribution-${Date.now()}`,
-                        timestamp: Date.now(),
-                        market: distributionSignal.market,
-                        marketDisplay: distributionSignal.marketName,
-                        type:
-                            distributionSignal.recommendation.action === 'OVER'
-                                ? (`OVER${distributionSignal.recommendation.barrier}` as SignalsCenterSignal['type'])
-                                : (`UNDER${distributionSignal.recommendation.barrier}` as SignalsCenterSignal['type']),
-                        entry: distributionSignal.currentPrice,
-                        duration: '5 ticks',
-                        confidence:
-                            distributionSignal.confidence >= 80
-                                ? 'HIGH'
-                                : distributionSignal.confidence >= 60
-                                  ? 'MEDIUM'
-                                  : 'LOW',
-                        strategy: `Patel: ${distributionSignal.signalType}`,
-                        source: 'digitdistribution',
-                        status: 'ACTIVE',
-                        entryDigit: distributionSignal.targetDigit,
-                        reason: distributionSignal.recommendation.reasoning,
-                    };
-
-                    // Add countdown validity
-                    const validityDuration = calculateValidityDuration(newSignal);
-                    const expiresAt = Date.now() + validityDuration * 1000;
-
-                    const signalWithCountdown: SignalsCenterSignal = {
-                        ...newSignal,
-                        validityDuration,
-                        expiresAt,
-                        remainingTime: validityDuration,
-                    };
-
-                    setDigitDistributionSignals(prev => [signalWithCountdown, ...prev].slice(0, 10));
-                    console.log(
-                        '🎯 Digit Distribution Signal:',
-                        distributionSignal.signalType,
-                        `(${distributionSignal.confidence.toFixed(1)}%)`
-                    );
-                }
-            } catch (error) {
-                console.warn('Digit Distribution signal generation failed:', error);
-            }
-        };
-
-        // Generate Digit Distribution signals every 35 seconds (offset from Hot/Cold)
-        const distributionInterval = setInterval(generateDigitDistributionSignal, 35000);
-
-        // Initial generation after 10 seconds
-        setTimeout(generateDigitDistributionSignal, 10000);
-
-        return () => clearInterval(distributionInterval);
-    }, [isConnectedToRealData, tickCount, enabledGenerators.patelDistribution]);
-
-    // AI Signal Intelligence Generation - Neural network-based analysis
-    useEffect(() => {
-        if (!isConnectedToRealData || tickCount < 30 || !enabledGenerators.aiIntelligence) return;
-
-        const generateAISignal = async () => {
-            try {
-                console.log('🧠 Generating AI Intelligence signal...');
-
-                // Get recent tick data for AI analysis
-                const recentTicks = (
-                    signalAnalysisService as unknown as {
-                        getRecentTicks: (count: number) => Array<{ quote: number }>;
-                    }
-                ).getRecentTicks(100);
-
-                if (recentTicks && recentTicks.length >= 30) {
-                    const quotes = recentTicks.map((t: { quote: number }) => t.quote);
-                    const aiPrediction = aiSignalIntelligence.generateAISignal('R_50', quotes);
-
-                    if (aiPrediction) {
-                        console.log('🧠 AI Signal Generated:', {
-                            type: aiPrediction.signalType,
-                            confidence: aiPrediction.confidence.toFixed(1) + '%',
-                            neuralScore: (aiPrediction.neuralScore * 100).toFixed(1) + '%',
-                            riskLevel: aiPrediction.riskLevel,
-                            sentiment: aiPrediction.marketSentiment.sentiment,
-                        });
-
-                        const newSignal: SignalsCenterSignal = {
-                            id: `ai-intelligence-${Date.now()}`,
-                            timestamp: Date.now(),
-                            market: 'R_50',
-                            marketDisplay: 'Volatility 50',
-                            type: aiPrediction.signalType,
-                            entry: quotes[quotes.length - 1],
-                            duration: '5 ticks',
-                            confidence:
-                                aiPrediction.confidence >= 75
-                                    ? 'HIGH'
-                                    : aiPrediction.confidence >= 55
-                                      ? 'MEDIUM'
-                                      : 'LOW',
-                            strategy: `AI Neural Network (Score: ${(aiPrediction.neuralScore * 100).toFixed(1)}%)`,
-                            source: 'ai',
-                            status: 'ACTIVE',
-                            reason: `AI Analysis: ${aiPrediction.reasoning.join(' | ')}. Risk: ${aiPrediction.riskLevel}. Sentiment: ${aiPrediction.marketSentiment.sentiment} (${aiPrediction.marketSentiment.strength.toFixed(1)}%)`,
-                        };
-
-                        // Add AI-specific metadata
-                        if (aiPrediction.supportingPatterns.length > 0) {
-                            newSignal.reason += ` | Patterns: ${aiPrediction.supportingPatterns.join(', ')}`;
-                        }
-
-                        // Add countdown validity
-                        const validityDuration = calculateValidityDuration(newSignal);
-                        const expiresAt = Date.now() + validityDuration * 1000;
-
-                        const signalWithCountdown: SignalsCenterSignal = {
-                            ...newSignal,
-                            validityDuration,
-                            expiresAt,
-                            remainingTime: validityDuration,
-                        };
-
-                        // Apply risk mode transformation
-                        const transformedSignal = transformSignalForRiskMode(signalWithCountdown);
-
-                        setAiSignals(prev => [transformedSignal, ...prev].slice(0, 10));
-                        setLatestSignal(transformedSignal);
-
-                        console.log('🧠 AI Intelligence Signal added:', {
-                            id: transformedSignal.id,
-                            type: transformedSignal.type,
-                            confidence: transformedSignal.confidence,
-                            validFor: `${validityDuration}s`,
-                        });
-                    }
-                }
-            } catch (error) {
-                console.warn('AI Intelligence signal generation failed:', error);
-            }
-        };
-
-        // Generate AI signals every 25 seconds (offset from other generators)
-        const aiInterval = setInterval(generateAISignal, 25000);
-
-        // Initial generation after 15 seconds
-        setTimeout(generateAISignal, 15000);
-
-        return () => clearInterval(aiInterval);
-    }, [isConnectedToRealData, tickCount, enabledGenerators.aiIntelligence]);
-
     // Combine all signals
     const allSignals = [
         ...signals,
-        ...flippingSignals,
-        ...evenOddSignals,
         ...dynamicSignals,
-        ...riseFallSignals,
-        ...patternPredictorSignals,
         ...multiMarketSignals,
         ...jumpSignals,
         ...hotColdZoneSignals,
-        ...digitDistributionSignals,
         ...digitHackerSignals,
-        ...aiSignals,
     ];
 
     // Filter signals with enhanced categorization (MOVED BEFORE useEffect that uses it)
@@ -1318,8 +971,6 @@ export const SignalsCenter: React.FC = () => {
                 if (category.category !== 'RANGE_PREDICTION') return false;
             } else if (activeSource === 'hotcoldzone') {
                 if (signal.source !== 'hotcoldzone') return false;
-            } else if (activeSource === 'digitdistribution') {
-                if (signal.source !== 'digitdistribution') return false;
             } else if (signal.source !== activeSource) {
                 return false;
             }
@@ -1350,17 +1001,11 @@ export const SignalsCenter: React.FC = () => {
             totalSignals: allSignals.length,
             breakdown: {
                 main: signals.length,
-                flipping: flippingSignals.length,
-                evenOdd: evenOddSignals.length,
                 dynamic: dynamicSignals.length,
-                riseFall: riseFallSignals.length,
-                patternPredictor: patternPredictorSignals.length,
                 multiMarket: multiMarketSignals.length,
                 jump: jumpSignals.length,
                 hotCold: hotColdZoneSignals.length,
-                digitDistribution: digitDistributionSignals.length,
                 digitHacker: digitHackerSignals.length,
-                ai: aiSignals.length,
             },
             filtered: filteredSignals.length,
             activeSource,
@@ -1373,15 +1018,10 @@ export const SignalsCenter: React.FC = () => {
     }, [
         allSignals.length,
         signals.length,
-        flippingSignals.length,
-        evenOddSignals.length,
         dynamicSignals.length,
-        riseFallSignals.length,
-        patternPredictorSignals.length,
         multiMarketSignals.length,
         jumpSignals.length,
         hotColdZoneSignals.length,
-        digitDistributionSignals.length,
         filteredSignals.length,
         activeSource,
         riskMode,
@@ -1402,10 +1042,9 @@ export const SignalsCenter: React.FC = () => {
                 filterStrategy,
                 filterTime,
                 signalsBySource: {
-                    evenodd: allSignals.filter(s => s.source === 'evenodd').length,
-                    risefall: allSignals.filter(s => s.source === 'risefall').length,
-                    ai: allSignals.filter(s => s.source === 'ai').length,
-                    pattern: allSignals.filter(s => s.source === 'pattern').length,
+                    dynamic: allSignals.filter(s => s.source === 'dynamic').length,
+                    multimarket: allSignals.filter(s => s.source === 'multimarket').length,
+                    hotcoldzone: allSignals.filter(s => s.source === 'hotcoldzone').length,
                     technical: allSignals.filter(s => s.source === 'technical').length,
                 },
             });
@@ -2734,25 +2373,25 @@ export const SignalsCenter: React.FC = () => {
             {/* Always Visible Signal Type Buttons */}
             <div className='quick-signal-types'>
                 <button
-                    className={activeSource === 'evenodd' ? 'active' : ''}
-                    onClick={() => setActiveSource('evenodd')}
-                    title='Show EVEN/ODD signals'
-                >
-                    🎲 EVEN/ODD Signals
-                </button>
-                <button
-                    className={activeSource === 'risefall' ? 'active' : ''}
-                    onClick={() => setActiveSource('risefall')}
-                    title='Show RISE/FALL signals'
-                >
-                    📊 RISE/FALL Signals
-                </button>
-                <button
                     className={activeSource === 'all' ? 'active' : ''}
                     onClick={() => setActiveSource('all')}
                     title='Show all signal types'
                 >
-                    🌐 All Signals
+                    � All Signals
+                </button>
+                <button
+                    className={activeSource === 'dynamic' ? 'active' : ''}
+                    onClick={() => setActiveSource('dynamic')}
+                    title='Show Dynamic AI signals'
+                >
+                    🤖 Dynamic Signals
+                </button>
+                <button
+                    className={activeSource === 'exact_digit' ? 'active' : ''}
+                    onClick={() => setActiveSource('exact_digit')}
+                    title='Show Digit Hacker signals'
+                >
+                    � Digit Hacker
                 </button>
             </div>
 
@@ -2801,20 +2440,6 @@ export const SignalsCenter: React.FC = () => {
                                                 💰 Stake Settings
                                             </button>
                                             <button
-                                                className='control-btn debug-btn'
-                                                onClick={() => {
-                                                    console.log('🧪 Debug: Manual signal generation test');
-                                                    console.log('Current signal counts:', {
-                                                        evenOdd: evenOddSignals.length,
-                                                        riseFall: riseFallSignals.length,
-                                                        total: allSignals.length,
-                                                    });
-                                                }}
-                                                title='Debug signal generation'
-                                            >
-                                                🧪 Debug Signals
-                                            </button>
-                                            <button
                                                 className={`control-btn risk-mode-btn ${riskMode === 'lessRisky' ? 'active less-risky' : ''}`}
                                                 onClick={() =>
                                                     setRiskMode(riskMode === 'lessRisky' ? 'normal' : 'lessRisky')
@@ -2841,30 +2466,6 @@ export const SignalsCenter: React.FC = () => {
                                                 <span className='toggles-hint'>(Turn off to reduce API load)</span>
                                             </div>
                                             <div className='toggles-grid'>
-                                                <button
-                                                    className={`toggle-btn ${enabledGenerators.evenOdd ? 'active' : 'inactive'}`}
-                                                    onClick={() =>
-                                                        setEnabledGenerators(prev => ({
-                                                            ...prev,
-                                                            evenOdd: !prev.evenOdd,
-                                                        }))
-                                                    }
-                                                    title='Toggle Even/Odd signal generator'
-                                                >
-                                                    🎲 Even/Odd {enabledGenerators.evenOdd && '✓'}
-                                                </button>
-                                                <button
-                                                    className={`toggle-btn ${enabledGenerators.riseFall ? 'active' : 'inactive'}`}
-                                                    onClick={() =>
-                                                        setEnabledGenerators(prev => ({
-                                                            ...prev,
-                                                            riseFall: !prev.riseFall,
-                                                        }))
-                                                    }
-                                                    title='Toggle Rise/Fall signal generator'
-                                                >
-                                                    📈 Rise/Fall {enabledGenerators.riseFall && '✓'}
-                                                </button>
                                                 <button
                                                     className={`toggle-btn ${enabledGenerators.dynamic ? 'active' : 'inactive'}`}
                                                     onClick={() =>
@@ -2901,42 +2502,6 @@ export const SignalsCenter: React.FC = () => {
                                                 >
                                                     🔥 Hot/Cold {enabledGenerators.hotCold && '✓'}
                                                 </button>
-                                                <button
-                                                    className={`toggle-btn ${enabledGenerators.flipping ? 'active' : 'inactive'}`}
-                                                    onClick={() =>
-                                                        setEnabledGenerators(prev => ({
-                                                            ...prev,
-                                                            flipping: !prev.flipping,
-                                                        }))
-                                                    }
-                                                    title='Toggle Flipping Tool signal generator (High API load)'
-                                                >
-                                                    🔄 Flipping {enabledGenerators.flipping && '✓'}
-                                                </button>
-                                                <button
-                                                    className={`toggle-btn ${enabledGenerators.patelDistribution ? 'active' : 'inactive'}`}
-                                                    onClick={() =>
-                                                        setEnabledGenerators(prev => ({
-                                                            ...prev,
-                                                            patelDistribution: !prev.patelDistribution,
-                                                        }))
-                                                    }
-                                                    title='Toggle Patel Distribution signal generator'
-                                                >
-                                                    📊 Patel {enabledGenerators.patelDistribution && '✓'}
-                                                </button>
-                                                <button
-                                                    className={`toggle-btn ${enabledGenerators.aiIntelligence ? 'active' : 'inactive'}`}
-                                                    onClick={() =>
-                                                        setEnabledGenerators(prev => ({
-                                                            ...prev,
-                                                            aiIntelligence: !prev.aiIntelligence,
-                                                        }))
-                                                    }
-                                                    title='Toggle AI Signal Intelligence generator (Neural network-based analysis)'
-                                                >
-                                                    🧠 AI Intelligence {enabledGenerators.aiIntelligence && '✓'}
-                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -2950,34 +2515,10 @@ export const SignalsCenter: React.FC = () => {
                                             🌐 All Sources
                                         </button>
                                         <button
-                                            className={activeSource === 'ai' ? 'active' : ''}
-                                            onClick={() => setActiveSource('ai')}
-                                        >
-                                            🤖 AI Signals
-                                        </button>
-                                        <button
-                                            className={activeSource === 'pattern' ? 'active' : ''}
-                                            onClick={() => setActiveSource('pattern')}
-                                        >
-                                            🔍 Pattern Signals
-                                        </button>
-                                        <button
                                             className={activeSource === 'technical' ? 'active' : ''}
                                             onClick={() => setActiveSource('technical')}
                                         >
                                             📊 Technical Signals
-                                        </button>
-                                        <button
-                                            className={activeSource === 'flipping' ? 'active' : ''}
-                                            onClick={() => setActiveSource('flipping')}
-                                        >
-                                            🔄 Flipping Tool Signals
-                                        </button>
-                                        <button
-                                            className={activeSource === 'evenodd' ? 'active' : ''}
-                                            onClick={() => setActiveSource('evenodd')}
-                                        >
-                                            🎲 EVEN/ODD Signals
                                         </button>
                                         <button
                                             className={activeSource === 'dynamic' ? 'active' : ''}
@@ -2986,16 +2527,10 @@ export const SignalsCenter: React.FC = () => {
                                             🧲 Dynamic Signals
                                         </button>
                                         <button
-                                            className={activeSource === 'risefall' ? 'active' : ''}
-                                            onClick={() => setActiveSource('risefall')}
+                                            className={activeSource === 'multimarket' ? 'active' : ''}
+                                            onClick={() => setActiveSource('multimarket')}
                                         >
-                                            📊 RISE/FALL Signals
-                                        </button>
-                                        <button
-                                            className={activeSource === 'patternpredictor' ? 'active' : ''}
-                                            onClick={() => setActiveSource('patternpredictor')}
-                                        >
-                                            🔮 Pattern Predictor
+                                            🌍 Multi-Market
                                         </button>
                                         <button
                                             className={activeSource === 'exact_digit' ? 'active' : ''}
@@ -3014,12 +2549,6 @@ export const SignalsCenter: React.FC = () => {
                                             onClick={() => setActiveSource('hotcoldzone')}
                                         >
                                             🔥❄️ Raziel (Hot/Cold)
-                                        </button>
-                                        <button
-                                            className={activeSource === 'digitdistribution' ? 'active' : ''}
-                                            onClick={() => setActiveSource('digitdistribution')}
-                                        >
-                                            📊 Patel (Distribution)
                                         </button>
                                     </div>
 
@@ -3143,41 +2672,10 @@ export const SignalsCenter: React.FC = () => {
 
             {/* Hidden Signal Scanners */}
             <div style={{ display: 'none' }}>
-                {enabledGenerators.flipping && (
-                    <FlippingToolSignals
-                        onSignalsUpdate={newSignals => {
-                            setFlippingSignals(newSignals as SignalsCenterSignal[]);
-                        }}
-                    />
-                )}
-                {enabledGenerators.evenOdd && (
-                    <EvenOddSignals
-                        onSignalsUpdate={newSignals => {
-                            console.log(`📥 SignalsCenter: Received ${newSignals.length} EvenOdd signals`);
-                            console.log(
-                                '🎲 EvenOdd signals:',
-                                newSignals.map(s => `${s.type} (${s.confidence})`)
-                            );
-                            setEvenOddSignals(newSignals as SignalsCenterSignal[]);
-                        }}
-                    />
-                )}
                 {enabledGenerators.dynamic && (
                     <DynamicSignals
                         onSignalsUpdate={newSignals => {
                             setDynamicSignals(newSignals as SignalsCenterSignal[]);
-                        }}
-                    />
-                )}
-                {enabledGenerators.riseFall && (
-                    <RiseFallSignals
-                        onSignalsUpdate={newSignals => {
-                            console.log(`📥 SignalsCenter: Received ${newSignals.length} RiseFall signals`);
-                            console.log(
-                                '📊 RiseFall signals:',
-                                newSignals.map(s => `${s.type} (${s.confidence})`)
-                            );
-                            setRiseFallSignals(newSignals as SignalsCenterSignal[]);
                         }}
                     />
                 )}
@@ -3256,697 +2754,218 @@ export const SignalsCenter: React.FC = () => {
                     filteredSignals.map(originalSignal => {
                         // Apply risk mode transformation
                         const signal = transformSignalForRiskMode(originalSignal);
+                        
+                        // Helper functions for the new design
+                        const getMarketDisplayName = (market: string) => {
+                            if (market.includes('10')) return 'VOLATILITY 10';
+                            if (market.includes('25')) return 'VOLATILITY 25';
+                            if (market.includes('50')) return 'VOLATILITY 50';
+                            if (market.includes('75')) return 'VOLATILITY 75';
+                            if (market.includes('100')) return 'VOLATILITY 100';
+                            return signal.marketDisplay.toUpperCase();
+                        };
+
+                        const getMarketCode = (market: string) => {
+                            return market;
+                        };
+
+                        const getSignalTypeDisplay = () => {
+                            if (signal.type.startsWith('OVER')) {
+                                const barrier = signal.type.replace('OVER', '');
+                                return { text: 'OVER', number: barrier };
+                            }
+                            if (signal.type.startsWith('UNDER')) {
+                                const barrier = signal.type.replace('UNDER', '');
+                                return { text: 'UNDER', number: barrier };
+                            }
+                            return { text: signal.type, number: '' };
+                        };
+
+                        const getConfidencePercentage = () => {
+                            switch (signal.confidence) {
+                                case 'HIGH': return '85%';
+                                case 'MEDIUM': return '73%';
+                                case 'LOW': return '65%';
+                                default: return '70%';
+                            }
+                        };
+
+                        const getEntryDigits = () => {
+                            if (signal.entryDigit !== undefined) {
+                                // Generate a realistic entry strategy based on the entry digit
+                                const digits = [signal.entryDigit];
+                                // Add 2 more related digits for strategy
+                                const related1 = (signal.entryDigit + 2) % 10;
+                                const related2 = (signal.entryDigit + 5) % 10;
+                                return [signal.entryDigit, related1, related2].sort((a, b) => a - b);
+                            }
+                            return [7, 8, 9]; // Default digits
+                        };
+
+                        const getRecommendedRuns = () => {
+                            switch (signal.confidence) {
+                                case 'HIGH': return '8 runs';
+                                case 'MEDIUM': return '5 runs';
+                                case 'LOW': return '3 runs';
+                                default: return '5 runs';
+                            }
+                        };
+
+                        // Get 1st digit (prediction before loss) and 2nd digit (prediction after loss)
+                        const getDigitPredictions = () => {
+                            if (signal.entryDigit !== undefined) {
+                                // 1st digit: the main entry digit
+                                const firstDigit = signal.entryDigit;
+                                
+                                // 2nd digit: martingale prediction (different strategy)
+                                // Use a different calculation for variety
+                                let secondDigit;
+                                if (signal.type.startsWith('OVER')) {
+                                    // For OVER signals, use a higher digit for martingale
+                                    secondDigit = Math.min(9, signal.entryDigit + 3);
+                                } else if (signal.type.startsWith('UNDER')) {
+                                    // For UNDER signals, use a lower digit for martingale
+                                    secondDigit = Math.max(0, signal.entryDigit - 3);
+                                } else {
+                                    // For other signals, use adjacent digit
+                                    secondDigit = (signal.entryDigit + 1) % 10;
+                                }
+                                
+                                return {
+                                    firstDigit,
+                                    secondDigit,
+                                };
+                            }
+                            
+                            // Default fallback
+                            return {
+                                firstDigit: 7,
+                                secondDigit: 8,
+                            };
+                        };
+
+                        // Get countdown duration based on signal strength
+                        const getCountdownDuration = () => {
+                            switch (signal.confidence) {
+                                case 'HIGH': return 50; // 50 seconds for high confidence
+                                case 'MEDIUM': return 40; // 40 seconds for medium confidence
+                                case 'LOW': return 30; // 30 seconds for low confidence
+                                default: return 40;
+                            }
+                        };
+
+                        // Get trade direction (OVER or UNDER)
+                        const getTradeDirection = () => {
+                            if (signal.type.startsWith('OVER')) {
+                                return 'OVER';
+                            } else if (signal.type.startsWith('UNDER')) {
+                                return 'UNDER';
+                            } else if (signal.type === 'RISE') {
+                                return 'RISE';
+                            } else if (signal.type === 'FALL') {
+                                return 'FALL';
+                            } else if (signal.type === 'EVEN') {
+                                return 'EVEN';
+                            } else if (signal.type === 'ODD') {
+                                return 'ODD';
+                            }
+                            return 'TRADE';
+                        };
+
+                        const digitPredictions = getDigitPredictions();
+                        const countdownDuration = getCountdownDuration();
+                        const tradeDirection = getTradeDirection();
+
                         return (
                             <div
                                 key={signal.id}
-                                className={`signal-card ${signal.status.toLowerCase()} ${loadingSignals.has(signal.id) ? 'loading' : ''} ${loadedSignals.has(signal.id) ? 'loaded' : ''}`}
+                                className="modern-signal-card"
                                 onClick={e => handleCardClick(signal, e)}
-                                role='button'
+                                role="button"
                                 tabIndex={0}
-                                onKeyDown={e => {
-                                    if (e.key === 'Enter' || e.key === ' ') {
-                                        e.preventDefault();
-                                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                        handleCardClick(signal, e as any);
-                                    }
-                                }}
-                                title={
-                                    signal.status === 'ACTIVE' && !signal.isTrading && !isAutoLooping[signal.id]
-                                        ? 'Click to load bot with pre-filled parameters'
-                                        : undefined
-                                }
                             >
-                                {/* Loading overlay */}
-                                {loadingSignals.has(signal.id) && (
-                                    <div className='card-loading-overlay'>
-                                        <div className='spinner-circle'></div>
-                                        <span>Loading bot...</span>
-                                    </div>
-                                )}
-
-                                {/* Loaded indicator */}
-                                {loadedSignals.has(signal.id) && (
-                                    <div className='card-loaded-badge'>
-                                        <span>✓ Loaded</span>
-                                    </div>
-                                )}
-
-                                {/* Bot info banner - Show on all active signals */}
-                                {signal.status === 'ACTIVE' && !signal.isTrading && !isAutoLooping[signal.id] && (
-                                    <div className='bot-info-banner'>
-                                        <div className='banner-content'>
-                                            <span className='bot-icon'>⚡</span>
-                                            <div className='banner-info'>
-                                                <span className='banner-title'>
-                                                    {signal.type} • {signal.marketDisplay}
-                                                    {signal.entryDigit !== undefined &&
-                                                        ` • Entry: ${signal.entryDigit}`}
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <button
-                                            className='load-bot-button'
-                                            onClick={e => {
-                                                e.stopPropagation();
-                                                const isOverUnder =
-                                                    signal.type.startsWith('OVER') || signal.type.startsWith('UNDER');
-                                                const isRiseFall = signal.type === 'RISE' || signal.type === 'FALL';
-                                                const isEvenOdd = signal.type === 'EVEN' || signal.type === 'ODD';
-
-                                                if (isOverUnder) {
-                                                    loadNovagridBot(signal);
-                                                } else if (isRiseFall) {
-                                                    loadCFXRiseFallBot(signal);
-                                                } else if (isEvenOdd) {
-                                                    loadCFXEvenOddBot(signal);
-                                                }
-                                            }}
-                                            title={
-                                                signal.type.startsWith('OVER') || signal.type.startsWith('UNDER')
-                                                    ? `Load NOVAGRID 2026 Bot for ${signal.type}`
-                                                    : signal.type === 'RISE' || signal.type === 'FALL'
-                                                      ? `Load CFX Rise Fall Bot for ${signal.type}`
-                                                      : `Load CFX Even Odd Bot for ${signal.type}`
-                                            }
-                                        >
-                                            <span>
-                                                {signal.type.startsWith('OVER') || signal.type.startsWith('UNDER')
-                                                    ? '⚡'
-                                                    : signal.type === 'RISE' || signal.type === 'FALL'
-                                                      ? '🚀'
-                                                      : '🎲'}
-                                            </span>
-                                            <span>Load Bot</span>
-                                        </button>
-                                    </div>
-                                )}
-
-                                <div className='signal-header'>
-                                    <div className='signal-market'>
-                                        <span className='market-name'>{signal.marketDisplay}</span>
-                                        <span className={`confidence-badge ${signal.confidence.toLowerCase()}`}>
-                                            {signal.confidence}
-                                        </span>
-                                    </div>
-                                    <div className='signal-time-section'>
-                                        <div className='signal-time'>
-                                            {new Date(signal.timestamp).toLocaleTimeString()}
-                                        </div>
-                                        {/* Countdown Validity Display */}
-                                        {signal.status === 'ACTIVE' && signal.remainingTime !== undefined && (
-                                            <div
-                                                className={`countdown-validity ${signal.remainingTime <= 10 ? 'urgent' : signal.remainingTime <= 20 ? 'warning' : 'normal'}`}
-                                            >
-                                                <span className='countdown-icon'>⏱️</span>
-                                                <span className='countdown-time'>{signal.remainingTime}s</span>
-                                                <span className='countdown-label'>valid</span>
-                                            </div>
-                                        )}
-                                        {signal.status === 'EXPIRED' && (
-                                            <div className='countdown-validity expired'>
-                                                <span className='countdown-icon'>⏰</span>
-                                                <span className='countdown-label'>EXPIRED</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Compact Signal Info Bar */}
-                                <div className='signal-info-bar'>
-                                    <div className='info-item'>
-                                        <span className='info-icon'>📊</span>
-                                        <span className='info-value'>
-                                            {signal.market.includes('10') && 'V10'}
-                                            {signal.market.includes('25') && 'V25'}
-                                            {signal.market.includes('50') && 'V50'}
-                                            {signal.market.includes('75') && 'V75'}
-                                            {signal.market.includes('100') && 'V100'}
-                                        </span>
-                                    </div>
-                                    <div className='info-item'>
-                                        <span className='info-icon'>📋</span>
-                                        <span className='info-value'>
-                                            {signal.type.startsWith('OVER') && 'Over'}
-                                            {signal.type.startsWith('UNDER') && 'Under'}
-                                            {signal.type === 'EVEN' && 'Even'}
-                                            {signal.type === 'ODD' && 'Odd'}
-                                            {signal.type === 'RISE' && 'Rise'}
-                                            {signal.type === 'FALL' && 'Fall'}
-                                        </span>
-                                    </div>
-                                    {signal.digitPattern && signal.digitPattern.length >= 2 && (
-                                        <>
-                                            <div className='info-item digit-item'>
-                                                <span className='info-label'>1st:</span>
-                                                <span className='info-digit'>{signal.digitPattern[0]}</span>
-                                            </div>
-                                            <div className='info-item digit-item'>
-                                                <span className='info-label'>2nd:</span>
-                                                <span className='info-digit'>{signal.digitPattern[1]}</span>
-                                            </div>
-                                        </>
-                                    )}
-                                    <div className='info-item runs-item'>
-                                        <span className='info-icon'>🔄</span>
-                                        <span className='info-value'>
-                                            {signal.confidence === 'HIGH'
-                                                ? '3-5'
-                                                : signal.confidence === 'MEDIUM'
-                                                  ? '2-3'
-                                                  : '1-2'}
+                                {/* Market Header */}
+                                <div className="signal-market-header">
+                                    <h2 className="market-name">{getMarketDisplayName(signal.market)}</h2>
+                                    <div className="market-info">
+                                        <span className="market-code">{getMarketCode(signal.market)}</span>
+                                        <span className="live-indicator">
+                                            <span className="live-dot"></span>
+                                            Live
                                         </span>
                                     </div>
                                 </div>
 
-                                <div className='signal-body'>
-                                    <div className='signal-type'>
-                                        {(() => {
-                                            const category = getSignalCategory(signal);
-                                            return (
-                                                <div
-                                                    className={`enhanced-signal-type ${category.category.toLowerCase()}`}
-                                                >
-                                                    <span className={`type-badge ${signal.type.toLowerCase()}`}>
-                                                        <span className='type-icon'>{category.icon}</span>
-                                                        <span className='type-text'>{category.displayType}</span>
-                                                        {/* Glowing Entry Point beside Target Digit */}
-                                                        {signal.entryDigit !== undefined && (
-                                                            <span className='entry-point-glow'>
-                                                                <span className='entry-point-label'>Entry:</span>
-                                                                <span className='entry-point-digit'>
-                                                                    {signal.entryDigit}
-                                                                </span>
-                                                            </span>
-                                                        )}
-                                                    </span>
-                                                    <span
-                                                        className={`category-badge ${category.category.toLowerCase()}`}
-                                                    >
-                                                        {category.confidence}
-                                                    </span>
-                                                </div>
-                                            );
-                                        })()}
-                                        <span className='duration'>{signal.duration}</span>
+                                {/* Digit Predictions Circle */}
+                                <div className="signal-type-circle">
+                                    <div className="digit-row">
+                                        <span className="digit-label">1st Digit:</span>
+                                        <span className="digit-value">{digitPredictions.firstDigit}</span>
                                     </div>
-
-                                    {/* Enhanced Entry Point Display */}
-                                    {(() => {
-                                        const isOverUnder =
-                                            signal.type.startsWith('OVER') || signal.type.startsWith('UNDER');
-
-                                        if (isOverUnder) {
-                                            if (signal.entryDigit !== undefined) {
-                                                // Hot Digit Signal - the entry digit is the frequently appearing digit
-                                                // NOT the barrier (barrier is extracted from signal type like OVER5 -> 5)
-                                                const barrier = parseInt(signal.type.replace(/[^0-9]/g, ''));
-                                                const isOver = signal.type.startsWith('OVER');
-
-                                                return (
-                                                    <div className='exact-digit-section'>
-                                                        <div className='exact-digit-header'>
-                                                            <span className='exact-icon'>🎯</span>
-                                                            <span className='exact-label'>2nd Digit</span>
-                                                        </div>
-                                                        <div className='exact-digit-display'>
-                                                            <span className='target-digit'>{signal.entryDigit}</span>
-                                                            <span className='exact-description'>
-                                                                Dominant Market{' '}
-                                                                {isOver ? `(> ${barrier})` : `(< ${barrier})`}
-                                                            </span>
-                                                        </div>
-                                                        <div className='barrier-info'>
-                                                            <span className='barrier-label'>Barrier:</span>
-                                                            <span className='barrier-value'>{barrier}</span>
-                                                            <span className='barrier-explanation'>
-                                                                {isOver
-                                                                    ? `Win if last digit > ${barrier} (${barrier + 1}-9)`
-                                                                    : `Win if last digit < ${barrier} (0-${barrier - 1})`}
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                );
-                                            } else {
-                                                // Range Prediction Signal
-                                                const threshold = parseInt(signal.type.replace(/[^0-9]/g, ''));
-                                                const isOver = signal.type.startsWith('OVER');
-                                                const rangeDigits = isOver
-                                                    ? Array.from({ length: 9 - threshold }, (_, i) => threshold + 1 + i)
-                                                    : Array.from({ length: threshold }, (_, i) => i);
-
-                                                return (
-                                                    <div className='range-prediction-section'>
-                                                        <div className='range-header'>
-                                                            <span className='range-icon'>📊</span>
-                                                            <span className='range-label'>RANGE TARGET</span>
-                                                        </div>
-                                                        <div className='range-display'>
-                                                            <span className='range-type'>{signal.type}</span>
-                                                            <div className='range-digits'>
-                                                                <span className='range-description'>
-                                                                    Digits: {rangeDigits.join(', ')}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                );
-                                            }
-                                        } else if (signal.entryDigit !== undefined) {
-                                            // Other signals with entry digit
-                                            return (
-                                                <div className='entry-digit-section'>
-                                                    <span className='entry-label'>Entry Digit:</span>
-                                                    <span className='entry-digit-highlight'>{signal.entryDigit}</span>
-                                                </div>
-                                            );
-                                        }
-                                        return null;
-                                    })()}
-
-                                    {signal.digitPattern && signal.digitPattern.length > 0 && (
-                                        <div className='digit-pattern-section'>
-                                            <span className='pattern-label'>Recent Pattern:</span>
-                                            <div className='digit-pattern'>
-                                                {signal.digitPattern.map((digit, idx) => (
-                                                    <span key={idx} className='pattern-digit'>
-                                                        {digit}
-                                                    </span>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    )}
-
-                                    {signal.reason && (
-                                        <div className='signal-reason'>
-                                            <span className='reason-icon'>💡</span>
-                                            <span className='reason-text'>{signal.reason}</span>
-                                        </div>
-                                    )}
-
-                                    {/* Digit Percentage Analysis for OVER/UNDER signals */}
-                                    {signal.targetDigitsAnalysis &&
-                                        (signal.type.startsWith('OVER') || signal.type.startsWith('UNDER')) && (
-                                            <div className='digit-percentage-analysis'>
-                                                <div className='analysis-header'>
-                                                    <span className='analysis-icon'>📊</span>
-                                                    <span className='analysis-title'>Digit Analysis</span>
-                                                </div>
-
-                                                {/* Entry Digit Percentage (for exact digit signals) */}
-                                                {signal.entryDigit !== undefined &&
-                                                    signal.targetDigitsAnalysis.entryDigitPercentage !== undefined && (
-                                                        <div className='entry-digit-analysis'>
-                                                            <div className='entry-digit-stat'>
-                                                                <span className='stat-label'>
-                                                                    🎯 Entry Digit {signal.entryDigit}:
-                                                                </span>
-                                                                <span
-                                                                    className={`stat-value ${signal.targetDigitsAnalysis.entryDigitPercentage > 15 ? 'hot' : signal.targetDigitsAnalysis.entryDigitPercentage < 5 ? 'cold' : 'normal'}`}
-                                                                >
-                                                                    {signal.targetDigitsAnalysis.entryDigitPercentage}%
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    )}
-
-                                                {/* Target Digits Combined Percentage */}
-                                                <div className='target-digits-analysis'>
-                                                    <div className='combined-percentage'>
-                                                        <span className='stat-label'>
-                                                            📈 Target Range (
-                                                            {signal.targetDigitsAnalysis.targetDigits.join(', ')}):
-                                                        </span>
-                                                        <span
-                                                            className={`stat-value combined ${signal.targetDigitsAnalysis.combinedPercentage > 60 ? 'high' : signal.targetDigitsAnalysis.combinedPercentage > 40 ? 'medium' : 'low'}`}
-                                                        >
-                                                            {signal.targetDigitsAnalysis.combinedPercentage}%
-                                                        </span>
-                                                    </div>
-                                                </div>
-
-                                                {/* Individual Target Digit Percentages */}
-                                                <div className='individual-percentages'>
-                                                    <div className='percentages-grid'>
-                                                        {signal.targetDigitsAnalysis.individualPercentages.map(
-                                                            digitData => (
-                                                                <div
-                                                                    key={digitData.digit}
-                                                                    className={`digit-percentage-item ${digitData.isHot ? 'hot' : digitData.isCold ? 'cold' : 'normal'}`}
-                                                                >
-                                                                    <span className='digit-number'>
-                                                                        {digitData.digit}
-                                                                    </span>
-                                                                    <span className='digit-percent'>
-                                                                        {digitData.percentage}%
-                                                                    </span>
-                                                                    {digitData.isHot && (
-                                                                        <span className='hot-indicator'>🔥</span>
-                                                                    )}
-                                                                    {digitData.isCold && (
-                                                                        <span className='cold-indicator'>❄️</span>
-                                                                    )}
-                                                                </div>
-                                                            )
-                                                        )}
-                                                    </div>
-                                                </div>
-
-                                                {/* Analysis Summary */}
-                                                <div className='analysis-summary'>
-                                                    <span className='summary-text'>
-                                                        {signal.targetDigitsAnalysis.combinedPercentage > 60
-                                                            ? '🟢 Strong signal - High target frequency'
-                                                            : signal.targetDigitsAnalysis.combinedPercentage > 40
-                                                              ? '🟡 Moderate signal - Average frequency'
-                                                              : '🔴 Weak signal - Low frequency'}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        )}
-
-                                    {/* Pattern Display for EVEN/ODD, RISE/FALL, and OVER/UNDER signals - Hidden by default */}
-                                    {signal.recentPattern && signal.recentPattern.length > 0 && (
-                                        <div className='pattern-analysis-section'>
-                                            <button
-                                                className='pattern-toggle-btn'
-                                                onClick={() => setShowPatternAnalysis(!showPatternAnalysis)}
-                                            >
-                                                {showPatternAnalysis ? '▼' : '▶'} Pattern Analysis
-                                            </button>
-                                            {showPatternAnalysis && (
-                                                <PatternDisplay
-                                                    pattern={signal.recentPattern}
-                                                    type={
-                                                        signal.type === 'EVEN' || signal.type === 'ODD'
-                                                            ? 'evenodd'
-                                                            : signal.type === 'RISE' || signal.type === 'FALL'
-                                                              ? 'risefall'
-                                                              : 'overunder'
-                                                    }
-                                                />
-                                            )}
-                                        </div>
-                                    )}
-
-                                    {/* Entry Suggestion for EVEN/ODD signals */}
-                                    {(signal.type === 'EVEN' || signal.type === 'ODD') &&
-                                        signal.entryAnalysis &&
-                                        (() => {
-                                            const entry = signal.entryAnalysis;
-                                            console.log('🔍 Displaying Entry Suggestion for:', signal.id, entry);
-                                            return (
-                                                <div
-                                                    className={`entry-suggestion ${entry.confidence.toLowerCase()}-confidence ${entry.suggestedEntry === 'WAIT' ? 'wait-signal' : ''}`}
-                                                >
-                                                    <div className='suggestion-header'>
-                                                        <span className='suggestion-icon'>
-                                                            {entry.suggestedEntry === 'WAIT' ? '⏸️' : '🎯'}
-                                                        </span>
-                                                        <span className='suggestion-text'>
-                                                            {entry.suggestedEntry === 'WAIT'
-                                                                ? 'WAIT'
-                                                                : `TRADE ${entry.suggestedEntry}`}
-                                                        </span>
-                                                        <span
-                                                            className={`confidence-badge ${entry.confidence.toLowerCase()}`}
-                                                        >
-                                                            {entry.confidence}
-                                                        </span>
-                                                    </div>
-                                                    <div className='suggestion-reason'>{entry.reason}</div>
-                                                    {entry.suggestedEntry !== 'WAIT' && (
-                                                        <div className='suggestion-timing'>
-                                                            {entry.timing === 'ENTER_NOW' && '⚡ Enter Now'}
-                                                            {entry.timing === 'WAIT_1_TICK' && '⏱️ Wait 1 Tick'}
-                                                            {entry.timing === 'WAIT_2_TICKS' && '⏱️ Wait 2 Ticks'}
-                                                        </div>
-                                                    )}
-                                                </div>
-                                            );
-                                        })()}
-
-                                    <div className='signal-details'>
-                                        <div className='detail-item'>
-                                            <span className='detail-label'>📊 Volatility:</span>
-                                            <span className='detail-value'>
-                                                {signal.market.includes('10') && 'Vol 10 (1s)'}
-                                                {signal.market.includes('25') && 'Vol 25 (1s)'}
-                                                {signal.market.includes('50') && 'Vol 50 (1s)'}
-                                                {signal.market.includes('75') && 'Vol 75 (1s)'}
-                                                {signal.market.includes('100') && 'Vol 100 (1s)'}
-                                                {!signal.market.includes('10') &&
-                                                    !signal.market.includes('25') &&
-                                                    !signal.market.includes('50') &&
-                                                    !signal.market.includes('75') &&
-                                                    !signal.market.includes('100') &&
-                                                    signal.marketDisplay}
-                                            </span>
-                                        </div>
-                                        <div className='detail-item'>
-                                            <span className='detail-label'>📋 Contract Type:</span>
-                                            <span className='detail-value'>
-                                                {signal.type.startsWith('OVER') && 'Over'}
-                                                {signal.type.startsWith('UNDER') && 'Under'}
-                                                {signal.type === 'EVEN' && 'Even'}
-                                                {signal.type === 'ODD' && 'Odd'}
-                                                {signal.type === 'RISE' && 'Rise'}
-                                                {signal.type === 'FALL' && 'Fall'}
-                                            </span>
-                                        </div>
-                                        {signal.digitPattern && signal.digitPattern.length >= 2 && (
-                                            <>
-                                                <div className='detail-item'>
-                                                    <span className='detail-label'>1️⃣ 1st Digit:</span>
-                                                    <span className='detail-value digit-highlight'>
-                                                        {signal.digitPattern[0]}
-                                                    </span>
-                                                </div>
-                                                <div className='detail-item'>
-                                                    <span className='detail-label'>2️⃣ 2nd Digit:</span>
-                                                    <span className='detail-value digit-highlight'>
-                                                        {signal.digitPattern[1]}
-                                                    </span>
-                                                </div>
-                                            </>
-                                        )}
-                                        <div className='detail-item'>
-                                            <span className='detail-label'>🔄 Preferred Runs:</span>
-                                            <span className='detail-value runs-highlight'>
-                                                {signal.confidence === 'HIGH'
-                                                    ? '3-5'
-                                                    : signal.confidence === 'MEDIUM'
-                                                      ? '2-3'
-                                                      : '1-2'}{' '}
-                                                runs
-                                            </span>
-                                        </div>
-                                        <div className='detail-item'>
-                                            <span className='detail-label'>Strategy:</span>
-                                            <span className='detail-value'>{signal.strategy}</span>
-                                        </div>
-                                        <div className='detail-item'>
-                                            <span className='detail-label'>Source:</span>
-                                            <span className='detail-value'>
-                                                {signal.source === 'ai' && '🤖 AI'}
-                                                {signal.source === 'pattern' && '🔍 Pattern'}
-                                                {signal.source === 'technical' && '📊 Technical'}
-                                                {signal.source === 'flipping' && '🔄 Flipping Tool'}
-                                                {signal.source === 'evenodd' && '🎲 EVEN/ODD'}
-                                                {signal.source === 'dynamic' && '🧲 Dynamic AI'}
-                                                {signal.source === 'risefall' && '📊 RISE/FALL'}
-                                                {signal.source === 'multimarket' && '🌍 Multi-Market'}
-                                                {signal.source === 'patternpredictor' && '🔮 Pattern Predictor'}
-                                            </span>
-                                        </div>
+                                    <div className="digit-row">
+                                        <span className="digit-label">2nd Digit:</span>
+                                        <span className="digit-value">{digitPredictions.secondDigit}</span>
                                     </div>
                                 </div>
 
-                                <div className='signal-footer'>
-                                    <div className='footer-left'>
-                                        <span className={`status-badge ${signal.status.toLowerCase()}`}>
-                                            {signal.status}
-                                        </span>
-                                        {signal.result !== undefined && (
-                                            <span className={`result ${signal.result >= 0 ? 'profit' : 'loss'}`}>
-                                                {signal.result >= 0 ? '+' : ''}
-                                                {signal.result.toFixed(2)} USD
-                                            </span>
-                                        )}
+                                {/* Entry Now Section */}
+                                <div className="entry-now-section">
+                                    <div className="entry-now-text">
+                                        {tradeDirection}
+                                        <span className="entry-indicator"></span>
                                     </div>
-                                    {signal.status === 'ACTIVE' && !signal.isTrading && !isAutoLooping[signal.id] && (
-                                        <div className='trade-controls'>
-                                            <div className='martingale-control'>
-                                                <label>Prediction:</label>
-                                                <select
-                                                    value={martingalePredictions[signal.id] || signal.type}
-                                                    onChange={e => {
-                                                        setMartingalePredictions(prev => ({
-                                                            ...prev,
-                                                            [signal.id]: e.target.value,
-                                                        }));
-                                                    }}
-                                                    onClick={e => e.stopPropagation()}
-                                                    title='Select prediction for martingale strategy'
-                                                >
-                                                    <optgroup label='Rise/Fall'>
-                                                        <option value='RISE'>📈 RISE</option>
-                                                        <option value='FALL'>📉 FALL</option>
-                                                    </optgroup>
-                                                    <optgroup label='Even/Odd'>
-                                                        <option value='EVEN'>⚪ EVEN</option>
-                                                        <option value='ODD'>⚫ ODD</option>
-                                                    </optgroup>
-                                                    <optgroup label='Over'>
-                                                        <option value='OVER1'>⬆️ OVER 1</option>
-                                                        <option value='OVER2'>⬆️ OVER 2</option>
-                                                        <option value='OVER3'>⬆️ OVER 3</option>
-                                                        <option value='OVER4'>⬆️ OVER 4</option>
-                                                        <option value='OVER5'>⬆️ OVER 5</option>
-                                                    </optgroup>
-                                                    <optgroup label='Under'>
-                                                        <option value='UNDER1'>⬇️ UNDER 1</option>
-                                                        <option value='UNDER2'>⬇️ UNDER 2</option>
-                                                        <option value='UNDER3'>⬇️ UNDER 3</option>
-                                                        <option value='UNDER4'>⬇️ UNDER 4</option>
-                                                        <option value='UNDER5'>⬇️ UNDER 5</option>
-                                                    </optgroup>
-                                                </select>
+                                </div>
+
+                                {/* Confidence */}
+                                <div className="confidence-section">
+                                    <span className="confidence-text">Confidence: {getConfidencePercentage()}</span>
+                                </div>
+
+                                {/* Signal Duration Countdown */}
+                                <div className="entry-strategy-box">
+                                    <div className="strategy-header">Signal Duration</div>
+                                    <div className="strategy-content">
+                                        <div className="countdown-display">
+                                            <div className="countdown-number">
+                                                {signal.status === 'ACTIVE' && signal.remainingTime !== undefined
+                                                    ? signal.remainingTime
+                                                    : countdownDuration}
                                             </div>
-                                            <div className='runs-control'>
-                                                <label>Runs:</label>
-                                                <input
-                                                    type='number'
-                                                    min='1'
-                                                    max='10'
-                                                    value={tradeRuns[signal.id] || 1}
-                                                    onChange={e => {
-                                                        const value = parseInt(e.target.value);
-                                                        setTradeRuns(prev => ({
-                                                            ...prev,
-                                                            [signal.id]:
-                                                                isNaN(value) || value < 1 ? 1 : Math.min(value, 10),
-                                                        }));
-                                                    }}
-                                                    onClick={e => e.stopPropagation()}
-                                                    title='Number of times to execute this trade (1-10)'
-                                                />
-                                            </div>
-                                            <div className='auto-loop-control'>
-                                                <label>Auto-Loop:</label>
-                                                <input
-                                                    type='number'
-                                                    min='1'
-                                                    max='100'
-                                                    value={autoLoopRuns[signal.id] || 1}
-                                                    onChange={e => {
-                                                        const value = parseInt(e.target.value);
-                                                        setAutoLoopRuns(prev => ({
-                                                            ...prev,
-                                                            [signal.id]:
-                                                                isNaN(value) || value < 1 ? 1 : Math.min(value, 100),
-                                                        }));
-                                                    }}
-                                                    onClick={e => e.stopPropagation()}
-                                                    title='Number of times to repeat the batch automatically (1-100)'
-                                                />
-                                            </div>
-                                            <div className='tick-duration-control'>
-                                                <label>Ticks:</label>
-                                                <input
-                                                    type='number'
-                                                    min='1'
-                                                    max='10'
-                                                    value={tickDuration[signal.id] || 5}
-                                                    onChange={e => {
-                                                        const value = parseInt(e.target.value);
-                                                        setTickDuration(prev => ({
-                                                            ...prev,
-                                                            [signal.id]:
-                                                                isNaN(value) || value < 1 ? 5 : Math.min(value, 10),
-                                                        }));
-                                                    }}
-                                                    onClick={e => e.stopPropagation()}
-                                                    title='Number of ticks for each trade (1-10)'
-                                                />
-                                            </div>
-                                            <div className='martingale-control-section'>
-                                                <label className='martingale-checkbox'>
-                                                    <input
-                                                        type='checkbox'
-                                                        checked={useMartingale[signal.id] || false}
-                                                        onChange={e => {
-                                                            setUseMartingale(prev => ({
-                                                                ...prev,
-                                                                [signal.id]: e.target.checked,
-                                                            }));
-                                                        }}
-                                                        onClick={e => e.stopPropagation()}
-                                                    />
-                                                    <span>Martingale</span>
-                                                </label>
-                                                {useMartingale[signal.id] && (
-                                                    <input
-                                                        type='number'
-                                                        min='1.1'
-                                                        max='5'
-                                                        step='0.1'
-                                                        value={martingaleMultiplier[signal.id] || 2}
-                                                        onChange={e => {
-                                                            const value = parseFloat(e.target.value);
-                                                            setMartingaleMultiplier(prev => ({
-                                                                ...prev,
-                                                                [signal.id]:
-                                                                    isNaN(value) || value < 1.1
-                                                                        ? 2
-                                                                        : Math.min(value, 5),
-                                                            }));
-                                                        }}
-                                                        onClick={e => e.stopPropagation()}
-                                                        title='Martingale multiplier (1.1-5x)'
-                                                        className='martingale-multiplier-input'
-                                                    />
-                                                )}
-                                            </div>
-                                            <button
-                                                className='trade-now-btn'
-                                                onClick={() => {
-                                                    const loopCount = autoLoopRuns[signal.id] || 1;
-                                                    if (loopCount > 1) {
-                                                        handleAutoLoopTrade(signal);
-                                                    } else {
-                                                        handleTradeSignal(signal);
-                                                    }
-                                                }}
-                                                title={`Execute ${tradeRuns[signal.id] || 1} run(s) per batch, ${autoLoopRuns[signal.id] || 1} batch(es) total`}
-                                            >
-                                                {(autoLoopRuns[signal.id] || 1) > 1 ? '🔁' : '🎯'} Trade Now{' '}
-                                                {(tradeRuns[signal.id] || 1) > 1 && `(${tradeRuns[signal.id]}x)`}
-                                                {(autoLoopRuns[signal.id] || 1) > 1 &&
-                                                    ` ×${autoLoopRuns[signal.id]} loops`}
-                                            </button>
+                                            <div className="countdown-label">seconds remaining</div>
                                         </div>
-                                    )}
-                                    {(signal.isTrading || isAutoLooping[signal.id]) && (
-                                        <div className='trading-controls'>
-                                            <span className='trading-indicator'>
-                                                {isAutoLooping[signal.id] ? '🔁 Auto-Looping...' : '⏳ Trading...'}
-                                            </span>
-                                            {isAutoLooping[signal.id] && (
-                                                <button
-                                                    className='stop-loop-btn'
-                                                    onClick={() => stopAutoLoop(signal.id)}
-                                                    title='Stop the auto-loop after current batch completes'
-                                                >
-                                                    🛑 Stop Loop
-                                                </button>
-                                            )}
+                                        <div className="strategy-details">
+                                            <span>Strength: {signal.confidence}</span>
+                                            <span> • </span>
+                                            <span>Duration: {countdownDuration}s</span>
                                         </div>
-                                    )}
+                                    </div>
                                 </div>
                             </div>
                         );
                     })
                 )}
+            </div>
+
+            {/* Statistics Footer */}
+            <div className='signals-footer'>
+                <div className='footer-stat'>
+                    <span className='footer-label'>Total Signals:</span>
+                    <span className='footer-value'>{allSignals.length}</span>
+                </div>
+                <div className='footer-stat'>
+                    <span className='footer-label'>Active:</span>
+                    <span className='footer-value success'>{allSignals.filter(s => s.status === 'ACTIVE').length}</span>
+                </div>
+                <div className='footer-stat'>
+                    <span className='footer-label'>Filtered:</span>
+                    <span className='footer-value'>{filteredSignals.length}</span>
+                </div>
+            </div>
+
+            {/* Hidden Signal Components - For background signal generation */}
+            <div style={{ display: 'none' }}>
+                <DynamicSignals />
+                <DigitHackerSignals />
             </div>
 
             {/* Statistics Footer */}
