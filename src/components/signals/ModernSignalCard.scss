@@ -3,18 +3,24 @@
     background: #ffffff;
     border-radius: 16px;
     padding: 24px;
-    margin-bottom: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
-    max-width: 400px;
-    margin-left: auto;
-    margin-right: auto;
+    width: 100%;
+    max-width: 100%;
 
     &:hover {
         transform: translateY(-2px);
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    // Mobile: Center and limit width
+    @media (width <= 768px) {
+        max-width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 16px;
     }
 }
 

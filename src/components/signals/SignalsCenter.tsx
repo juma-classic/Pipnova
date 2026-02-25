@@ -2946,22 +2946,6 @@ export const SignalsCenter: React.FC = () => {
                 )}
             </div>
 
-            {/* Statistics Footer */}
-            <div className='signals-footer'>
-                <div className='footer-stat'>
-                    <span className='footer-label'>Total Signals:</span>
-                    <span className='footer-value'>{allSignals.length}</span>
-                </div>
-                <div className='footer-stat'>
-                    <span className='footer-label'>Active:</span>
-                    <span className='footer-value success'>{allSignals.filter(s => s.status === 'ACTIVE').length}</span>
-                </div>
-                <div className='footer-stat'>
-                    <span className='footer-label'>Filtered:</span>
-                    <span className='footer-value'>{filteredSignals.length}</span>
-                </div>
-            </div>
-
             {/* Hidden Signal Components - For background signal generation */}
             <div style={{ display: 'none' }}>
                 <DynamicSignals />
