@@ -139,13 +139,7 @@ export const SignalsCenter: React.FC = () => {
     const [hotColdZoneSignals, setHotColdZoneSignals] = useState<SignalsCenterSignal[]>([]);
     const [digitHackerSignals, setDigitHackerSignals] = useState<SignalsCenterSignal[]>([]);
     const [activeSource, setActiveSource] = useState<
-        | 'all'
-        | 'technical'
-        | 'dynamic'
-        | 'multimarket'
-        | 'exact_digit'
-        | 'range_prediction'
-        | 'hotcoldzone'
+        'all' | 'technical' | 'dynamic' | 'multimarket' | 'exact_digit' | 'range_prediction' | 'hotcoldzone'
     >('all');
     const [filterMarket, setFilterMarket] = useState<string>('all');
     const [filterStrategy, setFilterStrategy] = useState<string>('all');
@@ -1563,6 +1557,22 @@ export const SignalsCenter: React.FC = () => {
             let recoveryStrategy: any = null;
             if (signal.type.startsWith('OVER') || signal.type.startsWith('UNDER')) {
                 try {
+                    // Calculate digit predictions from signal (same logic as in card display)
+                    let firstDigit = signal.entryDigit;
+                    let secondDigit;
+
+                    if (signal.entryDigit !== undefined) {
+                        if (signal.type.startsWith('OVER')) {
+                            // For OVER signals: 2nd digit must be between 2-4
+                            const calculated = signal.entryDigit + 2;
+                            secondDigit = Math.max(2, Math.min(4, calculated));
+                        } else if (signal.type.startsWith('UNDER')) {
+                            // For UNDER signals: 2nd digit must be between 5-7
+                            const calculated = signal.entryDigit - 2;
+                            secondDigit = Math.max(5, Math.min(7, calculated));
+                        }
+                    }
+
                     const { adaptiveRecoveryStrategy } = await import('@/services/adaptive-recovery-strategy.service');
 
                     // Determine if barrier was adjusted and get the values
@@ -1590,6 +1600,16 @@ export const SignalsCenter: React.FC = () => {
                         signal.entryDigit, // Entry digit (e.g., 4)
                         isBarrierAdjusted ? originalBarrier : undefined // Original barrier (e.g., 4)
                     );
+
+                    // Override with signal's digit predictions
+                    if (recoveryStrategy && firstDigit !== undefined && secondDigit !== undefined) {
+                        recoveryStrategy.predictionBeforeLoss = firstDigit;
+                        recoveryStrategy.predictionAfterLoss = secondDigit;
+                        console.log('🎯 Overriding recovery strategy with signal digit predictions:', {
+                            predictionBeforeLoss: firstDigit,
+                            predictionAfterLoss: secondDigit,
+                        });
+                    }
 
                     if (recoveryStrategy && recoveryStrategy.isValid) {
                         console.log('🧠 Adaptive Recovery Strategy Applied:', {
@@ -2754,7 +2774,7 @@ export const SignalsCenter: React.FC = () => {
                     filteredSignals.map(originalSignal => {
                         // Apply risk mode transformation
                         const signal = transformSignalForRiskMode(originalSignal);
-                        
+
                         // Helper functions for the new design
                         const getMarketDisplayName = (market: string) => {
                             if (market.includes('10')) return 'VOLATILITY 10';
@@ -2783,10 +2803,14 @@ export const SignalsCenter: React.FC = () => {
 
                         const getConfidencePercentage = () => {
                             switch (signal.confidence) {
-                                case 'HIGH': return '85%';
-                                case 'MEDIUM': return '73%';
-                                case 'LOW': return '65%';
-                                default: return '70%';
+                                case 'HIGH':
+                                    return '85%';
+                                case 'MEDIUM':
+                                    return '73%';
+                                case 'LOW':
+                                    return '65%';
+                                default:
+                                    return '70%';
                             }
                         };
 
@@ -2804,10 +2828,14 @@ export const SignalsCenter: React.FC = () => {
 
                         const getRecommendedRuns = () => {
                             switch (signal.confidence) {
-                                case 'HIGH': return '8 runs';
-                                case 'MEDIUM': return '5 runs';
-                                case 'LOW': return '3 runs';
-                                default: return '5 runs';
+                                case 'HIGH':
+                                    return '8 runs';
+                                case 'MEDIUM':
+                                    return '5 runs';
+                                case 'LOW':
+                                    return '3 runs';
+                                default:
+                                    return '5 runs';
                             }
                         };
 
@@ -2816,27 +2844,28 @@ export const SignalsCenter: React.FC = () => {
                             if (signal.entryDigit !== undefined) {
                                 // 1st digit: the main entry digit
                                 const firstDigit = signal.entryDigit;
-                                
-                                // 2nd digit: martingale prediction (different strategy)
-                                // Use a different calculation for variety
+
+                                // 2nd digit: martingale prediction with constraints
                                 let secondDigit;
                                 if (signal.type.startsWith('OVER')) {
-                                    // For OVER signals, use a higher digit for martingale
-                                    secondDigit = Math.min(9, signal.entryDigit + 3);
+                                    // For OVER signals: 2nd digit must be between 2-4
+                                    const calculated = signal.entryDigit + 2;
+                                    secondDigit = Math.max(2, Math.min(4, calculated));
                                 } else if (signal.type.startsWith('UNDER')) {
-                                    // For UNDER signals, use a lower digit for martingale
-                                    secondDigit = Math.max(0, signal.entryDigit - 3);
+                                    // For UNDER signals: 2nd digit must be between 5-7 (same ratio as OVER)
+                                    const calculated = signal.entryDigit - 2;
+                                    secondDigit = Math.max(5, Math.min(7, calculated));
                                 } else {
                                     // For other signals, use adjacent digit
                                     secondDigit = (signal.entryDigit + 1) % 10;
                                 }
-                                
+
                                 return {
                                     firstDigit,
                                     secondDigit,
                                 };
                             }
-                            
+
                             // Default fallback
                             return {
                                 firstDigit: 7,
@@ -2847,10 +2876,14 @@ export const SignalsCenter: React.FC = () => {
                         // Get countdown duration based on signal strength
                         const getCountdownDuration = () => {
                             switch (signal.confidence) {
-                                case 'HIGH': return 50; // 50 seconds for high confidence
-                                case 'MEDIUM': return 40; // 40 seconds for medium confidence
-                                case 'LOW': return 30; // 30 seconds for low confidence
-                                default: return 40;
+                                case 'HIGH':
+                                    return 50; // 50 seconds for high confidence
+                                case 'MEDIUM':
+                                    return 40; // 40 seconds for medium confidence
+                                case 'LOW':
+                                    return 30; // 30 seconds for low confidence
+                                default:
+                                    return 40;
                             }
                         };
 
@@ -2879,61 +2912,61 @@ export const SignalsCenter: React.FC = () => {
                         return (
                             <div
                                 key={signal.id}
-                                className="modern-signal-card"
+                                className='modern-signal-card'
                                 onClick={e => handleCardClick(signal, e)}
-                                role="button"
+                                role='button'
                                 tabIndex={0}
                             >
                                 {/* Market Header */}
-                                <div className="signal-market-header">
-                                    <h2 className="market-name">{getMarketDisplayName(signal.market)}</h2>
-                                    <div className="market-info">
-                                        <span className="market-code">{getMarketCode(signal.market)}</span>
-                                        <span className="live-indicator">
-                                            <span className="live-dot"></span>
+                                <div className='signal-market-header'>
+                                    <h2 className='market-name'>{getMarketDisplayName(signal.market)}</h2>
+                                    <div className='market-info'>
+                                        <span className='market-code'>{getMarketCode(signal.market)}</span>
+                                        <span className='live-indicator'>
+                                            <span className='live-dot'></span>
                                             Live
                                         </span>
                                     </div>
                                 </div>
 
                                 {/* Digit Predictions Circle */}
-                                <div className="signal-type-circle">
-                                    <div className="digit-row">
-                                        <span className="digit-label">1st Digit:</span>
-                                        <span className="digit-value">{digitPredictions.firstDigit}</span>
+                                <div className='signal-type-circle'>
+                                    <div className='digit-row'>
+                                        <span className='digit-label'>1st Digit:</span>
+                                        <span className='digit-value'>{digitPredictions.firstDigit}</span>
                                     </div>
-                                    <div className="digit-row">
-                                        <span className="digit-label">2nd Digit:</span>
-                                        <span className="digit-value">{digitPredictions.secondDigit}</span>
+                                    <div className='digit-row'>
+                                        <span className='digit-label'>2nd Digit:</span>
+                                        <span className='digit-value'>{digitPredictions.secondDigit}</span>
                                     </div>
                                 </div>
 
                                 {/* Entry Now Section */}
-                                <div className="entry-now-section">
-                                    <div className="entry-now-text">
+                                <div className='entry-now-section'>
+                                    <div className='entry-now-text'>
                                         {tradeDirection}
-                                        <span className="entry-indicator"></span>
+                                        <span className='entry-indicator'></span>
                                     </div>
                                 </div>
 
                                 {/* Confidence */}
-                                <div className="confidence-section">
-                                    <span className="confidence-text">Confidence: {getConfidencePercentage()}</span>
+                                <div className='confidence-section'>
+                                    <span className='confidence-text'>Confidence: {getConfidencePercentage()}</span>
                                 </div>
 
                                 {/* Signal Duration Countdown */}
-                                <div className="entry-strategy-box">
-                                    <div className="strategy-header">Signal Duration</div>
-                                    <div className="strategy-content">
-                                        <div className="countdown-display">
-                                            <div className="countdown-number">
+                                <div className='entry-strategy-box'>
+                                    <div className='strategy-header'>Signal Duration</div>
+                                    <div className='strategy-content'>
+                                        <div className='countdown-display'>
+                                            <div className='countdown-number'>
                                                 {signal.status === 'ACTIVE' && signal.remainingTime !== undefined
                                                     ? signal.remainingTime
                                                     : countdownDuration}
                                             </div>
-                                            <div className="countdown-label">seconds remaining</div>
+                                            <div className='countdown-label'>seconds remaining</div>
                                         </div>
-                                        <div className="strategy-details">
+                                        <div className='strategy-details'>
                                             <span>Strength: {signal.confidence}</span>
                                             <span> • </span>
                                             <span>Duration: {countdownDuration}s</span>
