@@ -40,6 +40,7 @@ interface SignalResult {
         | 'UNDER4'
         | 'UNDER5';
     confidence: 'HIGH' | 'MEDIUM' | 'LOW';
+    confidencePercentage?: number; // Actual percentage (60-95%)
     strategy: string;
     entryDigit?: number;
     digitPattern?: number[];
@@ -408,17 +409,34 @@ export class SignalAnalysisService {
                     const signalType = `OVER${threshold}` as SignalResult['type'];
                     const targetAnalysis = this.analyzeTargetDigits(signalType, entryDigit);
 
+                    // Calculate confidence based on how much it exceeds the minimum threshold
+                    const exceedance = analysis.over - minReq.over;
+                    let confidence: 'HIGH' | 'MEDIUM' | 'LOW';
+                    if (exceedance >= 0.15) {
+                        confidence = 'HIGH'; // 15%+ above minimum
+                    } else if (exceedance >= 0.05) {
+                        confidence = 'MEDIUM'; // 5-15% above minimum
+                    } else {
+                        confidence = 'LOW'; // Just meeting minimum
+                    }
+
+                    // Calculate actual confidence percentage (60-95%)
+                    // Map analysis.over (0.45-1.0) to confidence (60-95%)
+                    const rawPercentage = analysis.over * 100;
+                    const confidencePercentage = Math.min(95, Math.max(60, Math.round(rawPercentage)));
+
                     console.log(
-                        `✅ Valid OVER${threshold} signal: Hot digit ${entryDigit} > barrier ${threshold} (${(analysis.over * 100).toFixed(1)}%)`
+                        `✅ Valid OVER${threshold} signal: Hot digit ${entryDigit} > barrier ${threshold} (${rawPercentage.toFixed(1)}% → ${confidencePercentage}%, confidence: ${confidence})`
                     );
 
                     return {
                         type: signalType,
-                        confidence: analysis.over > minReq.over + 0.1 ? 'HIGH' : 'MEDIUM',
+                        confidence: confidence,
+                        confidencePercentage: confidencePercentage,
                         strategy: 'Hot Digits',
                         entryDigit: entryDigit,
                         digitPattern: pattern,
-                        reason: `Digits ${threshold + 1}-9 appearing ${(analysis.over * 100).toFixed(0)}% of the time, hot digit ${entryDigit} detected`,
+                        reason: `Digits ${threshold + 1}-9 appearing ${rawPercentage.toFixed(0)}% of the time, hot digit ${entryDigit} detected`,
                         digitPercentages,
                         targetDigitsAnalysis: targetAnalysis,
                     };
@@ -439,13 +457,30 @@ export class SignalAnalysisService {
                     const signalType = `UNDER${threshold}` as SignalResult['type'];
                     const targetAnalysis = this.analyzeTargetDigits(signalType, entryDigit);
 
+                    // Calculate confidence based on how much it exceeds the minimum threshold
+                    const exceedance = analysis.under - minReq.under;
+                    let confidence: 'HIGH' | 'MEDIUM' | 'LOW';
+                    if (exceedance >= 0.15) {
+                        confidence = 'HIGH'; // 15%+ above minimum
+                    } else if (exceedance >= 0.05) {
+                        confidence = 'MEDIUM'; // 5-15% above minimum
+                    } else {
+                        confidence = 'LOW'; // Just meeting minimum
+                    }
+
+                    // Calculate actual confidence percentage (60-95%)
+                    // Map analysis.under (0.15-1.0) to confidence (60-95%)
+                    const rawPercentage = analysis.under * 100;
+                    const confidencePercentage = Math.min(95, Math.max(60, Math.round(rawPercentage)));
+
                     console.log(
-                        `✅ Valid UNDER${threshold} signal: Hot digit ${entryDigit} < barrier ${threshold} (${(analysis.under * 100).toFixed(1)}%)`
+                        `✅ Valid UNDER${threshold} signal: Hot digit ${entryDigit} < barrier ${threshold} (${rawPercentage.toFixed(1)}% → ${confidencePercentage}%, confidence: ${confidence})`
                     );
 
                     return {
                         type: signalType,
-                        confidence: analysis.under > minReq.under + 0.1 ? 'HIGH' : 'MEDIUM',
+                        confidence: confidence,
+                        confidencePercentage: confidencePercentage,
                         strategy: 'Hot Digits',
                         entryDigit: entryDigit,
                         digitPattern: pattern,

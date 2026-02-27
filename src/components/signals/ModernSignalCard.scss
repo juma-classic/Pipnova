@@ -1,9 +1,9 @@
 /* Modern Signal Card Styles - Based on your design */
 .modern-signal-card {
-    background: #ffffff;
+    background: #fff;
     border-radius: 16px;
     padding: 24px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgb(0 0 0 / 10%);
     cursor: pointer;
     transition: all 0.3s ease;
     text-align: center;
@@ -12,7 +12,7 @@
 
     &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 24px rgb(0 0 0 / 15%);
     }
 
     // Mobile: Center and limit width
@@ -32,7 +32,7 @@
         font-size: 24px;
         font-weight: bold;
         color: #2c3e50;
-        margin: 0 0 8px 0;
+        margin: 0 0 8px;
         letter-spacing: 1px;
     }
 
@@ -75,10 +75,22 @@
     align-items: center;
     justify-content: center;
     margin: 20px auto;
-    color: #ffffff;
-    box-shadow: 0 4px 16px rgba(39, 174, 96, 0.3);
+    color: #fff;
+    box-shadow: 0 4px 16px rgb(39 174 96 / 30%);
     padding: 16px;
     gap: 12px;
+
+    // OVER signals - Green (default)
+    &--over {
+        background: #27ae60;
+        box-shadow: 0 4px 16px rgb(39 174 96 / 30%);
+    }
+
+    // UNDER signals - Orange
+    &--under {
+        background: #f97316;
+        box-shadow: 0 4px 16px rgb(249 115 22 / 30%);
+    }
 
     .digit-row {
         display: flex;
@@ -183,7 +195,7 @@
         .strategy-details {
             font-size: 14px;
             color: #8b7355;
-            
+
             span {
                 &:first-child {
                     font-weight: 500;
@@ -198,7 +210,7 @@
     margin-top: 16px;
     padding: 8px 16px;
     background: #f39c12;
-    color: #ffffff;
+    color: #fff;
     border-radius: 20px;
     display: inline-block;
     font-size: 14px;
@@ -211,10 +223,12 @@
         opacity: 1;
         transform: scale(1);
     }
+
     50% {
         opacity: 0.7;
         transform: scale(1.1);
     }
+
     100% {
         opacity: 1;
         transform: scale(1);
@@ -222,9 +236,9 @@
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (width <= 768px) {
     .modern-signal-card {
-        margin: 0 16px 16px 16px;
+        margin: 0 16px 16px;
         padding: 20px;
         max-width: none;
     }

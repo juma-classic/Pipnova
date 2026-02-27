@@ -6,6 +6,7 @@ import { hotColdZoneScannerService } from '@/services/hot-cold-zone-scanner.serv
 import { patternPredictor } from '@/services/pattern-predictor.service';
 import { signalAnalysisService } from '@/services/signal-analysis.service';
 import { SignalTradeResult, signalTradingService } from '@/services/signal-trading.service';
+import { signalsCenterBridge, BridgedSignal } from '@/services/signals-center-bridge.service';
 import { EntryAnalysis, EvenOddEntrySuggester } from '@/utils/evenodd-entry-suggester';
 import { AutoTradeSettings } from './AutoTradeSettings';
 import { ConnectionPoolStatus } from './ConnectionPoolStatus';
@@ -55,6 +56,7 @@ interface SignalsCenterSignal {
     entry: number;
     duration: string;
     confidence: 'HIGH' | 'MEDIUM' | 'LOW' | 'CONSERVATIVE' | 'AGGRESSIVE';
+    confidencePercentage?: number; // Actual percentage (60-95%)
     strategy: string;
     source: string;
     status: 'ACTIVE' | 'WON' | 'LOST' | 'EXPIRED' | 'TRADING';
@@ -122,9 +124,24 @@ export const SignalsCenter: React.FC = () => {
             const saved = localStorage.getItem('signalsCenterSignals');
             if (saved) {
                 const parsed = JSON.parse(saved);
-                // Filter out signals older than 1 hour
-                const oneHourAgo = Date.now() - 60 * 60 * 1000;
-                return parsed.filter((s: SignalsCenterSignal) => s.timestamp > oneHourAgo);
+                const now = Date.now();
+                // Filter out signals older than 1 hour and recalculate remainingTime
+                const oneHourAgo = now - 60 * 60 * 1000;
+                return parsed
+                    .filter((s: SignalsCenterSignal) => s.timestamp > oneHourAgo)
+                    .map((s: SignalsCenterSignal) => {
+                        // Recalculate remainingTime if signal has expiresAt
+                        if (s.expiresAt) {
+                            const remainingMs = s.expiresAt - now;
+                            const remainingSeconds = Math.max(0, Math.floor(remainingMs / 1000));
+                            return {
+                                ...s,
+                                remainingTime: remainingSeconds,
+                                status: remainingSeconds <= 0 ? ('EXPIRED' as const) : s.status,
+                            };
+                        }
+                        return s;
+                    });
             }
         } catch (e) {
             console.warn('Failed to load signals from localStorage:', e);
@@ -373,6 +390,41 @@ export const SignalsCenter: React.FC = () => {
         } catch (e) {
             console.warn('Failed to save signals to localStorage:', e);
         }
+    }, [signals]);
+
+    // Push OVER/UNDER signals to SignalOverlay bridge
+    useEffect(() => {
+        // Filter for active OVER/UNDER signals only
+        const overUnderSignals = signals.filter(signal => {
+            const isOverUnder = signal.type.startsWith('OVER') || signal.type.startsWith('UNDER');
+            const isActive = signal.status === 'ACTIVE';
+            const hasValidExpiry = signal.expiresAt && signal.expiresAt > Date.now();
+            return isOverUnder && isActive && hasValidExpiry;
+        });
+
+        // Convert to bridge format
+        const bridgedSignals: BridgedSignal[] = overUnderSignals.map(signal => {
+            // Extract barrier number from type (e.g., "OVER3" -> 3)
+            const barrierMatch = signal.type.match(/\d+/);
+            const barrier = barrierMatch ? parseInt(barrierMatch[0]) : 5;
+
+            return {
+                id: signal.id,
+                timestamp: signal.timestamp,
+                market: signal.market,
+                type: signal.type.startsWith('OVER') ? 'OVER' : 'UNDER',
+                digit: signal.entryDigit || barrier,
+                barrier: barrier,
+                confidencePercentage: signal.confidence === 'HIGH' ? 85 : signal.confidence === 'MEDIUM' ? 70 : 60,
+                recommendedStake: 1,
+                recommendedRuns: 1,
+                expiresAt: signal.expiresAt || Date.now() + 120000,
+            };
+        });
+
+        // Update bridge
+        signalsCenterBridge.updateSignals(bridgedSignals);
+        console.log('🌉 Bridge updated with', bridgedSignals.length, 'OVER/UNDER signals');
     }, [signals]);
 
     // Save risk mode to localStorage whenever it changes
@@ -736,6 +788,7 @@ export const SignalsCenter: React.FC = () => {
                     entry: currentPrice, // Use REAL price
                     duration: '5 ticks', // Default to 5 ticks
                     confidence: signalResult.confidence,
+                    confidencePercentage: signalResult.confidencePercentage, // Actual percentage (60-95%)
                     strategy: signalResult.strategy,
                     source: signalResult.strategy.includes('Trend')
                         ? 'technical'
@@ -1577,13 +1630,13 @@ export const SignalsCenter: React.FC = () => {
 
                     if (signal.entryDigit !== undefined) {
                         if (signal.type.startsWith('OVER')) {
-                            // For OVER signals: 2nd digit must be between 2-4
-                            const calculated = signal.entryDigit + 2;
-                            secondDigit = Math.max(2, Math.min(4, calculated));
+                            // For OVER signals: 1st digit max 4, 2nd digit max 5, 2nd >= 1st
+                            firstDigit = Math.min(signal.entryDigit, 4); // Cap at 4
+                            secondDigit = Math.min(Math.max(firstDigit, signal.entryDigit), 5); // Between firstDigit and 5
                         } else if (signal.type.startsWith('UNDER')) {
-                            // For UNDER signals: 2nd digit must be between 5-7
-                            const calculated = signal.entryDigit - 2;
-                            secondDigit = Math.max(5, Math.min(7, calculated));
+                            // For UNDER signals: 1st digit min 5, 2nd digit min 4, 2nd <= 1st
+                            firstDigit = Math.max(signal.entryDigit, 5); // Floor at 5
+                            secondDigit = Math.max(Math.min(firstDigit, signal.entryDigit), 4); // Between 4 and firstDigit
                         }
                     }
 
@@ -2816,6 +2869,11 @@ export const SignalsCenter: React.FC = () => {
                         };
 
                         const getConfidencePercentage = () => {
+                            // Use actual confidence percentage if available (60-95%)
+                            if (signal.confidencePercentage !== undefined) {
+                                return `${signal.confidencePercentage}%`;
+                            }
+                            // Fallback to fixed mapping for old signals
                             switch (signal.confidence) {
                                 case 'HIGH':
                                     return '85%';
@@ -2831,11 +2889,29 @@ export const SignalsCenter: React.FC = () => {
                         const getEntryDigits = () => {
                             if (signal.entryDigit !== undefined) {
                                 // Generate a realistic entry strategy based on the entry digit
-                                const digits = [signal.entryDigit];
-                                // Add 2 more related digits for strategy
-                                const related1 = (signal.entryDigit + 2) % 10;
-                                const related2 = (signal.entryDigit + 5) % 10;
-                                return [signal.entryDigit, related1, related2].sort((a, b) => a - b);
+                                if (signal.type.startsWith('OVER')) {
+                                    // For OVER: 1st digit max 4, 2nd digit max 5, 2nd >= 1st
+                                    const firstDigit = Math.min(signal.entryDigit, 4);
+                                    const secondDigit = Math.min(Math.max(firstDigit, signal.entryDigit), 5);
+                                    const thirdDigit = Math.min(secondDigit + 1, 5); // One more, capped at 5
+                                    return [firstDigit, secondDigit, thirdDigit]
+                                        .filter((v, i, a) => a.indexOf(v) === i)
+                                        .sort((a, b) => a - b);
+                                } else if (signal.type.startsWith('UNDER')) {
+                                    // For UNDER: 1st digit min 5, 2nd digit min 4, 2nd <= 1st
+                                    const firstDigit = Math.max(signal.entryDigit, 5);
+                                    const secondDigit = Math.max(Math.min(firstDigit, signal.entryDigit), 4);
+                                    const thirdDigit = Math.max(secondDigit - 1, 4); // One less, floored at 4
+                                    return [thirdDigit, secondDigit, firstDigit]
+                                        .filter((v, i, a) => a.indexOf(v) === i)
+                                        .sort((a, b) => a - b);
+                                } else {
+                                    // For other signals, use original logic
+                                    const digits = [signal.entryDigit];
+                                    const related1 = (signal.entryDigit + 2) % 10;
+                                    const related2 = (signal.entryDigit + 5) % 10;
+                                    return [signal.entryDigit, related1, related2].sort((a, b) => a - b);
+                                }
                             }
                             return [7, 8, 9]; // Default digits
                         };
@@ -2856,19 +2932,24 @@ export const SignalsCenter: React.FC = () => {
                         // Get 1st digit (prediction before loss) and 2nd digit (prediction after loss)
                         const getDigitPredictions = () => {
                             if (signal.entryDigit !== undefined) {
-                                // 1st digit: the main entry digit
-                                const firstDigit = signal.entryDigit;
+                                // 1st digit: the main entry digit with constraints
+                                let firstDigit;
+                                if (signal.type.startsWith('OVER')) {
+                                    firstDigit = Math.min(signal.entryDigit, 4); // Cap at 4 for OVER
+                                } else if (signal.type.startsWith('UNDER')) {
+                                    firstDigit = Math.max(signal.entryDigit, 5); // Floor at 5 for UNDER
+                                } else {
+                                    firstDigit = signal.entryDigit;
+                                }
 
                                 // 2nd digit: martingale prediction with constraints
                                 let secondDigit;
                                 if (signal.type.startsWith('OVER')) {
-                                    // For OVER signals: 2nd digit must be between 2-4
-                                    const calculated = signal.entryDigit + 2;
-                                    secondDigit = Math.max(2, Math.min(4, calculated));
+                                    // For OVER signals: 1st digit max 4, 2nd digit max 5, 2nd >= 1st
+                                    secondDigit = Math.min(Math.max(firstDigit, signal.entryDigit), 5); // Between firstDigit and 5
                                 } else if (signal.type.startsWith('UNDER')) {
-                                    // For UNDER signals: 2nd digit must be between 5-7 (same ratio as OVER)
-                                    const calculated = signal.entryDigit - 2;
-                                    secondDigit = Math.max(5, Math.min(7, calculated));
+                                    // For UNDER signals: 1st digit min 5, 2nd digit min 4, 2nd <= 1st
+                                    secondDigit = Math.max(Math.min(firstDigit, signal.entryDigit), 4); // Between 4 and firstDigit
                                 } else {
                                     // For other signals, use adjacent digit
                                     secondDigit = (signal.entryDigit + 1) % 10;
@@ -2944,7 +3025,9 @@ export const SignalsCenter: React.FC = () => {
                                 </div>
 
                                 {/* Digit Predictions Circle */}
-                                <div className='signal-type-circle'>
+                                <div
+                                    className={`signal-type-circle ${signal.type.startsWith('UNDER') ? 'signal-type-circle--under' : 'signal-type-circle--over'}`}
+                                >
                                     <div className='digit-row'>
                                         <span className='digit-label'>1st Digit:</span>
                                         <span className='digit-value'>{digitPredictions.firstDigit}</span>
