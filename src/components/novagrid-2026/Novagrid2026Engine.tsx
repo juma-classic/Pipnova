@@ -13,6 +13,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { derivAPIService } from '@/services/deriv-api.service';
+import { api_base } from '@/external/bot-skeleton';
 import './Novagrid2026Engine.scss';
 
 // Signal Types
@@ -110,10 +111,14 @@ export const Novagrid2026Engine: React.FC = () => {
      * Valid: 1st digit [1,2,3,4], 2nd digit [2,3,4,5,6], 1st ≤ 2nd
      */
     const generateOversSignal = (frequencies: DigitFrequency[], volatilityFactor: number): WeightedSignal | null => {
+        if (frequencies.length < 10) return null;
+
         const validFirstDigits = [1, 2, 3, 4];
         const validSecondDigits = [2, 3, 4, 5, 6];
 
-        let bestPair: { first: number; second: number; weight: number } | null = null;
+        let bestFirst = 0;
+        let bestSecond = 0;
+        let bestWeight = -Infinity;
 
         validFirstDigits.forEach(first => {
             validSecondDigits.forEach(second => {
@@ -121,36 +126,40 @@ export const Novagrid2026Engine: React.FC = () => {
                     const firstFreq = frequencies[first];
                     const secondFreq = frequencies[second];
 
+                    if (!firstFreq || !secondFreq) return;
+
                     const firstWeight = calculateDigitWeight(firstFreq, volatilityFactor);
                     const secondWeight = calculateDigitWeight(secondFreq, volatilityFactor);
                     const pairWeight = firstWeight + secondWeight;
 
-                    if (!bestPair || pairWeight > bestPair.weight) {
-                        bestPair = { first, second, weight: pairWeight };
+                    if (pairWeight > bestWeight) {
+                        bestFirst = first;
+                        bestSecond = second;
+                        bestWeight = pairWeight;
                     }
                 }
             });
         });
 
-        if (!bestPair) return null;
+        if (bestWeight === -Infinity) return null;
 
         // Calculate confidence (70-98%)
-        const normalizedWeight = Math.min(100, Math.max(0, bestPair.weight));
+        const normalizedWeight = Math.min(100, Math.max(0, bestWeight));
         const confidence = Math.min(98, Math.max(70, 70 + (normalizedWeight / 100) * 28));
 
         const now = Date.now();
         return {
             id: `novagrid-${now}`,
             volatility: selectedVolatility,
-            type: 'Overs',
-            firstDigit: bestPair.first,
-            secondDigit: bestPair.second,
+            type: 'Overs' as const,
+            firstDigit: bestFirst,
+            secondDigit: bestSecond,
             confidence: Math.round(confidence * 10) / 10,
-            weightScore: Math.round(bestPair.weight * 10) / 10,
+            weightScore: Math.round(bestWeight * 10) / 10,
             createdAt: now,
             expiresAt: now + SIGNAL_TTL,
             timeToLive: 60,
-            status: 'active',
+            status: 'active' as const,
         };
     };
 
@@ -159,10 +168,14 @@ export const Novagrid2026Engine: React.FC = () => {
      * Valid: 1st digit [8,7,6,5], 2nd digit [8,7,6,5,4], 1st ≥ 2nd
      */
     const generateUndersSignal = (frequencies: DigitFrequency[], volatilityFactor: number): WeightedSignal | null => {
+        if (frequencies.length < 10) return null;
+
         const validFirstDigits = [8, 7, 6, 5];
         const validSecondDigits = [8, 7, 6, 5, 4];
 
-        let bestPair: { first: number; second: number; weight: number } | null = null;
+        let bestFirst = 0;
+        let bestSecond = 0;
+        let bestWeight = -Infinity;
 
         validFirstDigits.forEach(first => {
             validSecondDigits.forEach(second => {
@@ -170,36 +183,40 @@ export const Novagrid2026Engine: React.FC = () => {
                     const firstFreq = frequencies[first];
                     const secondFreq = frequencies[second];
 
+                    if (!firstFreq || !secondFreq) return;
+
                     const firstWeight = calculateDigitWeight(firstFreq, volatilityFactor);
                     const secondWeight = calculateDigitWeight(secondFreq, volatilityFactor);
                     const pairWeight = firstWeight + secondWeight;
 
-                    if (!bestPair || pairWeight > bestPair.weight) {
-                        bestPair = { first, second, weight: pairWeight };
+                    if (pairWeight > bestWeight) {
+                        bestFirst = first;
+                        bestSecond = second;
+                        bestWeight = pairWeight;
                     }
                 }
             });
         });
 
-        if (!bestPair) return null;
+        if (bestWeight === -Infinity) return null;
 
         // Calculate confidence (70-98%)
-        const normalizedWeight = Math.min(100, Math.max(0, bestPair.weight));
+        const normalizedWeight = Math.min(100, Math.max(0, bestWeight));
         const confidence = Math.min(98, Math.max(70, 70 + (normalizedWeight / 100) * 28));
 
         const now = Date.now();
         return {
             id: `novagrid-${now}`,
             volatility: selectedVolatility,
-            type: 'Unders',
-            firstDigit: bestPair.first,
-            secondDigit: bestPair.second,
+            type: 'Unders' as const,
+            firstDigit: bestFirst,
+            secondDigit: bestSecond,
             confidence: Math.round(confidence * 10) / 10,
-            weightScore: Math.round(bestPair.weight * 10) / 10,
+            weightScore: Math.round(bestWeight * 10) / 10,
             createdAt: now,
             expiresAt: now + SIGNAL_TTL,
             timeToLive: 60,
-            status: 'active',
+            status: 'active' as const,
         };
     };
 
@@ -250,8 +267,16 @@ export const Novagrid2026Engine: React.FC = () => {
         try {
             setIsEngineRunning(true);
             console.log('🚀 Starting Novagrid 2026 Engine...');
+            console.log('📡 Selected volatility:', selectedVolatility);
 
-            const unsub = await derivAPIService.subscribeToTicks(selectedVolatility, tickData => {
+            // Check if API is available
+            if (!api_base?.api) {
+                throw new Error('Deriv API not initialized. Please ensure you are logged in.');
+            }
+
+            const subscriptionId = await derivAPIService.subscribeToTicks(selectedVolatility, tickData => {
+                console.log('📊 Novagrid received tick:', tickData);
+
                 if (tickData?.tick?.quote && tickData?.tick?.epoch) {
                     const lastDigit = extractLastDigit(tickData.tick.quote);
 
@@ -271,11 +296,24 @@ export const Novagrid2026Engine: React.FC = () => {
                 }
             });
 
-            unsubscribeRef.current = unsub;
-            console.log('✅ Novagrid 2026 Engine Started');
+            if (!subscriptionId) {
+                throw new Error('Failed to get subscription ID from Deriv API');
+            }
+
+            // Store unsubscribe function
+            unsubscribeRef.current = () => {
+                if (subscriptionId) {
+                    console.log('🔌 Unsubscribing from Novagrid ticks:', subscriptionId);
+                    derivAPIService.unsubscribe(subscriptionId);
+                }
+            };
+
+            console.log('✅ Novagrid 2026 Engine Started with subscription:', subscriptionId);
         } catch (error) {
-            console.error('❌ Failed to start engine:', error);
+            console.error('❌ Failed to start Novagrid engine:', error);
             setIsConnected(false);
+            setIsEngineRunning(false);
+            alert(`Failed to start Novagrid engine: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     }, [selectedVolatility]);
 
@@ -326,7 +364,7 @@ export const Novagrid2026Engine: React.FC = () => {
                     prev
                         .map(signal => {
                             if (signal.status === 'active' && now >= signal.expiresAt) {
-                                return { ...signal, status: 'expired', timeToLive: 0 };
+                                return { ...signal, status: 'expired' as const, timeToLive: 0 };
                             }
                             if (signal.status === 'active') {
                                 return {
