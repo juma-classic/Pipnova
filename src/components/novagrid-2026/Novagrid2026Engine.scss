@@ -1,0 +1,341 @@
+.novagrid-2026-engine {
+    padding: 24px;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    min-height: 100vh;
+    color: #fff;
+
+    .novagrid-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+        padding: 24px;
+        background: rgb(255 255 255 / 5%);
+        border-radius: 16px;
+        border: 1px solid rgb(251 191 36 / 20%);
+
+        .novagrid-title {
+            h1 {
+                font-size: 32px;
+                font-weight: bold;
+                margin: 0 0 8px;
+                background: linear-gradient(90deg, #fbbf24, #f59e0b);
+                background-clip: text;
+                -webkit-text-fill-color: transparent;
+            }
+
+            p {
+                margin: 0;
+                color: #94a3b8;
+                font-size: 14px;
+            }
+        }
+
+        .novagrid-status {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+
+            .status-indicator {
+                padding: 8px 16px;
+                border-radius: 20px;
+                font-size: 14px;
+                font-weight: 500;
+
+                &.connected {
+                    background: rgb(34 197 94 / 20%);
+                    border: 1px solid #22c55e;
+                }
+
+                &.disconnected {
+                    background: rgb(239 68 68 / 20%);
+                    border: 1px solid #ef4444;
+                }
+            }
+
+            .tick-count {
+                font-size: 12px;
+                color: #94a3b8;
+            }
+        }
+    }
+
+    .novagrid-controls {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 32px;
+
+        select {
+            flex: 1;
+            padding: 12px 16px;
+            background: rgb(255 255 255 / 5%);
+            border: 1px solid rgb(251 191 36 / 30%);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 14px;
+            cursor: pointer;
+
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+
+            option {
+                background: #1e293b;
+            }
+        }
+
+        .engine-btn {
+            padding: 12px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+
+            &.start {
+                background: linear-gradient(135deg, #22c55e, #16a34a);
+                color: #fff;
+
+                &:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 16px rgb(34 197 94 / 30%);
+                }
+            }
+
+            &.stop {
+                background: linear-gradient(135deg, #ef4444, #dc2626);
+                color: #fff;
+
+                &:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 16px rgb(239 68 68 / 30%);
+                }
+            }
+        }
+    }
+
+    .novagrid-content {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 24px;
+
+        @media (width <= 1200px) {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    .digit-matrix {
+        background: rgb(255 255 255 / 5%);
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid rgb(251 191 36 / 20%);
+
+        h3 {
+            margin: 0 0 20px;
+            font-size: 18px;
+            color: #fbbf24;
+        }
+
+        .matrix-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .digit-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+
+            .digit-number {
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: rgb(251 191 36 / 20%);
+                border-radius: 8px;
+                font-weight: bold;
+                font-size: 16px;
+            }
+
+            .digit-bar {
+                height: 24px;
+                background: linear-gradient(90deg, #fbbf24, #f59e0b);
+                border-radius: 4px;
+                transition: width 0.3s ease;
+                min-width: 2px;
+            }
+
+            .digit-stats {
+                display: flex;
+                flex-direction: column;
+                font-size: 12px;
+                color: #94a3b8;
+
+                .momentum {
+                    color: #22c55e;
+                }
+            }
+        }
+    }
+
+    .active-signals {
+        background: rgb(255 255 255 / 5%);
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid rgb(251 191 36 / 20%);
+
+        h3 {
+            margin: 0 0 20px;
+            font-size: 18px;
+            color: #fbbf24;
+        }
+
+        .no-signals {
+            text-align: center;
+            padding: 60px 20px;
+            color: #94a3b8;
+
+            p {
+                margin: 8px 0;
+            }
+
+            .hint {
+                font-size: 14px;
+                opacity: 0.7;
+            }
+        }
+
+        .signals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .signal-card {
+            background: rgb(255 255 255 / 5%);
+            border-radius: 12px;
+            padding: 20px;
+            border: 2px solid;
+            transition: all 0.3s ease;
+
+            &.overs {
+                border-color: #22c55e;
+
+                .signal-type {
+                    background: rgb(34 197 94 / 20%);
+                    color: #22c55e;
+                }
+
+                .confidence-fill {
+                    background: linear-gradient(90deg, #22c55e, #16a34a);
+                }
+            }
+
+            &.unders {
+                border-color: #f97316;
+
+                .signal-type {
+                    background: rgb(249 115 22 / 20%);
+                    color: #f97316;
+                }
+
+                .confidence-fill {
+                    background: linear-gradient(90deg, #f97316, #ea580c);
+                }
+            }
+
+            &.expired {
+                opacity: 0.5;
+                border-style: dashed;
+            }
+
+            &:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 8px 24px rgb(251 191 36 / 20%);
+            }
+
+            .signal-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 16px;
+
+                .signal-type {
+                    padding: 6px 12px;
+                    border-radius: 6px;
+                    font-weight: 600;
+                    font-size: 14px;
+                }
+
+                .signal-ttl {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #fbbf24;
+                }
+            }
+
+            .signal-digits {
+                display: flex;
+                gap: 16px;
+                margin-bottom: 16px;
+
+                .digit-pair {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    padding: 12px;
+                    background: rgb(255 255 255 / 5%);
+                    border-radius: 8px;
+
+                    .label {
+                        font-size: 12px;
+                        color: #94a3b8;
+                        margin-bottom: 4px;
+                    }
+
+                    .value {
+                        font-size: 32px;
+                        font-weight: bold;
+                        color: #fbbf24;
+                    }
+                }
+            }
+
+            .signal-confidence {
+                margin-bottom: 12px;
+
+                .confidence-bar {
+                    height: 8px;
+                    background: rgb(255 255 255 / 10%);
+                    border-radius: 4px;
+                    overflow: hidden;
+                    margin-bottom: 8px;
+
+                    .confidence-fill {
+                        height: 100%;
+                        transition: width 0.3s ease;
+                    }
+                }
+
+                .confidence-text {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #fbbf24;
+                }
+            }
+
+            .signal-meta {
+                display: flex;
+                justify-content: space-between;
+                font-size: 12px;
+                color: #94a3b8;
+            }
+        }
+    }
+}
