@@ -375,24 +375,21 @@ export class SignalAnalysisService {
     /**
      * Generate OVER/UNDER signal with smart barrier selection
      * IMPORTANT: Entry digit (hot digit) must NEVER equal the barrier
-     * - For OVER signals: entry digit must be > barrier (winning digits)
-     * - For UNDER signals: entry digit must be < barrier (winning digits)
+     * - For OVER signals: 1st digit [1,2], 2nd digit [3,4]
+     * - For UNDER signals: 1st digit [8,7], 2nd digit [6,5]
      */
     private generateOverUnderSignal(): SignalResult | null {
         const hotDigits = this.getHotDigits(0.15);
         const pattern = this.detectPattern(5);
         const digitPercentages = this.getDigitPercentageAnalysis();
 
-        // Prioritize more balanced thresholds first (3, 4, 5), then 2, then 1
-        const thresholds = [3, 4, 5, 2, 1];
+        // Restricted thresholds: only 3 and 4 for OVER, 6 and 5 for UNDER
+        const thresholds = [3, 4];
 
-        // Define minimum thresholds for each barrier to avoid too-easy signals
+        // Define minimum thresholds for each barrier
         const minThresholds = {
-            1: { over: 0.85, under: 0.15 }, // OVER1 needs 85%+ (very rare), UNDER1 needs 15%+ (very rare)
-            2: { over: 0.75, under: 0.25 }, // OVER2 needs 75%+, UNDER2 needs 25%+
             3: { over: 0.65, under: 0.35 }, // OVER3 needs 65%+, UNDER3 needs 35%+
             4: { over: 0.55, under: 0.45 }, // OVER4 needs 55%+, UNDER4 needs 45%+
-            5: { over: 0.45, under: 0.55 }, // OVER5 needs 45%+, UNDER5 needs 55%+
         };
 
         for (const threshold of thresholds) {
@@ -400,11 +397,11 @@ export class SignalAnalysisService {
             const minReq = minThresholds[threshold as keyof typeof minThresholds];
 
             // Check OVER signals (digits > threshold)
-            // Entry digit MUST be strictly greater than threshold
+            // Entry digit MUST be 1 or 2 (restricted)
             if (analysis.over >= minReq.over) {
-                const validHotDigits = hotDigits.filter(d => d > threshold);
+                const validHotDigits = hotDigits.filter(d => d === 1 || d === 2);
                 if (validHotDigits.length > 0) {
-                    // Use the hottest digit that is strictly greater than threshold
+                    // Use the hottest digit from [1, 2]
                     const entryDigit = validHotDigits[0];
                     const signalType = `OVER${threshold}` as SignalResult['type'];
                     const targetAnalysis = this.analyzeTargetDigits(signalType, entryDigit);
@@ -421,12 +418,11 @@ export class SignalAnalysisService {
                     }
 
                     // Calculate actual confidence percentage (60-95%)
-                    // Map analysis.over (0.45-1.0) to confidence (60-95%)
                     const rawPercentage = analysis.over * 100;
                     const confidencePercentage = Math.min(95, Math.max(60, Math.round(rawPercentage)));
 
                     console.log(
-                        `✅ Valid OVER${threshold} signal: Hot digit ${entryDigit} > barrier ${threshold} (${rawPercentage.toFixed(1)}% → ${confidencePercentage}%, confidence: ${confidence})`
+                        `✅ Valid OVER${threshold} signal: 1st digit ${entryDigit} (from [1,2]), 2nd digit ${threshold} (from [3,4]) - ${rawPercentage.toFixed(1)}% → ${confidencePercentage}%, confidence: ${confidence}`
                     );
 
                     return {
@@ -442,19 +438,21 @@ export class SignalAnalysisService {
                     };
                 } else {
                     console.log(
-                        `❌ Rejected OVER${threshold}: No hot digits > ${threshold} (hot digits: ${hotDigits.join(', ')})`
+                        `❌ Rejected OVER${threshold}: No hot digits in [1,2] (hot digits: ${hotDigits.join(', ')})`
                     );
                 }
             }
 
             // Check UNDER signals (digits < threshold)
-            // Entry digit MUST be strictly less than threshold
+            // Entry digit MUST be 8 or 7 (restricted)
             if (analysis.under >= minReq.under) {
-                const validHotDigits = hotDigits.filter(d => d < threshold);
+                const validHotDigits = hotDigits.filter(d => d === 8 || d === 7);
                 if (validHotDigits.length > 0) {
-                    // Use the hottest digit that is strictly less than threshold
+                    // Use the hottest digit from [8, 7]
                     const entryDigit = validHotDigits[0];
-                    const signalType = `UNDER${threshold}` as SignalResult['type'];
+                    // Map threshold to UNDER barrier: 3->6, 4->5
+                    const underBarrier = threshold === 3 ? 6 : 5;
+                    const signalType = `UNDER${underBarrier}` as SignalResult['type'];
                     const targetAnalysis = this.analyzeTargetDigits(signalType, entryDigit);
 
                     // Calculate confidence based on how much it exceeds the minimum threshold
@@ -469,12 +467,11 @@ export class SignalAnalysisService {
                     }
 
                     // Calculate actual confidence percentage (60-95%)
-                    // Map analysis.under (0.15-1.0) to confidence (60-95%)
                     const rawPercentage = analysis.under * 100;
                     const confidencePercentage = Math.min(95, Math.max(60, Math.round(rawPercentage)));
 
                     console.log(
-                        `✅ Valid UNDER${threshold} signal: Hot digit ${entryDigit} < barrier ${threshold} (${rawPercentage.toFixed(1)}% → ${confidencePercentage}%, confidence: ${confidence})`
+                        `✅ Valid UNDER${underBarrier} signal: 1st digit ${entryDigit} (from [8,7]), 2nd digit ${underBarrier} (from [6,5]) - ${rawPercentage.toFixed(1)}% → ${confidencePercentage}%, confidence: ${confidence}`
                     );
 
                     return {
@@ -484,20 +481,20 @@ export class SignalAnalysisService {
                         strategy: 'Hot Digits',
                         entryDigit: entryDigit,
                         digitPattern: pattern,
-                        reason: `Digits 0-${threshold - 1} appearing ${(analysis.under * 100).toFixed(0)}% of the time, hot digit ${entryDigit} detected`,
+                        reason: `Digits 0-${underBarrier - 1} appearing ${(analysis.under * 100).toFixed(0)}% of the time, hot digit ${entryDigit} detected`,
                         digitPercentages,
                         targetDigitsAnalysis: targetAnalysis,
                     };
                 } else {
                     console.log(
-                        `❌ Rejected UNDER${threshold}: No hot digits < ${threshold} (hot digits: ${hotDigits.join(', ')})`
+                        `❌ Rejected UNDER${threshold === 3 ? 6 : 5}: No hot digits in [8,7] (hot digits: ${hotDigits.join(', ')})`
                     );
                 }
             }
         }
 
         // If no valid signals with hot digits, generate range-based signals WITHOUT entry digit
-        // These are probability-based signals without a specific hot digit target
+        // Use default entry digits: 1 for OVER, 8 for UNDER
         for (const threshold of thresholds) {
             const analysis = this.analyzeOverUnder(threshold, 30);
             const minReq = minThresholds[threshold as keyof typeof minThresholds];
@@ -508,10 +505,11 @@ export class SignalAnalysisService {
 
             if (analysis.over >= rangeOverThreshold) {
                 const signalType = `OVER${threshold}` as SignalResult['type'];
-                const targetAnalysis = this.analyzeTargetDigits(signalType);
+                const defaultEntryDigit = 1; // Default to 1 for OVER
+                const targetAnalysis = this.analyzeTargetDigits(signalType, defaultEntryDigit);
 
                 console.log(
-                    `📊 Range-based OVER${threshold} signal (${(analysis.over * 100).toFixed(1)}%) - NO entry digit`
+                    `📊 Range-based OVER${threshold} signal (${(analysis.over * 100).toFixed(1)}%) - Using default 1st digit: ${defaultEntryDigit}`
                 );
 
                 return {
@@ -519,6 +517,7 @@ export class SignalAnalysisService {
                     confidence: analysis.over > rangeOverThreshold + 0.1 ? 'HIGH' : 'MEDIUM',
                     strategy: 'Range Analysis',
                     // NO entryDigit for range-based signals - this is intentional
+                    entryDigit: defaultEntryDigit,
                     digitPattern: pattern,
                     reason: `Digits ${threshold + 1}-9 appearing ${(analysis.over * 100).toFixed(0)}% of the time`,
                     digitPercentages,
@@ -527,20 +526,22 @@ export class SignalAnalysisService {
             }
 
             if (analysis.under >= rangeUnderThreshold) {
-                const signalType = `UNDER${threshold}` as SignalResult['type'];
-                const targetAnalysis = this.analyzeTargetDigits(signalType);
+                const underBarrier = threshold === 3 ? 6 : 5;
+                const signalType = `UNDER${underBarrier}` as SignalResult['type'];
+                const defaultEntryDigit = 8; // Default to 8 for UNDER
+                const targetAnalysis = this.analyzeTargetDigits(signalType, defaultEntryDigit);
 
                 console.log(
-                    `📊 Range-based UNDER${threshold} signal (${(analysis.under * 100).toFixed(1)}%) - NO entry digit`
+                    `📊 Range-based UNDER${underBarrier} signal (${(analysis.under * 100).toFixed(1)}%) - Using default 1st digit: ${defaultEntryDigit}`
                 );
 
                 return {
                     type: signalType,
                     confidence: analysis.under > rangeUnderThreshold + 0.1 ? 'HIGH' : 'MEDIUM',
                     strategy: 'Range Analysis',
-                    // NO entryDigit for range-based signals - this is intentional
+                    entryDigit: defaultEntryDigit,
                     digitPattern: pattern,
-                    reason: `Digits 0-${threshold - 1} appearing ${(analysis.under * 100).toFixed(0)}% of the time`,
+                    reason: `Digits 0-${underBarrier - 1} appearing ${(analysis.under * 100).toFixed(0)}% of the time`,
                     digitPercentages,
                     targetDigitsAnalysis: targetAnalysis,
                 };

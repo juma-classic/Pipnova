@@ -219,20 +219,20 @@ export const SignalsCenter: React.FC = () => {
     const calculateValidityDuration = (
         signal: Omit<SignalsCenterSignal, 'validityDuration' | 'expiresAt' | 'remainingTime'>
     ): number => {
-        let baseDuration = 40; // Default 40 seconds
+        let baseDuration = 120; // Default 2 minutes (120 seconds)
 
         // Adjust based on confidence level
         switch (signal.confidence) {
             case 'HIGH':
-                baseDuration = 50; // High confidence gets 50 seconds
+                baseDuration = 150; // High confidence gets 2.5 minutes
                 break;
             case 'MEDIUM':
-                baseDuration = 40; // Medium confidence gets 40 seconds
+                baseDuration = 120; // Medium confidence gets 2 minutes
                 break;
             case 'LOW':
             case 'CONSERVATIVE':
             case 'AGGRESSIVE':
-                baseDuration = 30; // Low confidence gets 30 seconds
+                baseDuration = 90; // Low confidence gets 1.5 minutes
                 break;
         }
 
@@ -240,7 +240,7 @@ export const SignalsCenter: React.FC = () => {
         if (signal.type.startsWith('OVER') || signal.type.startsWith('UNDER')) {
             // Digit signals with entry points get extra time for precision
             if (signal.entryDigit !== undefined) {
-                baseDuration += 5; // +5 seconds for hot digit signals
+                baseDuration += 10; // +10 seconds for hot digit signals
             }
         }
 
@@ -3044,11 +3044,6 @@ export const SignalsCenter: React.FC = () => {
                                         {tradeDirection}
                                         <span className='entry-indicator'></span>
                                     </div>
-                                </div>
-
-                                {/* Confidence */}
-                                <div className='confidence-section'>
-                                    <span className='confidence-text'>Confidence: {getConfidencePercentage()}</span>
                                 </div>
 
                                 {/* Signal Duration Countdown */}

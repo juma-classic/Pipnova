@@ -108,13 +108,14 @@ export const Novagrid2026Engine: React.FC = () => {
 
     /**
      * Generate OVERS signal
-     * Valid: 1st digit [1,2,3,4], 2nd digit [2,3,4,5,6], 1st ≤ 2nd
+     * Valid: 1st digit [1,2], 2nd digit [3,4], 1st ≤ 2nd
+     * Prioritizes 1st=1 and 2nd=3, with 1st=2 and 2nd=4 as alternatives
      */
     const generateOversSignal = (frequencies: DigitFrequency[], volatilityFactor: number): WeightedSignal | null => {
         if (frequencies.length < 10) return null;
 
-        const validFirstDigits = [1, 2, 3, 4];
-        const validSecondDigits = [2, 3, 4, 5, 6];
+        const validFirstDigits = [1, 2]; // Only 1 or 2
+        const validSecondDigits = [3, 4]; // Only 3 or 4
 
         let bestFirst = 0;
         let bestSecond = 0;
@@ -130,7 +131,20 @@ export const Novagrid2026Engine: React.FC = () => {
 
                     const firstWeight = calculateDigitWeight(firstFreq, volatilityFactor);
                     const secondWeight = calculateDigitWeight(secondFreq, volatilityFactor);
-                    const pairWeight = firstWeight + secondWeight;
+                    let pairWeight = firstWeight + secondWeight;
+
+                    // Prioritize (1,3) combination - add bonus weight
+                    if (first === 1 && second === 3) {
+                        pairWeight += 10; // Bonus for preferred combination
+                    }
+                    // Secondary preference for (1,4)
+                    else if (first === 1 && second === 4) {
+                        pairWeight += 5;
+                    }
+                    // Tertiary preference for (2,3)
+                    else if (first === 2 && second === 3) {
+                        pairWeight += 3;
+                    }
 
                     if (pairWeight > bestWeight) {
                         bestFirst = first;
@@ -165,13 +179,14 @@ export const Novagrid2026Engine: React.FC = () => {
 
     /**
      * Generate UNDERS signal
-     * Valid: 1st digit [8,7,6,5], 2nd digit [8,7,6,5,4], 1st ≥ 2nd
+     * Valid: 1st digit [8,7], 2nd digit [6,5], 1st ≥ 2nd
+     * Prioritizes 1st=8 and 2nd=6, with 1st=7 and 2nd=5 as alternatives
      */
     const generateUndersSignal = (frequencies: DigitFrequency[], volatilityFactor: number): WeightedSignal | null => {
         if (frequencies.length < 10) return null;
 
-        const validFirstDigits = [8, 7, 6, 5];
-        const validSecondDigits = [8, 7, 6, 5, 4];
+        const validFirstDigits = [8, 7]; // Only 8 or 7
+        const validSecondDigits = [6, 5]; // Only 6 or 5
 
         let bestFirst = 0;
         let bestSecond = 0;
@@ -187,7 +202,20 @@ export const Novagrid2026Engine: React.FC = () => {
 
                     const firstWeight = calculateDigitWeight(firstFreq, volatilityFactor);
                     const secondWeight = calculateDigitWeight(secondFreq, volatilityFactor);
-                    const pairWeight = firstWeight + secondWeight;
+                    let pairWeight = firstWeight + secondWeight;
+
+                    // Prioritize (8,6) combination - add bonus weight
+                    if (first === 8 && second === 6) {
+                        pairWeight += 10; // Bonus for preferred combination
+                    }
+                    // Secondary preference for (8,5)
+                    else if (first === 8 && second === 5) {
+                        pairWeight += 5;
+                    }
+                    // Tertiary preference for (7,6)
+                    else if (first === 7 && second === 6) {
+                        pairWeight += 3;
+                    }
 
                     if (pairWeight > bestWeight) {
                         bestFirst = first;
