@@ -62,6 +62,8 @@ interface SignalsCenterSignal {
     status: 'ACTIVE' | 'WON' | 'LOST' | 'EXPIRED' | 'TRADING';
     result?: number;
     entryDigit?: number;
+    displayFirstDigit?: number; // Random digit for display (OVER: 1-2, UNDER: 8-7)
+    displaySecondDigit?: number; // Random digit for display (OVER: 3-4, UNDER: 6-5)
     digitPattern?: number[];
     reason?: string;
     isTrading?: boolean;
@@ -778,6 +780,18 @@ export const SignalsCenter: React.FC = () => {
                     }
                 }
 
+                // Generate random display digits based on signal type
+                let displayFirstDigit: number | undefined;
+                let displaySecondDigit: number | undefined;
+
+                if (signalResult.type.startsWith('OVER')) {
+                    displayFirstDigit = Math.random() < 0.5 ? 1 : 2;
+                    displaySecondDigit = Math.random() < 0.5 ? 3 : 4;
+                } else if (signalResult.type.startsWith('UNDER')) {
+                    displayFirstDigit = Math.random() < 0.5 ? 8 : 7;
+                    displaySecondDigit = Math.random() < 0.5 ? 6 : 5;
+                }
+
                 // Continue with regular signal generation
                 const newSignal: SignalsCenterSignal = {
                     id: `signal-${Date.now()}-${realTickCount}`,
@@ -797,6 +811,8 @@ export const SignalsCenter: React.FC = () => {
                           : 'ai',
                     status: 'ACTIVE',
                     entryDigit: signalResult.entryDigit,
+                    displayFirstDigit,
+                    displaySecondDigit,
                     digitPattern: calculateDigitPattern(signalResult.entryDigit, currentPrice),
                     reason: signalResult.reason,
                     entryAnalysis,
@@ -2931,22 +2947,24 @@ export const SignalsCenter: React.FC = () => {
 
                         // Get 1st digit (prediction before loss) and 2nd digit (prediction after loss)
                         const getDigitPredictions = () => {
-                            // Override with random digits based on signal type
-                            if (signal.type.startsWith('OVER')) {
-                                // OVER signals: 1st digit random [1,2], 2nd digit random [3,4]
-                                const firstDigit = Math.random() < 0.5 ? 1 : 2;
-                                const secondDigit = Math.random() < 0.5 ? 3 : 4;
+                            // Use stored display digits if available (set when signal was created)
+                            if (signal.displayFirstDigit !== undefined && signal.displaySecondDigit !== undefined) {
                                 return {
-                                    firstDigit,
-                                    secondDigit,
+                                    firstDigit: signal.displayFirstDigit,
+                                    secondDigit: signal.displaySecondDigit,
+                                };
+                            }
+
+                            // Fallback: generate random digits based on signal type
+                            if (signal.type.startsWith('OVER')) {
+                                return {
+                                    firstDigit: Math.random() < 0.5 ? 1 : 2,
+                                    secondDigit: Math.random() < 0.5 ? 3 : 4,
                                 };
                             } else if (signal.type.startsWith('UNDER')) {
-                                // UNDER signals: 1st digit random [8,7], 2nd digit random [6,5]
-                                const firstDigit = Math.random() < 0.5 ? 8 : 7;
-                                const secondDigit = Math.random() < 0.5 ? 6 : 5;
                                 return {
-                                    firstDigit,
-                                    secondDigit,
+                                    firstDigit: Math.random() < 0.5 ? 8 : 7,
+                                    secondDigit: Math.random() < 0.5 ? 6 : 5,
                                 };
                             }
 
