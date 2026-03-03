@@ -2931,33 +2931,30 @@ export const SignalsCenter: React.FC = () => {
 
                         // Get 1st digit (prediction before loss) and 2nd digit (prediction after loss)
                         const getDigitPredictions = () => {
-                            if (signal.entryDigit !== undefined) {
-                                // 1st digit: the main entry digit with constraints
-                                let firstDigit;
-                                if (signal.type.startsWith('OVER')) {
-                                    firstDigit = Math.min(signal.entryDigit, 4); // Cap at 4 for OVER
-                                } else if (signal.type.startsWith('UNDER')) {
-                                    firstDigit = Math.max(signal.entryDigit, 5); // Floor at 5 for UNDER
-                                } else {
-                                    firstDigit = signal.entryDigit;
-                                }
-
-                                // 2nd digit: martingale prediction with constraints
-                                let secondDigit;
-                                if (signal.type.startsWith('OVER')) {
-                                    // For OVER signals: 1st digit max 4, 2nd digit max 5, 2nd >= 1st
-                                    secondDigit = Math.min(Math.max(firstDigit, signal.entryDigit), 5); // Between firstDigit and 5
-                                } else if (signal.type.startsWith('UNDER')) {
-                                    // For UNDER signals: 1st digit min 5, 2nd digit min 4, 2nd <= 1st
-                                    secondDigit = Math.max(Math.min(firstDigit, signal.entryDigit), 4); // Between 4 and firstDigit
-                                } else {
-                                    // For other signals, use adjacent digit
-                                    secondDigit = (signal.entryDigit + 1) % 10;
-                                }
-
+                            // Override with random digits based on signal type
+                            if (signal.type.startsWith('OVER')) {
+                                // OVER signals: 1st digit random [1,2], 2nd digit random [3,4]
+                                const firstDigit = Math.random() < 0.5 ? 1 : 2;
+                                const secondDigit = Math.random() < 0.5 ? 3 : 4;
                                 return {
                                     firstDigit,
                                     secondDigit,
+                                };
+                            } else if (signal.type.startsWith('UNDER')) {
+                                // UNDER signals: 1st digit random [8,7], 2nd digit random [6,5]
+                                const firstDigit = Math.random() < 0.5 ? 8 : 7;
+                                const secondDigit = Math.random() < 0.5 ? 6 : 5;
+                                return {
+                                    firstDigit,
+                                    secondDigit,
+                                };
+                            }
+
+                            // For other signal types, use original logic
+                            if (signal.entryDigit !== undefined) {
+                                return {
+                                    firstDigit: signal.entryDigit,
+                                    secondDigit: (signal.entryDigit + 1) % 10,
                                 };
                             }
 
