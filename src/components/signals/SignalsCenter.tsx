@@ -780,16 +780,16 @@ export const SignalsCenter: React.FC = () => {
                     }
                 }
 
-                // Generate random display digits based on signal type
+                // Set fixed display digits based on signal type
                 let displayFirstDigit: number | undefined;
                 let displaySecondDigit: number | undefined;
 
                 if (signalResult.type.startsWith('OVER')) {
-                    displayFirstDigit = Math.random() < 0.5 ? 1 : 2;
-                    displaySecondDigit = Math.random() < 0.5 ? 3 : 4;
+                    displayFirstDigit = 1; // Always 1 for OVER
+                    displaySecondDigit = 3; // Always 3 for OVER
                 } else if (signalResult.type.startsWith('UNDER')) {
-                    displayFirstDigit = Math.random() < 0.5 ? 8 : 7;
-                    displaySecondDigit = Math.random() < 0.5 ? 6 : 5;
+                    displayFirstDigit = 8; // Always 8 for UNDER
+                    displaySecondDigit = 6; // Always 6 for UNDER
                 }
 
                 // Continue with regular signal generation
@@ -2955,16 +2955,16 @@ export const SignalsCenter: React.FC = () => {
                                 };
                             }
 
-                            // Fallback: generate random digits based on signal type
+                            // Fallback: use fixed digits based on signal type
                             if (signal.type.startsWith('OVER')) {
                                 return {
-                                    firstDigit: Math.random() < 0.5 ? 1 : 2,
-                                    secondDigit: Math.random() < 0.5 ? 3 : 4,
+                                    firstDigit: 1,
+                                    secondDigit: 3,
                                 };
                             } else if (signal.type.startsWith('UNDER')) {
                                 return {
-                                    firstDigit: Math.random() < 0.5 ? 8 : 7,
-                                    secondDigit: Math.random() < 0.5 ? 6 : 5,
+                                    firstDigit: 8,
+                                    secondDigit: 6,
                                 };
                             }
 
