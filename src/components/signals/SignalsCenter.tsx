@@ -2873,6 +2873,15 @@ export const SignalsCenter: React.FC = () => {
 
                         // Helper functions for the new design
                         const getMarketDisplayName = (market: string) => {
+                            // Check for 1-second markets (1HZ prefix)
+                            if (market.startsWith('1HZ')) {
+                                if (market.includes('10')) return 'VOLATILITY 10 (1s)';
+                                if (market.includes('25')) return 'VOLATILITY 25 (1s)';
+                                if (market.includes('50')) return 'VOLATILITY 50 (1s)';
+                                if (market.includes('75')) return 'VOLATILITY 75 (1s)';
+                                if (market.includes('100')) return 'VOLATILITY 100 (1s)';
+                            }
+                            // Regular markets (R_ prefix)
                             if (market.includes('10')) return 'VOLATILITY 10';
                             if (market.includes('25')) return 'VOLATILITY 25';
                             if (market.includes('50')) return 'VOLATILITY 50';
