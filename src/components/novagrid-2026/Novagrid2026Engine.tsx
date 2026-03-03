@@ -291,14 +291,15 @@ export const Novagrid2026Engine: React.FC = () => {
                         ];
                         return newBuffer.slice(-TICK_WINDOW);
                     });
-
-                    setIsConnected(true);
                 }
             });
 
             if (!subscriptionId) {
                 throw new Error('Failed to get subscription ID from Deriv API');
             }
+
+            // Set connected immediately after successful subscription
+            setIsConnected(true);
 
             // Store unsubscribe function
             unsubscribeRef.current = () => {

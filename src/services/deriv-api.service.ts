@@ -188,8 +188,15 @@ class DerivAPIService {
         };
 
         console.log('🔔 Subscribing to ticks for symbol:', symbol);
+        console.log('🔌 API connection state:', api_base.api?.connection?.readyState);
+
         const response = await api_base.api?.send(request);
         console.log('📬 Subscription response:', response);
+
+        if (response?.error) {
+            console.error('❌ Subscription error:', response.error);
+            throw new Error(response.error.message || 'Failed to subscribe to ticks');
+        }
 
         if (response?.subscription) {
             const subscription = api_base.api?.onMessage().subscribe((message: any) => {
@@ -200,10 +207,10 @@ class DerivAPIService {
                         requestedSymbol: symbol,
                         matches: message.tick.symbol === symbol,
                         quote: message.tick.quote,
-                        epoch: message.tick.epoch
+                        epoch: message.tick.epoch,
                     });
                 }
-                
+
                 if (message.tick && message.tick.symbol === symbol) {
                     callback(message as TTicksSubscribeResponse);
                 }
@@ -216,6 +223,8 @@ class DerivAPIService {
 
             return response.subscription.id;
         }
+
+        throw new Error('No subscription ID received from API');
     }
 
     /**
