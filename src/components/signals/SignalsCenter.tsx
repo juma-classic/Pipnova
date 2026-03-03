@@ -1036,8 +1036,21 @@ export const SignalsCenter: React.FC = () => {
         ...digitHackerSignals,
     ];
 
+    // Deduplicate signals - keep only the most recent signal per market
+    const deduplicatedSignals = allSignals.reduce((acc, signal) => {
+        const existingSignal = acc.find(s => s.market === signal.market && s.status === 'ACTIVE');
+        if (!existingSignal) {
+            acc.push(signal);
+        } else if (signal.timestamp > existingSignal.timestamp) {
+            // Replace with newer signal
+            const index = acc.indexOf(existingSignal);
+            acc[index] = signal;
+        }
+        return acc;
+    }, [] as SignalsCenterSignal[]);
+
     // Filter signals with enhanced categorization (MOVED BEFORE useEffect that uses it)
-    const filteredSignals = allSignals.filter(signal => {
+    const filteredSignals = deduplicatedSignals.filter(signal => {
         // Enhanced source filtering with new categories
         if (activeSource !== 'all') {
             if (activeSource === 'exact_digit') {
