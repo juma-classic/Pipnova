@@ -192,6 +192,7 @@ export const SignalsCenter: React.FC = () => {
 
     const [showConnectionPool, setShowConnectionPool] = useState(false);
     const [showStakeModal, setShowStakeModal] = useState(false);
+    const [showRiskDisclaimer, setShowRiskDisclaimer] = useState(false);
 
     // Pattern analysis visibility state - hidden by default
     const [showPatternAnalysis, setShowPatternAnalysis] = useState(false);
@@ -3134,6 +3135,13 @@ export const SignalsCenter: React.FC = () => {
                 </div>
             </div>
 
+            {/* Risk Disclaimer Button */}
+            <div className='risk-disclaimer-footer'>
+                <button className='risk-disclaimer-btn' onClick={() => setShowRiskDisclaimer(true)}>
+                    ⚠️ Risk Disclaimer
+                </button>
+            </div>
+
             {/* Modal Components */}
             {showDashboard && <PerformanceDashboard onClose={() => setShowDashboard(false)} />}
 
@@ -3167,6 +3175,49 @@ export const SignalsCenter: React.FC = () => {
                 onClose={() => setShowStakeModal(false)}
                 onConfirm={handleStakeModalConfirm}
             />
+
+            {/* Risk Disclaimer Modal */}
+            {showRiskDisclaimer && (
+                <div className='modal-overlay' onClick={() => setShowRiskDisclaimer(false)}>
+                    <div className='modal-content risk-disclaimer-modal' onClick={e => e.stopPropagation()}>
+                        <div className='modal-header'>
+                            <h2>⚠️ Risk Disclaimer</h2>
+                            <button className='modal-close' onClick={() => setShowRiskDisclaimer(false)}>
+                                ×
+                            </button>
+                        </div>
+                        <div className='modal-body'>
+                            <p className='disclaimer-text'>
+                                Deriv offers complex derivatives, such as options and contracts for difference ("CFDs").
+                                These products may not be suitable for all clients, and trading them puts you at risk.
+                            </p>
+                            <p className='disclaimer-text'>
+                                Please make sure that you understand the following risks before trading Deriv products:
+                            </p>
+                            <ul className='disclaimer-list'>
+                                <li>
+                                    <strong>a)</strong> You may lose some or all of the money you invest in the trade
+                                </li>
+                                <li>
+                                    <strong>b)</strong> If your trade involves currency conversion, exchange rates will
+                                    affect your profit and loss
+                                </li>
+                            </ul>
+                            <p className='disclaimer-warning'>
+                                <strong>
+                                    You should never trade with borrowed money or with money that you cannot afford to
+                                    lose.
+                                </strong>
+                            </p>
+                        </div>
+                        <div className='modal-footer'>
+                            <button className='btn-acknowledge' onClick={() => setShowRiskDisclaimer(false)}>
+                                I Understand
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
