@@ -178,7 +178,6 @@ export const SignalsCenter: React.FC = () => {
     const [showRiskSettings, setShowRiskSettings] = useState(false);
     const [showAutoTradeSettings, setShowAutoTradeSettings] = useState(false);
     const [autoTradeEnabled, setAutoTradeEnabled] = useState(signalTradingService.getAutoTradeConfig().enabled);
-    const [, forceUpdate] = useState({});
     const [tradeRuns, setTradeRuns] = useState<Record<string, number>>({});
     const [martingalePredictions, setMartingalePredictions] = useState<Record<string, string>>({});
     const [autoLoopRuns, setAutoLoopRuns] = useState<Record<string, number>>({});
@@ -440,13 +439,7 @@ export const SignalsCenter: React.FC = () => {
     }, [riskMode]);
 
     // Update trades list when new trades complete
-    useEffect(() => {
-        const updateInterval = setInterval(() => {
-            forceUpdate({});
-        }, 1000);
-
-        return () => clearInterval(updateInterval);
-    }, []);
+    // Removed force update - let React handle updates naturally through state changes
 
     // Countdown timer for signal validity
     useEffect(() => {
@@ -3011,22 +3004,25 @@ export const SignalsCenter: React.FC = () => {
                                 };
                             }
 
-                            // Fallback: use random from expanded ranges
+                            // Fallback: Use signal ID as seed for deterministic "random" digits
+                            // This ensures the same signal always gets the same digits (no changing on render)
+                            const seed = signal.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+
                             if (signal.type.startsWith('OVER')) {
                                 // OVER: 1st digit [1,2,3,4], 2nd digit [2,3,4,5,6]
                                 const allowedFirst = [1, 2, 3, 4];
                                 const allowedSecond = [2, 3, 4, 5, 6];
                                 return {
-                                    firstDigit: allowedFirst[Math.floor(Math.random() * allowedFirst.length)],
-                                    secondDigit: allowedSecond[Math.floor(Math.random() * allowedSecond.length)],
+                                    firstDigit: allowedFirst[seed % allowedFirst.length],
+                                    secondDigit: allowedSecond[(seed * 7) % allowedSecond.length], // Multiply by prime for variety
                                 };
                             } else if (signal.type.startsWith('UNDER')) {
                                 // UNDER: 1st digit [8,7,6], 2nd digit [7,6,5,4]
                                 const allowedFirst = [8, 7, 6];
                                 const allowedSecond = [7, 6, 5, 4];
                                 return {
-                                    firstDigit: allowedFirst[Math.floor(Math.random() * allowedFirst.length)],
-                                    secondDigit: allowedSecond[Math.floor(Math.random() * allowedSecond.length)],
+                                    firstDigit: allowedFirst[seed % allowedFirst.length],
+                                    secondDigit: allowedSecond[(seed * 7) % allowedSecond.length], // Multiply by prime for variety
                                 };
                             }
 
