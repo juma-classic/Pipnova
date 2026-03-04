@@ -5742,7 +5742,7 @@
                 <field name="TEXT"></field>
               </shadow>
               <block type="text" id="?5#n=2(0x;3,DsB(aipH">
-                <field name="TEXT">Analysing Results From The Previous </field>
+                <field name="TEXT">ANALYSING MARKET</field>
               </block>
             </value>
             <next>
@@ -5810,7 +5810,7 @@
                             <field name="TEXT"></field>
                           </shadow>
                           <block type="text" id="_3s5l;|zjKmI%zU!M9.N">
-                            <field name="TEXT">Over 0  is  </field>
+                            <field name="TEXT">ANALYSING MARKET</field>
                           </block>
                         </value>
                         <next>
@@ -5971,7 +5971,7 @@
                                         <field name="TEXT"></field>
                                       </shadow>
                                       <block type="text" id="(MG1=0l|/}0vR!vtQTl^">
-                                        <field name="TEXT">Over 1  is  </field>
+                                        <field name="TEXT">ANALYSING MARKET</field>
                                       </block>
                                     </value>
                                     <next>
@@ -5999,7 +5999,7 @@
                                                 <field name="TEXT"></field>
                                               </shadow>
                                               <block type="text" id="tSiv)0[3l=9qp)O1Ky4%">
-                                                <field name="TEXT">% &amp;  </field>
+                                                <field name="TEXT"></field>
                                               </block>
                                             </value>
                                             <next>
@@ -6009,7 +6009,7 @@
                                                     <field name="TEXT"></field>
                                                   </shadow>
                                                   <block type="text" id="mkvk}eVIh*dC$OUZZ,TS">
-                                                    <field name="TEXT">Under is  </field>
+                                                    <field name="TEXT">ANALYSING MARKET</field>
                                                   </block>
                                                 </value>
                                                 <next>
@@ -6095,85 +6095,9 @@
                                             <field name="TEXT"></field>
                                           </shadow>
                                           <block type="text" id="D2b.D/@U$#efvsNaka#M">
-                                            <field name="TEXT">Over 2  is  </field>
+                                            <field name="TEXT">ANALYSING MARKET</field>
                                           </block>
                                         </value>
-                                        <next>
-                                          <block type="text_statement" id="0dV5W}pV-ZikWpz!rm,R">
-                                            <value name="TEXT">
-                                              <shadow type="text" id="jirUa:kV0(+B-b0KKnOH">
-                                                <field name="TEXT"></field>
-                                              </shadow>
-                                              <block type="math_round" id="nZA3aH=+xn!OM%@*Wn$s">
-                                                <field name="OP">ROUND</field>
-                                                <value name="NUM">
-                                                  <shadow type="math_number" id="S)+sn=DEU`Wg5m)xybjo">
-                                                    <field name="NUM">3.1</field>
-                                                  </shadow>
-                                                  <block type="variables_get" id="dt.9JXR*_IGGG?kL-]Ui">
-                                                    <field name="VAR" id="L1?vwZ.{(zWm|f9QSM?V">Over 2%</field>
-                                                  </block>
-                                                </value>
-                                              </block>
-                                            </value>
-                                            <next>
-                                              <block type="text_statement" id="qhbQ,2rEXM^3ojGE/EOo">
-                                                <value name="TEXT">
-                                                  <shadow type="text" id="*qtajO$2v0|v9IX{FRa?">
-                                                    <field name="TEXT"></field>
-                                                  </shadow>
-                                                  <block type="text" id="i}(,aaE5O?3d[1XE#r~j">
-                                                    <field name="TEXT">% &amp;  </field>
-                                                  </block>
-                                                </value>
-                                                <next>
-                                                  <block type="text_statement" id="_`Sgyvu4o1w,[U^R:x2~">
-                                                    <value name="TEXT">
-                                                      <shadow type="text" id="]^g*3N^,Tg*xUaz=KIV:">
-                                                        <field name="TEXT"></field>
-                                                      </shadow>
-                                                      <block type="text" id="N8eKV7Y2#NS^Mu}i|jcy">
-                                                        <field name="TEXT">Under is  </field>
-                                                      </block>
-                                                    </value>
-                                                    <next>
-                                                      <block type="text_statement" id="o;ROE*1_c+?UQYun2Aq)">
-                                                        <value name="TEXT">
-                                                          <shadow type="text" id="k8u6#?VW?YA/vi?#%74r">
-                                                            <field name="TEXT"></field>
-                                                          </shadow>
-                                                          <block type="math_round" id="f5`C{~?Um!@rKaB4Kfld">
-                                                            <field name="OP">ROUND</field>
-                                                            <value name="NUM">
-                                                              <shadow type="math_number" id="TP,w7_b(dMjGN38:a=F1">
-                                                                <field name="NUM">3.1</field>
-                                                              </shadow>
-                                                              <block type="variables_get" id="q:p0k?)pE[#f6A.Od-[g">
-                                                                <field name="VAR" id="[z5Aw96g9Z,b6*).5daY">Under 2%</field>
-                                                              </block>
-                                                            </value>
-                                                          </block>
-                                                        </value>
-                                                        <next>
-                                                          <block type="text_statement" id="{%]Thgdh8u(:WJBojvNB">
-                                                            <value name="TEXT">
-                                                              <shadow type="text" id="V`YDtl%iraxi^-y/B)#K">
-                                                                <field name="TEXT"></field>
-                                                              </shadow>
-                                                              <block type="text" id="sSpVtubnK$)sPu!BT0W)">
-                                                                <field name="TEXT">% </field>
-                                                              </block>
-                                                            </value>
-                                                          </block>
-                                                        </next>
-                                                      </block>
-                                                    </next>
-                                                  </block>
-                                                </next>
-                                              </block>
-                                            </next>
-                                          </block>
-                                        </next>
                                       </block>
                                     </statement>
                                     <next>
@@ -6219,7 +6143,7 @@
                                                 <field name="TEXT"></field>
                                               </shadow>
                                               <block type="text" id="D2Ge#0%We@kpb3ndHrwm">
-                                                <field name="TEXT">Over 3  is  </field>
+                                                <field name="TEXT">ANALYSING MARKET</field>
                                               </block>
                                             </value>
                                             <next>
@@ -6247,7 +6171,7 @@
                                                         <field name="TEXT"></field>
                                                       </shadow>
                                                       <block type="text" id="el7oC5?*Up@4O0^+,^%^">
-                                                        <field name="TEXT">% &amp;  </field>
+                                                        <field name="TEXT"></field>
                                                       </block>
                                                     </value>
                                                     <next>
@@ -6257,7 +6181,7 @@
                                                             <field name="TEXT"></field>
                                                           </shadow>
                                                           <block type="text" id="`Uruwn*DEu5Q$pnp@2c!">
-                                                            <field name="TEXT">Under is  </field>
+                                                            <field name="TEXT">ANALYSING MARKET</field>
                                                           </block>
                                                         </value>
                                                         <next>
@@ -6343,7 +6267,7 @@
                                                     <field name="TEXT"></field>
                                                   </shadow>
                                                   <block type="text" id="1Pk$e?=8vxz;vx]}=,=V">
-                                                    <field name="TEXT">Over 4  is  </field>
+                                                    <field name="TEXT">ANALYSING MARKET</field>
                                                   </block>
                                                 </value>
                                                 <next>
@@ -6371,7 +6295,7 @@
                                                             <field name="TEXT"></field>
                                                           </shadow>
                                                           <block type="text" id="-_3U4%?5Dn`~0I5;eXH(">
-                                                            <field name="TEXT">% &amp;  </field>
+                                                            <field name="TEXT"></field>
                                                           </block>
                                                         </value>
                                                         <next>
@@ -6381,7 +6305,7 @@
                                                                 <field name="TEXT"></field>
                                                               </shadow>
                                                               <block type="text" id="{e0gIi=_/4?-ZUO=6iV2">
-                                                                <field name="TEXT">Under is  </field>
+                                                                <field name="TEXT">ANALYSING MARKET</field>
                                                               </block>
                                                             </value>
                                                             <next>
@@ -6467,7 +6391,7 @@
                                                         <field name="TEXT"></field>
                                                       </shadow>
                                                       <block type="text" id="~NhRDCAMA5ryBwAZ#WQ/">
-                                                        <field name="TEXT">Over 5  is  </field>
+                                                        <field name="TEXT">ANALYSING MARKET</field>
                                                       </block>
                                                     </value>
                                                     <next>
@@ -6495,7 +6419,7 @@
                                                                 <field name="TEXT"></field>
                                                               </shadow>
                                                               <block type="text" id="jeu1?leOVaotN7F;:-0A">
-                                                                <field name="TEXT">% &amp;  </field>
+                                                                <field name="TEXT"></field>
                                                               </block>
                                                             </value>
                                                             <next>
@@ -6505,7 +6429,7 @@
                                                                     <field name="TEXT"></field>
                                                                   </shadow>
                                                                   <block type="text" id="nSm[dv,;%EFk95EjybA+">
-                                                                    <field name="TEXT">Under is  </field>
+                                                                    <field name="TEXT">ANALYSING MARKET</field>
                                                                   </block>
                                                                 </value>
                                                                 <next>
@@ -6591,7 +6515,7 @@
                                                             <field name="TEXT"></field>
                                                           </shadow>
                                                           <block type="text" id="+6@`.%bZFCPgGfK[S(QF">
-                                                            <field name="TEXT">Over 6  is  </field>
+                                                            <field name="TEXT">ANALYSING MARKET</field>
                                                           </block>
                                                         </value>
                                                         <next>
@@ -6619,7 +6543,7 @@
                                                                     <field name="TEXT"></field>
                                                                   </shadow>
                                                                   <block type="text" id="x%$sPvGFQ/S=:bxQ/I/B">
-                                                                    <field name="TEXT">% &amp;  </field>
+                                                                    <field name="TEXT"></field>
                                                                   </block>
                                                                 </value>
                                                                 <next>
@@ -6629,7 +6553,7 @@
                                                                         <field name="TEXT"></field>
                                                                       </shadow>
                                                                       <block type="text" id="c7$eQX,eS~n8=@ow01g1">
-                                                                        <field name="TEXT">Under is  </field>
+                                                                        <field name="TEXT">ANALYSING MARKET</field>
                                                                       </block>
                                                                     </value>
                                                                     <next>
@@ -6715,7 +6639,7 @@
                                                                 <field name="TEXT"></field>
                                                               </shadow>
                                                               <block type="text" id="fmNFLLtvI0cKX-Pg]ZYi">
-                                                                <field name="TEXT">Over 7  is </field>
+                                                                <field name="TEXT">ANALYSING MARKET</field>
                                                               </block>
                                                             </value>
                                                             <next>
@@ -6743,7 +6667,7 @@
                                                                         <field name="TEXT"></field>
                                                                       </shadow>
                                                                       <block type="text" id="Hbd=3[P#[IU,*6q@5830">
-                                                                        <field name="TEXT">% &amp;  </field>
+                                                                        <field name="TEXT"></field>
                                                                       </block>
                                                                     </value>
                                                                     <next>
@@ -6753,7 +6677,7 @@
                                                                             <field name="TEXT"></field>
                                                                           </shadow>
                                                                           <block type="text" id="(].7[sQu^;;nh9?KyjdJ">
-                                                                            <field name="TEXT">Under is  </field>
+                                                                            <field name="TEXT">ANALYSING MARKET</field>
                                                                           </block>
                                                                         </value>
                                                                         <next>
@@ -6839,7 +6763,7 @@
                                                                     <field name="TEXT"></field>
                                                                   </shadow>
                                                                   <block type="text" id="c;b4bCOD0fKMq^F_#g.@">
-                                                                    <field name="TEXT">Over 8  is  </field>
+                                                                    <field name="TEXT">ANALYSING MARKET</field>
                                                                   </block>
                                                                 </value>
                                                                 <next>
@@ -6867,7 +6791,7 @@
                                                                             <field name="TEXT"></field>
                                                                           </shadow>
                                                                           <block type="text" id="Mibgr?]|$gm;phk6X/24">
-                                                                            <field name="TEXT">% &amp;  </field>
+                                                                            <field name="TEXT"></field>
                                                                           </block>
                                                                         </value>
                                                                         <next>
@@ -6877,7 +6801,7 @@
                                                                                 <field name="TEXT"></field>
                                                                               </shadow>
                                                                               <block type="text" id="HzZ,v8qV3-;[]b}zi`ZI">
-                                                                                <field name="TEXT">Under is  </field>
+                                                                                <field name="TEXT">ANALYSING MARKET</field>
                                                                               </block>
                                                                             </value>
                                                                             <next>
