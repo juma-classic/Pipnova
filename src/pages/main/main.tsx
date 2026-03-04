@@ -8,7 +8,6 @@ import Dialog from '@/components/shared_ui/dialog';
 import MobileWrapper from '@/components/shared_ui/mobile-wrapper';
 import Tabs from '@/components/shared_ui/tabs/tabs';
 import { ProtectedSignalsCenter } from '@/components/signals/ProtectedSignalsCenter';
-import { Novagrid2026Engine } from '@/components/novagrid-2026';
 import TradingViewModal from '@/components/trading-view-chart/trading-view-modal';
 import { DBOT_TABS } from '@/constants/bot-contents';
 import { api_base, updateWorkspaceName } from '@/external/bot-skeleton';
@@ -715,136 +714,6 @@ const SignalsIcon = () => (
                 }
                 .signals-nav-icon line { 
                     animation: beamPulseSig 1.5s ease-in-out infinite; 
-                }
-            `}
-        </style>
-    </svg>
-);
-
-const NovagridIcon = () => (
-    <svg
-        width='40.56'
-        height='40.56'
-        viewBox='0 0 24 24'
-        fill='none'
-        xmlns='http://www.w3.org/2000/svg'
-        className='novagrid-nav-icon'
-    >
-        <defs>
-            <linearGradient id='novagridGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
-                <stop offset='0%' stopColor='#fbbf24' />
-                <stop offset='50%' stopColor='#f59e0b' />
-                <stop offset='100%' stopColor='#ea580c' />
-            </linearGradient>
-            <radialGradient id='novagridRadial' cx='50%' cy='50%'>
-                <stop offset='0%' stopColor='#fbbf24' stopOpacity='1' />
-                <stop offset='100%' stopColor='#ea580c' stopOpacity='0.3' />
-            </radialGradient>
-            <filter id='novagridGlow'>
-                <feGaussianBlur stdDeviation='3' result='coloredBlur' />
-                <feMerge>
-                    <feMergeNode in='coloredBlur' />
-                    <feMergeNode in='SourceGraphic' />
-                </feMerge>
-            </filter>
-        </defs>
-
-        {/* Central core - pulsing energy */}
-        <circle cx='12' cy='12' r='4' fill='url(#novagridRadial)' filter='url(#novagridGlow)' />
-        <circle cx='12' cy='12' r='2.5' fill='#fbbf24' />
-
-        {/* Grid lines - forming a network */}
-        <line x1='12' y1='2' x2='12' y2='8' stroke='url(#novagridGrad)' strokeWidth='2' strokeLinecap='round' />
-        <line x1='12' y1='16' x2='12' y2='22' stroke='url(#novagridGrad)' strokeWidth='2' strokeLinecap='round' />
-        <line x1='2' y1='12' x2='8' y2='12' stroke='url(#novagridGrad)' strokeWidth='2' strokeLinecap='round' />
-        <line x1='16' y1='12' x2='22' y2='12' stroke='url(#novagridGrad)' strokeWidth='2' strokeLinecap='round' />
-
-        {/* Diagonal connections */}
-        <line
-            x1='5'
-            y1='5'
-            x2='9'
-            y2='9'
-            stroke='url(#novagridGrad)'
-            strokeWidth='1.5'
-            strokeLinecap='round'
-            opacity='0.7'
-        />
-        <line
-            x1='19'
-            y1='5'
-            x2='15'
-            y2='9'
-            stroke='url(#novagridGrad)'
-            strokeWidth='1.5'
-            strokeLinecap='round'
-            opacity='0.7'
-        />
-        <line
-            x1='5'
-            y1='19'
-            x2='9'
-            y2='15'
-            stroke='url(#novagridGrad)'
-            strokeWidth='1.5'
-            strokeLinecap='round'
-            opacity='0.7'
-        />
-        <line
-            x1='19'
-            y1='19'
-            x2='15'
-            y2='15'
-            stroke='url(#novagridGrad)'
-            strokeWidth='1.5'
-            strokeLinecap='round'
-            opacity='0.7'
-        />
-
-        {/* Corner nodes */}
-        <circle cx='12' cy='2' r='1.5' fill='#fbbf24' filter='url(#novagridGlow)' />
-        <circle cx='12' cy='22' r='1.5' fill='#fbbf24' filter='url(#novagridGlow)' />
-        <circle cx='2' cy='12' r='1.5' fill='#fbbf24' filter='url(#novagridGlow)' />
-        <circle cx='22' cy='12' r='1.5' fill='#fbbf24' filter='url(#novagridGlow)' />
-
-        {/* Rotating ring */}
-        <circle
-            cx='12'
-            cy='12'
-            r='7'
-            stroke='url(#novagridGrad)'
-            strokeWidth='1'
-            fill='none'
-            opacity='0.5'
-            strokeDasharray='4 4'
-        />
-
-        <style>
-            {`
-                @keyframes novagridCorePulse {
-                    0%, 100% { r: 4; opacity: 1; }
-                    50% { r: 5; opacity: 0.7; }
-                }
-                @keyframes novagridRingRotate {
-                    from { transform: rotate(0deg); transform-origin: center; }
-                    to { transform: rotate(360deg); transform-origin: center; }
-                }
-                @keyframes novagridNodePulse {
-                    0%, 100% { r: 1.5; opacity: 1; }
-                    50% { r: 2; opacity: 0.6; }
-                }
-                
-                .novagrid-nav-icon circle:nth-of-type(1) {
-                    animation: novagridCorePulse 2s ease-in-out infinite;
-                }
-                .novagrid-nav-icon circle:nth-of-type(3),
-                .novagrid-nav-icon circle:nth-of-type(4),
-                .novagrid-nav-icon circle:nth-of-type(5),
-                .novagrid-nav-icon circle:nth-of-type(6) {
-                    animation: novagridNodePulse 1.5s ease-in-out infinite;
-                }
-                .novagrid-nav-icon circle:nth-of-type(7) {
-                    animation: novagridRingRotate 8s linear infinite;
                 }
             `}
         </style>
@@ -2640,6 +2509,19 @@ const AppWrapper = observer(() => {
                         top
                     >
                         {/* Note: Tab order matches DBOT_TABS indices in bot-contents.ts */}
+                        {/* NOVAGRID 2026 TAB - Premium signals feature */}
+                        <div
+                            label={
+                                <>
+                                    <SignalsIcon />
+                                    <Localize i18n_default_text='NOVAGRID 2026' />
+                                    <span className='tab-badge'>10</span>
+                                </>
+                            }
+                            id='id-signals'
+                        >
+                            <ProtectedSignalsCenter />
+                        </div>
                         {/* 0. FREE BOTS TAB - Will be moved here from line 2557 */}
                         {/* 0. BOT BUILDER TAB */}
                         <div
@@ -3261,32 +3143,6 @@ const AppWrapper = observer(() => {
                             </div>
                         </div>
                         {/* ZEUS ANALYSIS TAB - MOVED TO ANALYSIS TOOL */}
-                        {/* SIGNALS TAB */}
-                        <div
-                            label={
-                                <>
-                                    <SignalsIcon />
-                                    <Localize i18n_default_text='Signals' />
-                                    <span className='tab-badge'>10</span>
-                                </>
-                            }
-                            id='id-signals'
-                        >
-                            <ProtectedSignalsCenter />
-                        </div>
-                        {/* NOVAGRID 2026 TAB */}
-                        <div
-                            label={
-                                <>
-                                    <NovagridIcon />
-                                    <Localize i18n_default_text='Novagrid 2026' />
-                                    <span className='tab-badge tab-badge--premium'>PRO</span>
-                                </>
-                            }
-                            id='id-novagrid2026'
-                        >
-                            <Novagrid2026Engine />
-                        </div>
                         {/* DTRADER TAB */}
                         <div
                             label={
