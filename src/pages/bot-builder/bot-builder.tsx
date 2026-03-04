@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { observer } from 'mobx-react-lite';
 import { botNotification } from '@/components/bot-notification/bot-notification';
 import { notification_message } from '@/components/bot-notification/bot-notification-utils';
-import { SignalOverlay } from '@/components/signal-overlay';
 import { useStore } from '@/hooks/useStore';
 import { localize } from '@deriv-com/translations';
 import { useDevice } from '@deriv-com/ui';
@@ -108,7 +107,6 @@ const BotBuilder = observer(() => {
 
     return (
         <>
-            {active_tab === 1 && !is_preview_on_popup && <SignalOverlay />}
             <div
                 className={classNames('bot-builder', {
                     'bot-builder--active': active_tab === 1 && !is_preview_on_popup,
