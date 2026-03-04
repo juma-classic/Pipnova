@@ -1,0 +1,283 @@
+// Global Risk Disclaimer Button - Fixed at bottom right
+.global-risk-disclaimer-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 0.6rem 1.2rem;
+    background: #ef4444;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 12px rgb(239 68 68 / 30%);
+    z-index: 9998; // Below modals but above content
+    white-space: nowrap;
+
+    &:hover {
+        background: #dc2626;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgb(239 68 68 / 40%);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    // Mobile: Smaller button
+    @media (width <= 768px) {
+        bottom: 15px;
+        right: 15px;
+        padding: 0.5rem 1rem;
+        font-size: 0.8rem;
+    }
+
+    // Extra small screens: Icon only
+    @media (width <= 480px) {
+        padding: 0.6rem;
+        font-size: 1.2rem;
+        border-radius: 50%;
+        width: 48px;
+        height: 48px;
+        justify-content: center;
+
+        // Hide text, show only icon
+        &:after {
+            content: none;
+        }
+    }
+}
+
+// Modal Overlay
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgb(0 0 0 / 50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    padding: 1rem;
+    animation: fade-in 0.2s ease-out;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+// Modal Content
+.modal-content {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 20px 60px rgb(0 0 0 / 30%);
+    animation: slide-up 0.3s ease-out;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes slide-up {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+// Risk Disclaimer Modal
+.risk-disclaimer-modal {
+    max-width: 600px;
+    width: 90%;
+
+    .modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h2 {
+            margin: 0;
+            font-size: 1.5rem;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: #64748b;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+            line-height: 1;
+
+            &:hover {
+                background: #f1f5f9;
+                color: #1e293b;
+            }
+        }
+    }
+
+    .modal-body {
+        padding: 1.5rem;
+        max-height: 60vh;
+        overflow-y: auto;
+
+        // Custom scrollbar
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 3px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 3px;
+
+            &:hover {
+                background: #94a3b8;
+            }
+        }
+
+        .disclaimer-text {
+            color: #475569;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .disclaimer-list {
+            list-style: none;
+            padding: 0;
+            margin: 1rem 0;
+
+            li {
+                color: #475569;
+                font-size: 0.95rem;
+                line-height: 1.6;
+                margin-bottom: 0.75rem;
+                padding-left: 1.5rem;
+                position: relative;
+
+                strong {
+                    color: #ef4444;
+                    margin-right: 0.5rem;
+                }
+
+                &:before {
+                    content: '•';
+                    position: absolute;
+                    left: 0;
+                    color: #ef4444;
+                    font-weight: bold;
+                }
+            }
+        }
+
+        .disclaimer-warning {
+            background: linear-gradient(135deg, rgb(254 202 202 / 30%) 0%, rgb(252 165 165 / 30%) 100%);
+            border-left: 4px solid #ef4444;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
+
+            strong {
+                color: #991b1b;
+                font-size: 0.95rem;
+                line-height: 1.6;
+            }
+        }
+    }
+
+    .modal-footer {
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e2e8f0;
+        display: flex;
+        justify-content: center;
+
+        .btn-acknowledge {
+            padding: 0.75rem 2rem;
+            background: linear-gradient(135deg, #0d9488 0%, #14b8a6 100%);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+
+            &:hover {
+                background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgb(13 148 136 / 25%);
+            }
+
+            &:active {
+                transform: translateY(0);
+            }
+        }
+    }
+}
+
+// Mobile responsive
+@media (width <= 768px) {
+    .risk-disclaimer-modal {
+        .modal-header {
+            padding: 1rem;
+
+            h2 {
+                font-size: 1.25rem;
+            }
+        }
+
+        .modal-body {
+            padding: 1rem;
+
+            .disclaimer-text,
+            .disclaimer-list li {
+                font-size: 0.9rem;
+            }
+
+            .disclaimer-warning strong {
+                font-size: 0.9rem;
+            }
+        }
+
+        .modal-footer {
+            padding: 0.75rem 1rem;
+
+            .btn-acknowledge {
+                font-size: 0.9rem;
+                padding: 0.65rem 1.5rem;
+            }
+        }
+    }
+}

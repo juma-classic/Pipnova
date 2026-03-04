@@ -8,6 +8,7 @@ import { requestOidcAuthentication } from '@deriv-com/auth-client';
 import { useDevice } from '@deriv-com/ui';
 import { FakeRealModeIndicator } from '../fake-real-account-toggle/FakeRealModeIndicator';
 import { FloatingSignalButton } from '../floating-signal-button/FloatingSignalButton';
+import RiskDisclaimer from '../risk-disclaimer/RiskDisclaimer';
 import { crypto_currencies_display_order, fiat_currencies_display_order } from '../shared';
 import Footer from './footer';
 import AppHeader from './header';
@@ -95,6 +96,7 @@ const Layout = () => {
             {!isCallbackPage && <AppHeader />}
             <FakeRealModeIndicator />
             <FloatingSignalButton />
+            <RiskDisclaimer />
             <Body>
                 <Outlet />
             </Body>
