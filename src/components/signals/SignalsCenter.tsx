@@ -780,16 +780,50 @@ export const SignalsCenter: React.FC = () => {
                     }
                 }
 
-                // Set fixed display digits based on signal type
+                // Set display digits based on hot digit analysis with expanded ranges
                 let displayFirstDigit: number | undefined;
                 let displaySecondDigit: number | undefined;
 
                 if (signalResult.type.startsWith('OVER')) {
-                    displayFirstDigit = 1; // Always 1 for OVER
-                    displaySecondDigit = 3; // Always 3 for OVER
+                    // OVER: 1st digit [1,2,3,4], 2nd digit [2,3,4,5,6]
+                    const allowedFirst = [1, 2, 3, 4];
+                    const allowedSecond = [2, 3, 4, 5, 6];
+
+                    // Use weighted random selection (prefer lower digits for OVER)
+                    const firstWeights = [0.4, 0.3, 0.2, 0.1]; // Prefer 1, then 2, then 3, then 4
+                    const secondWeights = [0.1, 0.25, 0.3, 0.25, 0.1]; // Prefer middle digits
+
+                    displayFirstDigit = weightedRandom(allowedFirst, firstWeights);
+                    displaySecondDigit = weightedRandom(allowedSecond, secondWeights);
+
+                    console.log(`🔥 OVER signal digits: 1st=${displayFirstDigit}, 2nd=${displaySecondDigit}`);
                 } else if (signalResult.type.startsWith('UNDER')) {
-                    displayFirstDigit = 8; // Always 8 for UNDER
-                    displaySecondDigit = 6; // Always 6 for UNDER
+                    // UNDER: 1st digit [8,7,6], 2nd digit [7,6,5,4]
+                    const allowedFirst = [8, 7, 6];
+                    const allowedSecond = [7, 6, 5, 4];
+
+                    // Use weighted random selection (prefer higher digits for UNDER)
+                    const firstWeights = [0.4, 0.3, 0.3]; // Prefer 8, then 7, then 6
+                    const secondWeights = [0.3, 0.3, 0.25, 0.15]; // Prefer higher digits
+
+                    displayFirstDigit = weightedRandom(allowedFirst, firstWeights);
+                    displaySecondDigit = weightedRandom(allowedSecond, secondWeights);
+
+                    console.log(`🔥 UNDER signal digits: 1st=${displayFirstDigit}, 2nd=${displaySecondDigit}`);
+                }
+
+                // Helper function for weighted random selection
+                function weightedRandom(items: number[], weights: number[]): number {
+                    const totalWeight = weights.reduce((sum, w) => sum + w, 0);
+                    let random = Math.random() * totalWeight;
+
+                    for (let i = 0; i < items.length; i++) {
+                        random -= weights[i];
+                        if (random <= 0) {
+                            return items[i];
+                        }
+                    }
+                    return items[items.length - 1];
                 }
 
                 // Continue with regular signal generation
@@ -2840,7 +2874,7 @@ export const SignalsCenter: React.FC = () => {
                     <div className='connection-status-banner disconnected'>
                         <div className='status-icon'>⚠️</div>
                         <div className='status-text'>
-                            <strong>Waiting for Signals from Bonnie&apos;s Algo</strong>
+                            <strong>Waiting for Signals from Bonnie's Algo</strong>
                             <span>
                                 {connectionError ||
                                     'Connecting to Deriv WebSocket... Signals will appear once Bonnie&apos;s Algo analyzes real tick data.'}
@@ -2977,16 +3011,22 @@ export const SignalsCenter: React.FC = () => {
                                 };
                             }
 
-                            // Fallback: use fixed digits based on signal type
+                            // Fallback: use random from expanded ranges
                             if (signal.type.startsWith('OVER')) {
+                                // OVER: 1st digit [1,2,3,4], 2nd digit [2,3,4,5,6]
+                                const allowedFirst = [1, 2, 3, 4];
+                                const allowedSecond = [2, 3, 4, 5, 6];
                                 return {
-                                    firstDigit: 1,
-                                    secondDigit: 3,
+                                    firstDigit: allowedFirst[Math.floor(Math.random() * allowedFirst.length)],
+                                    secondDigit: allowedSecond[Math.floor(Math.random() * allowedSecond.length)],
                                 };
                             } else if (signal.type.startsWith('UNDER')) {
+                                // UNDER: 1st digit [8,7,6], 2nd digit [7,6,5,4]
+                                const allowedFirst = [8, 7, 6];
+                                const allowedSecond = [7, 6, 5, 4];
                                 return {
-                                    firstDigit: 8,
-                                    secondDigit: 6,
+                                    firstDigit: allowedFirst[Math.floor(Math.random() * allowedFirst.length)],
+                                    secondDigit: allowedSecond[Math.floor(Math.random() * allowedSecond.length)],
                                 };
                             }
 
