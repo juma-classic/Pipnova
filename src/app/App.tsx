@@ -28,6 +28,7 @@ if (process.env.NODE_ENV === 'development') {
 
 const Layout = lazy(() => import('../components/layout'));
 const AppRoot = lazy(() => import('./app-root'));
+const LandingPage = lazy(() => import('../pages/LandingPage').then(m => ({ default: m.LandingPage })));
 
 // Phase 1 Demo Pages
 const LiveSignalsDemo = lazy(() => import('../pages/live-signals-demo').then(m => ({ default: m.LiveSignalsDemo })));
@@ -80,69 +81,77 @@ const i18nInstance = initializeI18n({
 
 const router = createBrowserRouter(
     createRoutesFromElements(
-        <Route
-            path='/'
-            element={
-                <Suspense
-                    fallback={<ChunkLoader message={localize('Welcome to NOVAPRIME connecting to the server...')} />}
-                >
-                    <TranslationProvider defaultLang='EN' i18nInstance={i18nInstance}>
-                        <StoreProvider>
-                            <RoutePromptDialog />
-                            <CoreStoreProvider>
-                                <Layout />
-                            </CoreStoreProvider>
-                        </StoreProvider>
-                    </TranslationProvider>
-                </Suspense>
-            }
-        >
-            <Route index element={<AppRoot />} />
-            <Route path='endpoint' element={<Endpoint />} />
-            <Route path='callback' element={<CallbackPage />} />
+        <>
+            {/* Landing Page - No Layout */}
+            <Route path='/' element={<LandingPage />} />
 
-            {/* Advanced Algo - Main Production Page */}
-            <Route path='advanced-algo' element={<AdvancedAlgo />} />
+            {/* Main App with Layout */}
+            <Route
+                path='/dashboard'
+                element={
+                    <Suspense
+                        fallback={
+                            <ChunkLoader message={localize('Welcome to NOVAPRIME connecting to the server...')} />
+                        }
+                    >
+                        <TranslationProvider defaultLang='EN' i18nInstance={i18nInstance}>
+                            <StoreProvider>
+                                <RoutePromptDialog />
+                                <CoreStoreProvider>
+                                    <Layout />
+                                </CoreStoreProvider>
+                            </StoreProvider>
+                        </TranslationProvider>
+                    </Suspense>
+                }
+            >
+                <Route index element={<AppRoot />} />
+                <Route path='endpoint' element={<Endpoint />} />
+                <Route path='callback' element={<CallbackPage />} />
 
-            {/* ElvisZone - Matches/Differs Analyzer */}
-            <Route path='elvis-zone' element={<ElvisZone />} />
+                {/* Advanced Algo - Main Production Page */}
+                <Route path='advanced-algo' element={<AdvancedAlgo />} />
 
-            {/* Accumulator Trading Page */}
-            <Route path='accumulator' element={<Accumulator />} />
+                {/* ElvisZone - Matches/Differs Analyzer */}
+                <Route path='elvis-zone' element={<ElvisZone />} />
 
-            {/* Tick Speed Trading Page */}
-            <Route path='tick-speed-trading' element={<TickSpeedTrading />} />
+                {/* Accumulator Trading Page */}
+                <Route path='accumulator' element={<Accumulator />} />
 
-            {/* Digit Hacker AI Page */}
-            <Route path='digit-hacker' element={<DigitHackerPage />} />
+                {/* Tick Speed Trading Page */}
+                <Route path='tick-speed-trading' element={<TickSpeedTrading />} />
 
-            {/* Signal Savvy Page */}
-            <Route path='signal-savvy' element={<SignalSavvyPage />} />
+                {/* Digit Hacker AI Page */}
+                <Route path='digit-hacker' element={<DigitHackerPage />} />
 
-            {/* Patel Signals Page */}
-            <Route path='patel-signals' element={<PatelSignalsPage />} />
+                {/* Signal Savvy Page */}
+                <Route path='signal-savvy' element={<SignalSavvyPage />} />
 
-            {/* Patel Signal Center Page */}
-            <Route path='patel-signal-center' element={<PatelSignalCenterPage />} />
+                {/* Patel Signals Page */}
+                <Route path='patel-signals' element={<PatelSignalsPage />} />
 
-            {/* Speed Bot Page */}
-            <Route path='speed-bot' element={<SpeedBotPage />} />
+                {/* Patel Signal Center Page */}
+                <Route path='patel-signal-center' element={<PatelSignalCenterPage />} />
 
-            {/* xDTrader Page */}
-            <Route path='xdtrader' element={<XDTraderPage />} />
+                {/* Speed Bot Page */}
+                <Route path='speed-bot' element={<SpeedBotPage />} />
 
-            {/* Nova Analysis Page */}
-            <Route path='nova-analysis' element={<NovaAnalysisPage />} />
+                {/* xDTrader Page */}
+                <Route path='xdtrader' element={<XDTraderPage />} />
 
-            {/* Copy Trading Page */}
-            <Route path='copy-trading' element={<CopyTradingPage />} />
+                {/* Nova Analysis Page */}
+                <Route path='nova-analysis' element={<NovaAnalysisPage />} />
 
-            {/* Phase 1 Demo Routes */}
-            <Route path='live-signals-demo' element={<LiveSignalsDemo />} />
-            <Route path='dynamic-signals-demo' element={<DynamicSignalsDemo />} />
-            <Route path='enhanced-signals-demo' element={<EnhancedSignalsDemo />} />
-            <Route path='flash-animation-demo' element={<FlashAnimationDemo />} />
-        </Route>
+                {/* Copy Trading Page */}
+                <Route path='copy-trading' element={<CopyTradingPage />} />
+
+                {/* Phase 1 Demo Routes */}
+                <Route path='live-signals-demo' element={<LiveSignalsDemo />} />
+                <Route path='dynamic-signals-demo' element={<DynamicSignalsDemo />} />
+                <Route path='enhanced-signals-demo' element={<EnhancedSignalsDemo />} />
+                <Route path='flash-animation-demo' element={<FlashAnimationDemo />} />
+            </Route>
+        </>
     )
 );
 
