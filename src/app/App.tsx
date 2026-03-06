@@ -28,7 +28,9 @@ if (process.env.NODE_ENV === 'development') {
 
 const Layout = lazy(() => import('../components/layout'));
 const AppRoot = lazy(() => import('./app-root'));
-const LandingPage = lazy(() => import('../pages/LandingPage').then(m => ({ default: m.LandingPage })));
+const LandingPageWrapper = lazy(() =>
+    import('../pages/LandingPageWrapper').then(m => ({ default: m.LandingPageWrapper }))
+);
 
 // Phase 1 Demo Pages
 const LiveSignalsDemo = lazy(() => import('../pages/live-signals-demo').then(m => ({ default: m.LiveSignalsDemo })));
@@ -82,8 +84,8 @@ const i18nInstance = initializeI18n({
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
-            {/* Landing Page - No Layout */}
-            <Route path='/' element={<LandingPage />} />
+            {/* Landing Page - No Layout - Shows once per day */}
+            <Route path='/' element={<LandingPageWrapper />} />
 
             {/* Main App with Layout */}
             <Route
