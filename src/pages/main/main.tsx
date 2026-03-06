@@ -23,6 +23,7 @@ import { hasPremiumAccess } from '@/utils/premium-access-check';
 import RunPanel from '../../components/run-panel';
 import ChartModal from '../chart/chart-modal';
 import Dashboard from '../dashboard';
+import DashboardTab from '../dashboard/dashboard';
 import RunStrategy from '../dashboard/run-strategy';
 
 const Chart = lazy(() => import('../chart'));
@@ -2545,7 +2546,9 @@ const AppWrapper = observer(() => {
                                 </>
                             }
                             id='id-dbot-dashboard'
-                        />
+                        >
+                            <DashboardTab handleTabChange={setActiveTab} />
+                        </div>
                         {/* 3. CHARTS TAB */}
                         <div
                             label={
