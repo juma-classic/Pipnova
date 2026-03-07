@@ -88,7 +88,14 @@ const router = createBrowserRouter(
     createRoutesFromElements(
         <>
             {/* Landing Page - No Layout - Shows once per day */}
-            <Route path='/' element={<LandingPageWrapper />} />
+            <Route
+                path='/'
+                element={
+                    <Suspense fallback={<ChunkLoader message={localize('Loading...')} />}>
+                        <LandingPageWrapper />
+                    </Suspense>
+                }
+            />
 
             {/* Main App with Layout */}
             <Route
