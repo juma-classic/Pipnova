@@ -29,6 +29,7 @@ import RunStrategy from '../dashboard/run-strategy';
 const Chart = lazy(() => import('../chart'));
 const Tutorial = lazy(() => import('../tutorials'));
 const CopyTradingPage = lazy(() => import('../copy-trading-page'));
+const HedgeStrategyPage = lazy(() => import('../hedge-strategy-page'));
 
 const DashboardIcon = () => (
     <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
@@ -342,6 +343,49 @@ const TutorialsIcon = () => (
                 @keyframes tutScale {
                     0%, 100% { transform: scale(1); }
                     50% { transform: scale(1.05); }
+                }
+            `}
+        </style>
+    </svg>
+);
+
+const HedgeStrategyIcon = () => (
+    <svg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'>
+        <defs>
+            <linearGradient id='hedgeGrad' x1='0%' y1='0%' x2='100%' y2='100%'>
+                <stop offset='0%' stopColor='#667eea' />
+                <stop offset='100%' stopColor='#764ba2' />
+            </linearGradient>
+            <filter id='hedgeGlow'>
+                <feGaussianBlur stdDeviation='1.5' result='coloredBlur' />
+                <feMerge>
+                    <feMergeNode in='coloredBlur' />
+                    <feMergeNode in='SourceGraphic' />
+                </feMerge>
+            </filter>
+        </defs>
+        {/* Shield/Protection symbol for hedging */}
+        <path
+            d='M12 2L4 6v6c0 5.5 3.8 10.7 8 12 4.2-1.3 8-6.5 8-12V6l-8-4z'
+            stroke='url(#hedgeGrad)'
+            strokeWidth='1.5'
+            fill='none'
+            filter='url(#hedgeGlow)'
+        />
+        {/* Checkmark inside shield */}
+        <path
+            d='M9 12l2 2 4-4'
+            stroke='url(#hedgeGrad)'
+            strokeWidth='2'
+            strokeLinecap='round'
+            strokeLinejoin='round'
+            filter='url(#hedgeGlow)'
+        />
+        <style>
+            {`
+                @keyframes hedgePulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.7; }
                 }
             `}
         </style>
@@ -2577,6 +2621,22 @@ const AppWrapper = observer(() => {
                                 fallback={<ChunkLoader message={localize('Please wait, loading tutorials...')} />}
                             >
                                 <Tutorial handleTabChange={setActiveTab} />
+                            </Suspense>
+                        </div>
+                        {/* 5. HEDGE STRATEGY TAB */}
+                        <div
+                            label={
+                                <>
+                                    <HedgeStrategyIcon />
+                                    <Localize i18n_default_text='Hedge Strategy' />
+                                </>
+                            }
+                            id='id-hedge-strategy'
+                        >
+                            <Suspense
+                                fallback={<ChunkLoader message={localize('Please wait, loading hedge strategy...')} />}
+                            >
+                                <HedgeStrategyPage />
                             </Suspense>
                         </div>
                         {/* ANALYSIS TOOL TAB */}
