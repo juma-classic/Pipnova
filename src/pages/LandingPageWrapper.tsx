@@ -10,6 +10,16 @@ export const LandingPageWrapper: React.FC = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        // Check if we're on the root path - if so, always show landing page
+        const isRootPath = window.location.pathname === '/';
+
+        if (isRootPath) {
+            // Always show landing page when explicitly navigating to root
+            console.log('✨ Showing landing page (root path)');
+            markLandingPageVisited();
+            return;
+        }
+
         // Check if we should show the landing page
         if (!shouldShowLandingPage()) {
             // Already visited today, redirect to dashboard
@@ -21,12 +31,6 @@ export const LandingPageWrapper: React.FC = () => {
             markLandingPageVisited();
         }
     }, [navigate]);
-
-    // If we should show the landing page, render it
-    // Otherwise, show nothing (will redirect)
-    if (!shouldShowLandingPage()) {
-        return null;
-    }
 
     return <LandingPage />;
 };
