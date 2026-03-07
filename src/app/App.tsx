@@ -76,6 +76,9 @@ const NovaAnalysisPage = lazy(() => import('../pages/nova-analysis-page').then(m
 // Copy Trading Page
 const CopyTradingPage = lazy(() => import('../pages/copy-trading-page').then(m => ({ default: m.default })));
 
+// Hedge Strategy Page
+const HedgeStrategyPage = lazy(() => import('../pages/hedge-strategy-page').then(m => ({ default: m.default })));
+
 const { TRANSLATIONS_CDN_URL, R2_PROJECT_NAME, CROWDIN_BRANCH_NAME } = process.env;
 const i18nInstance = initializeI18n({
     cdnUrl: `${TRANSLATIONS_CDN_URL}/${R2_PROJECT_NAME}/${CROWDIN_BRANCH_NAME}`,
@@ -146,6 +149,9 @@ const router = createBrowserRouter(
 
                 {/* Copy Trading Page */}
                 <Route path='copy-trading' element={<CopyTradingPage />} />
+
+                {/* Hedge Strategy Page */}
+                <Route path='hedge-strategy' element={<HedgeStrategyPage />} />
 
                 {/* Phase 1 Demo Routes */}
                 <Route path='live-signals-demo' element={<LiveSignalsDemo />} />

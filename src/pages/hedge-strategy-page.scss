@@ -1,0 +1,141 @@
+.hedge-strategy-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+    padding: 24px;
+
+    .page-header {
+        max-width: 1200px;
+        margin: 0 auto 32px;
+        text-align: center;
+
+        h1 {
+            font-size: 36px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .account-info {
+            display: flex;
+            justify-content: center;
+            gap: 32px;
+            margin-top: 16px;
+
+            .info-item {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+
+                .label {
+                    font-size: 14px;
+                    color: #a0aec0;
+                }
+
+                .value {
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: #fff;
+                }
+            }
+        }
+    }
+
+    .strategy-guide {
+        max-width: 1200px;
+        margin: 32px auto 0;
+        background: rgb(255 255 255 / 5%);
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid rgb(255 255 255 / 10%);
+
+        h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .guide-content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+
+            @media (width <= 968px) {
+                grid-template-columns: 1fr;
+            }
+
+            .guide-section {
+                background: rgb(255 255 255 / 3%);
+                border-radius: 12px;
+                padding: 20px;
+                border: 1px solid rgb(255 255 255 / 10%);
+
+                h4 {
+                    font-size: 18px;
+                    font-weight: 600;
+                    color: #fff;
+                    margin-bottom: 12px;
+                }
+
+                p {
+                    font-size: 14px;
+                    color: #cbd5e0;
+                    line-height: 1.6;
+                    margin-bottom: 12px;
+
+                    strong {
+                        color: #667eea;
+                        font-weight: 600;
+                    }
+                }
+
+                ul {
+                    list-style: none;
+                    padding: 0;
+                    margin: 0;
+
+                    li {
+                        font-size: 14px;
+                        color: #cbd5e0;
+                        line-height: 1.6;
+                        margin-bottom: 8px;
+                        padding-left: 20px;
+                        position: relative;
+
+                        &:before {
+                            content: '•';
+                            position: absolute;
+                            left: 0;
+                            color: #667eea;
+                            font-weight: 700;
+                        }
+
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @media (width <= 768px) {
+        padding: 16px;
+
+        .page-header {
+            h1 {
+                font-size: 28px;
+            }
+
+            .account-info {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    }
+}
