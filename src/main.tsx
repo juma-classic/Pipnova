@@ -89,9 +89,11 @@ function AppWrapper() {
     }, []);
 
     if (isLoading) {
+        console.log('🔄 App is loading, showing NovaprimeLoader...');
         return <NovaprimeLoader onLoadComplete={() => setIsLoading(false)} duration={3000} />;
     }
 
+    console.log('✅ App loaded, rendering AuthWrapper...');
     return <AuthWrapper />;
 }
 

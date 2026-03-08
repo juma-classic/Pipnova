@@ -55,13 +55,13 @@ export const AuthWrapper = () => {
         const initializeAuth = async () => {
             // First, try to auto-authenticate with stored API token
             const hasApiToken = await apiTokenAuthService.autoAuthenticate();
-            
+
             if (!hasApiToken) {
                 // If no API token, proceed with OAuth flow
                 await setLocalStorageToken(loginInfo, paramsToDelete);
                 URLUtils.filterSearchParams(['lang']);
             }
-            
+
             setIsAuthComplete(true);
         };
 
@@ -69,8 +69,10 @@ export const AuthWrapper = () => {
     }, [loginInfo, paramsToDelete]);
 
     if (!isAuthComplete) {
+        console.log('🔐 Auth not complete, showing loader...');
         return <NovaprimeLoader onLoadComplete={() => {}} duration={3000} />;
     }
 
+    console.log('✅ Auth complete, rendering App...');
     return <App />;
 };
