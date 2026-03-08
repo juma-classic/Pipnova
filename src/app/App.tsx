@@ -1,6 +1,6 @@
 import { initSurvicate } from '../public-path';
 import { lazy, Suspense, useEffect } from 'react';
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider, Navigate } from 'react-router-dom';
 import ChunkLoader from '@/components/loader/chunk-loader';
 import RoutePromptDialog from '@/components/route-prompt-dialog';
 import { StoreProvider } from '@/hooks/useStore';
@@ -28,9 +28,6 @@ if (process.env.NODE_ENV === 'development') {
 
 const Layout = lazy(() => import('../components/layout'));
 const AppRoot = lazy(() => import('./app-root'));
-const LandingPageWrapper = lazy(() =>
-    import('../pages/LandingPageWrapper').then(m => ({ default: m.LandingPageWrapper }))
-);
 
 // Phase 1 Demo Pages
 const LiveSignalsDemo = lazy(() => import('../pages/live-signals-demo').then(m => ({ default: m.LiveSignalsDemo })));
@@ -87,15 +84,8 @@ const i18nInstance = initializeI18n({
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
-            {/* Landing Page - No Layout - Shows once per day */}
-            <Route
-                path='/'
-                element={
-                    <Suspense fallback={<ChunkLoader message={localize('Loading...')} />}>
-                        <LandingPageWrapper />
-                    </Suspense>
-                }
-            />
+            {/* Redirect root to dashboard */}
+            <Route path='/' element={<Navigate to='/dashboard' replace />} />
 
             {/* Main App with Layout */}
             <Route
