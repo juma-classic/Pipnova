@@ -1487,13 +1487,14 @@ export const SignalsCenter: React.FC = () => {
                     } catch (error) {
                         console.error('❌ AUTO-RUN ERROR: Failed to auto-run CFX Even Odd Bot:', error);
                     }
-                }, 0); // Run immediately
+                }, 50); // Ultra-fast execution - reduced from 100ms to 50ms
             } else {
                 throw new Error('Bot loader not available');
             }
         } catch (error) {
             console.error('❌ Failed to load CFX Even Odd Bot:', error);
-            alert(`Failed to load bot: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            // Removed alert to avoid interrupting the flow
+            console.error(`Failed to load bot: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     };
 
@@ -1649,13 +1650,14 @@ export const SignalsCenter: React.FC = () => {
                     } catch (error) {
                         console.error('❌ AUTO-RUN ERROR: Failed to auto-run CFX Rise Fall Bot:', error);
                     }
-                }, 0); // Run immediately
+                }, 100); // Reduced delay for faster execution
             } else {
                 throw new Error('Bot loader not available');
             }
         } catch (error) {
             console.error('❌ Failed to load CFX Rise Fall Bot:', error);
-            alert(`Failed to load bot: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            // Removed alert to avoid interrupting the flow
+            console.error(`Failed to load bot: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     };
 
@@ -2206,7 +2208,7 @@ export const SignalsCenter: React.FC = () => {
                     } catch (error) {
                         console.error('❌ AUTO-RUN ERROR: Failed to auto-run NOVAGRID 2026 Bot:', error);
                     }
-                }, 0); // Run immediately
+                }, 100); // Reduced delay for faster execution
 
                 // Optional: Show a success notification
                 // You can uncomment this if you want a visual confirmation
@@ -2216,7 +2218,8 @@ export const SignalsCenter: React.FC = () => {
             }
         } catch (error) {
             console.error('❌ Failed to load NOVAGRID 2026 Bot:', error);
-            alert(`Failed to load NOVAGRID 2026 bot: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            // Removed alert to avoid interrupting the flow
+            console.error(`Failed to load NOVAGRID 2026 bot: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     };
 
@@ -2240,14 +2243,14 @@ export const SignalsCenter: React.FC = () => {
         if (signal.status === 'ACTIVE') {
             if (signal.remainingTime !== undefined && signal.remainingTime <= 0) {
                 console.log('⏰ Signal expired, cannot trade:', signal.id);
-                alert('⏰ This signal has expired and is no longer valid for trading.');
+                // Removed alert to avoid interrupting the flow - just log and return
                 return;
             }
         }
 
         if (signal.status === 'EXPIRED') {
             console.log('⏰ Signal is expired:', signal.id);
-            alert('⏰ This signal has expired and is no longer valid for trading.');
+            // Removed alert to avoid interrupting the flow - just log and return
             return;
         }
 
