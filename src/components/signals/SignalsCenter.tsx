@@ -8,6 +8,7 @@ import { signalAnalysisService } from '@/services/signal-analysis.service';
 import { SignalTradeResult, signalTradingService } from '@/services/signal-trading.service';
 import { signalsCenterBridge, BridgedSignal } from '@/services/signals-center-bridge.service';
 import { EntryAnalysis, EvenOddEntrySuggester } from '@/utils/evenodd-entry-suggester';
+import { hasPremiumAccess } from '@/utils/premium-access-check';
 import { AutoTradeSettings } from './AutoTradeSettings';
 import { ConnectionPoolStatus } from './ConnectionPoolStatus';
 import { ConnectionStatus } from './ConnectionStatus';
@@ -1672,6 +1673,24 @@ export const SignalsCenter: React.FC = () => {
                 entryDigit: signal.entryDigit,
                 searchNumber: signal.entryDigit, // Entry digit becomes search number
             });
+
+            // 🔐 PREMIUM ACCESS CHECK - Verify user has access to NOVAGRID 2026
+            console.log('🔐 Checking premium access for NOVAGRID 2026...');
+            const hasAccess = await hasPremiumAccess('Novagrid 2026');
+            
+            if (!hasAccess) {
+                console.error('❌ PREMIUM ACCESS DENIED: User not whitelisted for NOVAGRID 2026');
+                console.error('🚫 Signal card click blocked - premium authentication required');
+                
+                // Show user they need premium access (but don't interrupt the flow with alerts)
+                console.warn('⚠️ NOVAGRID 2026 requires premium access. Please use the premium bot section.');
+                
+                // Optionally, you could redirect to premium bots or show a notification
+                // For now, we'll just return silently to avoid interrupting the user
+                return;
+            }
+            
+            console.log('✅ PREMIUM ACCESS GRANTED: User has NOVAGRID 2026 access');
 
             // Verify market value
             if (!signal.market) {
