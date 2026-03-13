@@ -19,7 +19,7 @@ import { useDevice } from '@deriv-com/ui';
 import { BotLoadingErrorHandler, withBotLoadingErrorHandling } from '@/utils/bot-loading-error-handler';
 import { adminPanelAccess } from '@/utils/admin-panel-access';
 import { AdminPanel } from '@/components/admin-panel/AdminPanel';
-import { hasPremiumAccess } from '@/utils/premium-access-check';
+import { hasPremiumAccess, isSignalsAuthenticated } from '@/utils/premium-access-check';
 import RunPanel from '../../components/run-panel';
 import ChartModal from '../chart/chart-modal';
 import Dashboard from '../dashboard';
@@ -1106,6 +1106,60 @@ const AppWrapper = observer(() => {
         await load_modal.loadFileFromRecent();
         setActiveTab(DBOT_TABS.DASHBOARD);
     }, [load_modal, setActiveTab]);
+
+    // Helper function to load premium bot directly (bypassing modal if signals authenticated)
+    const handlePremiumBotClick = async (bot: { name: string; xmlFile: string }) => {
+        // Check if user is already authenticated via signals section
+        if (isSignalsAuthenticated()) {
+            console.log('🔓 UNIFIED AUTH: User authenticated via signals, loading premium bot directly...');
+            
+            // Check if user has access to this specific bot
+            const hasAccess = await hasPremiumAccess(bot.name);
+            if (!hasAccess) {
+                alert(
+                    `Access denied. Your account is not whitelisted for ${bot.name}. Please contact admin for access.`
+                );
+                return;
+            }
+
+            try {
+                // Load the bot directly without showing the modal
+                const response = await fetch(`/${bot.xmlFile}`);
+                if (!response.ok) {
+                    throw new Error('Failed to load bot file');
+                }
+                const xmlContent = await response.text();
+
+                // Create strategy object to load
+                const strategyToLoad = {
+                    id: `premium_${Date.now()}`,
+                    name: bot.name,
+                    xml: xmlContent,
+                    save_type: 'LOCAL',
+                    timestamp: Date.now(),
+                };
+
+                // Load the bot into workspace
+                await load_modal.loadStrategyToBuilder(strategyToLoad);
+
+                // Switch to dashboard tab
+                setActiveTab(DBOT_TABS.DASHBOARD);
+
+                console.log(`✅ Premium bot ${bot.name} loaded directly via signals authentication`);
+            } catch (error) {
+                console.error('Error loading premium bot:', error);
+                alert('Failed to load bot. Please try again or contact admin.');
+            }
+        } else {
+            // Show the premium bot modal for password entry
+            setPremiumBotModal({
+                isOpen: true,
+                botName: bot.name,
+                xmlFile: bot.xmlFile,
+            });
+            setPremiumPassword('');
+        }
+    };
 
     const toggleAnalysisTool = (url: string) => setAnalysisToolUrl(url);
 
@@ -5758,14 +5812,7 @@ const AppWrapper = observer(() => {
                                             </p>
 
                                             <button
-                                                onClick={() => {
-                                                    setPremiumBotModal({
-                                                        isOpen: true,
-                                                        botName: bot.name,
-                                                        xmlFile: bot.xmlFile,
-                                                    });
-                                                    setPremiumPassword('');
-                                                }}
+                                                onClick={() => handlePremiumBotClick(bot)}
                                                 style={{
                                                     background: 'linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%)',
                                                     color: '#1f2937',
@@ -5837,12 +5884,16 @@ const AppWrapper = observer(() => {
                                             </h3>
 
                                             <p style={{ margin: '0 0 1.5rem 0', color: '#6b7280', fontSize: '14px' }}>
-                                                Enter your access code to unlock this premium bot
+                                                {isSignalsAuthenticated() 
+                                                    ? '🔓 You are authenticated via Signals Center. Press Enter or click Access to load the bot.'
+                                                    : 'Enter your access code to unlock this premium bot'
+                                                }
                                             </p>
 
                                             <input
                                                 type='password'
-                                                placeholder='Enter access code'
+                                                placeholder={isSignalsAuthenticated() ? 'Press Enter to access...' : 'Enter access code'}
+                                                disabled={isSignalsAuthenticated()}
                                                 value={premiumPassword}
                                                 onChange={e => setPremiumPassword(e.target.value)}
                                                 style={{
@@ -5858,8 +5909,8 @@ const AppWrapper = observer(() => {
                                                 onFocus={e => (e.currentTarget.style.borderColor = '#fbbf24')}
                                                 onBlur={e => (e.currentTarget.style.borderColor = '#e5e7eb')}
                                                 onKeyPress={async e => {
-                                                    if (e.key === 'Enter' && premiumPassword === '6776') {
-                                                        // Check if user is whitelisted for this specific bot
+                                                    if (e.key === 'Enter' && (premiumPassword === '6776' || isSignalsAuthenticated())) {
+                                                        // Check if user is whitelisted for this specific bot OR authenticated in signals
                                                         const hasAccess = await hasPremiumAccess(
                                                             premiumBotModal.botName
                                                         );
@@ -5912,8 +5963,8 @@ const AppWrapper = observer(() => {
 
                                             <button
                                                 onClick={async () => {
-                                                    if (premiumPassword === '6776') {
-                                                        // Check if user is whitelisted for this specific bot
+                                                    if (premiumPassword === '6776' || isSignalsAuthenticated()) {
+                                                        // Check if user is whitelisted for this specific bot OR authenticated in signals
                                                         const hasAccess = await hasPremiumAccess(
                                                             premiumBotModal.botName
                                                         );
@@ -5980,7 +6031,7 @@ const AppWrapper = observer(() => {
                                                 onMouseEnter={e => (e.currentTarget.style.transform = 'scale(1.02)')}
                                                 onMouseLeave={e => (e.currentTarget.style.transform = 'scale(1)')}
                                             >
-                                                Unlock Bot
+                                                {isSignalsAuthenticated() ? 'Load Bot' : 'Unlock Bot'}
                                             </button>
 
                                             <div
