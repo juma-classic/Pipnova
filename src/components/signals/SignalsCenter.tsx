@@ -1701,19 +1701,40 @@ export const SignalsCenter: React.FC = () => {
             let recoveryStrategy: any = null;
             if (signal.type.startsWith('OVER') || signal.type.startsWith('UNDER')) {
                 try {
-                    // Calculate digit predictions from signal (same logic as in card display)
-                    let firstDigit = signal.entryDigit;
-                    let secondDigit;
+                    // Use the EXACT digit predictions shown on the signal card
+                    // 1st Digit = Prediction Before Loss, 2nd Digit = Prediction After Loss
+                    let firstDigit: number | undefined;
+                    let secondDigit: number | undefined;
 
-                    if (signal.entryDigit !== undefined) {
-                        if (signal.type.startsWith('OVER')) {
-                            // For OVER signals: 1st digit max 4, 2nd digit max 5, 2nd >= 1st
-                            firstDigit = Math.min(signal.entryDigit, 4); // Cap at 4
-                            secondDigit = Math.min(Math.max(firstDigit, signal.entryDigit), 5); // Between firstDigit and 5
-                        } else if (signal.type.startsWith('UNDER')) {
-                            // For UNDER signals: 1st digit min 5, 2nd digit min 4, 2nd <= 1st
-                            firstDigit = Math.max(signal.entryDigit, 5); // Floor at 5
-                            secondDigit = Math.max(Math.min(firstDigit, signal.entryDigit), 4); // Between 4 and firstDigit
+                    // Priority 1: Use the displayFirstDigit and displaySecondDigit from the signal card
+                    if (signal.displayFirstDigit !== undefined && signal.displaySecondDigit !== undefined) {
+                        firstDigit = signal.displayFirstDigit;
+                        secondDigit = signal.displaySecondDigit;
+                        console.log('🎯 Using signal card digit predictions:', {
+                            predictionBeforeLoss: firstDigit,
+                            predictionAfterLoss: secondDigit,
+                            source: 'Signal Card Display'
+                        });
+                    } else {
+                        // Fallback: Calculate from entry digit (same logic as signal card)
+                        firstDigit = signal.entryDigit;
+
+                        if (signal.entryDigit !== undefined) {
+                            if (signal.type.startsWith('OVER')) {
+                                // For OVER signals: 1st digit max 4, 2nd digit max 5, 2nd >= 1st
+                                firstDigit = Math.min(signal.entryDigit, 4); // Cap at 4
+                                secondDigit = Math.min(Math.max(firstDigit, signal.entryDigit), 5); // Between firstDigit and 5
+                            } else if (signal.type.startsWith('UNDER')) {
+                                // For UNDER signals: 1st digit min 5, 2nd digit min 4, 2nd <= 1st
+                                firstDigit = Math.max(signal.entryDigit, 5); // Floor at 5
+                                secondDigit = Math.max(Math.min(firstDigit, signal.entryDigit), 4); // Between 4 and firstDigit
+                            }
+                            console.log('🎯 Calculated digit predictions from entry digit:', {
+                                entryDigit: signal.entryDigit,
+                                predictionBeforeLoss: firstDigit,
+                                predictionAfterLoss: secondDigit,
+                                source: 'Entry Digit Calculation'
+                            });
                         }
                     }
 
@@ -1745,13 +1766,14 @@ export const SignalsCenter: React.FC = () => {
                         isBarrierAdjusted ? originalBarrier : undefined // Original barrier (e.g., 4)
                     );
 
-                    // Override with signal's digit predictions
+                    // Apply signal card digit predictions to recovery strategy
                     if (recoveryStrategy && firstDigit !== undefined && secondDigit !== undefined) {
                         recoveryStrategy.predictionBeforeLoss = firstDigit;
                         recoveryStrategy.predictionAfterLoss = secondDigit;
-                        console.log('🎯 Overriding recovery strategy with signal digit predictions:', {
+                        console.log('✅ Applied signal card digits to recovery strategy:', {
                             predictionBeforeLoss: firstDigit,
                             predictionAfterLoss: secondDigit,
+                            source: signal.displayFirstDigit !== undefined ? 'Signal Card Display' : 'Entry Digit Calculation'
                         });
                     }
 
@@ -2186,6 +2208,8 @@ export const SignalsCenter: React.FC = () => {
                 console.log(`   Market: ${signal.market} (${signal.marketDisplay})`);
                 console.log(`   Type: ${signal.type} (${contractType})`);
                 console.log(`   Entry Digit (Search Number): ${signal.entryDigit}`);
+                console.log(`   1st Digit (Prediction Before Loss): ${signal.displayFirstDigit || 'calculated from entry'}`);
+                console.log(`   2nd Digit (Prediction After Loss): ${signal.displaySecondDigit || 'calculated from entry'}`);
                 console.log(`   Stake: ${stakeManager.getStake()} (from StakeManager)`);
                 console.log(`   Martingale: ${stakeManager.getMartingale()}x (from StakeManager)`);
 
