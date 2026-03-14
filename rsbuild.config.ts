@@ -1,21 +1,32 @@
 import { defineConfig } from '@rsbuild/core';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
-import { pluginBasicSsl } from '@rsbuild/plugin-basic-ssl';
 
 const path = require('path');
 
+// Conditionally load SSL plugin only in development
+const plugins = [
+    pluginSass({
+        sassLoaderOptions: {
+            sourceMap: false, // Disable source maps in production
+        },
+        exclude: /node_modules/,
+    }),
+    pluginReact(),
+];
+
+// Add SSL plugin only in development
+if (process.env.NODE_ENV !== 'production') {
+    try {
+        const { pluginBasicSsl } = require('@rsbuild/plugin-basic-ssl');
+        plugins.push(pluginBasicSsl());
+    } catch (error) {
+        console.warn('SSL plugin not available, continuing without HTTPS in development');
+    }
+}
+
 export default defineConfig({
-    plugins: [
-        pluginSass({
-            sassLoaderOptions: {
-                sourceMap: false, // Disable source maps in production
-            },
-            exclude: /node_modules/,
-        }),
-        pluginReact(),
-        pluginBasicSsl(),
-    ],
+    plugins,
     performance: {
         chunkSplit: {
             strategy: 'split-by-experience',
@@ -41,24 +52,24 @@ export default defineConfig({
         },
         define: {
             'process.env': {
-                DERIV_APP_ID: JSON.stringify(process.env.DERIV_APP_ID), // ✅ Added App ID
-                TRANSLATIONS_CDN_URL: JSON.stringify(process.env.TRANSLATIONS_CDN_URL),
-                R2_PROJECT_NAME: JSON.stringify(process.env.R2_PROJECT_NAME),
-                CROWDIN_BRANCH_NAME: JSON.stringify(process.env.CROWDIN_BRANCH_NAME),
-                TRACKJS_TOKEN: JSON.stringify(process.env.TRACKJS_TOKEN),
-                APP_ENV: JSON.stringify(process.env.APP_ENV),
-                REF_NAME: JSON.stringify(process.env.REF_NAME),
-                REMOTE_CONFIG_URL: JSON.stringify(process.env.REMOTE_CONFIG_URL),
-                GD_CLIENT_ID: JSON.stringify(process.env.GD_CLIENT_ID),
-                GD_APP_ID: JSON.stringify(process.env.GD_APP_ID),
-                GD_API_KEY: JSON.stringify(process.env.GD_API_KEY),
-                DATADOG_SESSION_REPLAY_SAMPLE_RATE: JSON.stringify(process.env.DATADOG_SESSION_REPLAY_SAMPLE_RATE),
-                DATADOG_SESSION_SAMPLE_RATE: JSON.stringify(process.env.DATADOG_SESSION_SAMPLE_RATE),
-                DATADOG_APPLICATION_ID: JSON.stringify(process.env.DATADOG_APPLICATION_ID),
-                DATADOG_CLIENT_TOKEN: JSON.stringify(process.env.DATADOG_CLIENT_TOKEN),
-                RUDDERSTACK_KEY: JSON.stringify(process.env.RUDDERSTACK_KEY),
-                GROWTHBOOK_CLIENT_KEY: JSON.stringify(process.env.GROWTHBOOK_CLIENT_KEY),
-                GROWTHBOOK_DECRYPTION_KEY: JSON.stringify(process.env.GROWTHBOOK_DECRYPTION_KEY),
+                DERIV_APP_ID: JSON.stringify(process.env.DERIV_APP_ID || ''), // ✅ Added fallback
+                TRANSLATIONS_CDN_URL: JSON.stringify(process.env.TRANSLATIONS_CDN_URL || ''),
+                R2_PROJECT_NAME: JSON.stringify(process.env.R2_PROJECT_NAME || ''),
+                CROWDIN_BRANCH_NAME: JSON.stringify(process.env.CROWDIN_BRANCH_NAME || ''),
+                TRACKJS_TOKEN: JSON.stringify(process.env.TRACKJS_TOKEN || ''),
+                APP_ENV: JSON.stringify(process.env.APP_ENV || 'development'),
+                REF_NAME: JSON.stringify(process.env.REF_NAME || ''),
+                REMOTE_CONFIG_URL: JSON.stringify(process.env.REMOTE_CONFIG_URL || ''),
+                GD_CLIENT_ID: JSON.stringify(process.env.GD_CLIENT_ID || ''),
+                GD_APP_ID: JSON.stringify(process.env.GD_APP_ID || ''),
+                GD_API_KEY: JSON.stringify(process.env.GD_API_KEY || ''),
+                DATADOG_SESSION_REPLAY_SAMPLE_RATE: JSON.stringify(process.env.DATADOG_SESSION_REPLAY_SAMPLE_RATE || '0'),
+                DATADOG_SESSION_SAMPLE_RATE: JSON.stringify(process.env.DATADOG_SESSION_SAMPLE_RATE || '0'),
+                DATADOG_APPLICATION_ID: JSON.stringify(process.env.DATADOG_APPLICATION_ID || ''),
+                DATADOG_CLIENT_TOKEN: JSON.stringify(process.env.DATADOG_CLIENT_TOKEN || ''),
+                RUDDERSTACK_KEY: JSON.stringify(process.env.RUDDERSTACK_KEY || ''),
+                GROWTHBOOK_CLIENT_KEY: JSON.stringify(process.env.GROWTHBOOK_CLIENT_KEY || ''),
+                GROWTHBOOK_DECRYPTION_KEY: JSON.stringify(process.env.GROWTHBOOK_DECRYPTION_KEY || ''),
             },
         },
         alias: {
@@ -70,6 +81,8 @@ export default defineConfig({
             '@/utils': path.resolve(__dirname, './src/utils'),
             '@/constants': path.resolve(__dirname, './src/constants'),
             '@/stores': path.resolve(__dirname, './src/stores'),
+            '@/services': path.resolve(__dirname, './src/services'),
+            '@/config': path.resolve(__dirname, './src/config'),
         },
     },
     output: {
