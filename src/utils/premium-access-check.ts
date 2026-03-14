@@ -50,6 +50,8 @@ export const hasPremiumAccess = async (botName: string): Promise<boolean> => {
             whitelist = data.novagrid2026 || [];
         } else if (botName === 'Novagrid Elite') {
             whitelist = data.novagridElite || [];
+        } else if (botName === 'signals') {
+            whitelist = data.signals || [];
         }
         
         // Check if current user's account is in the whitelist
@@ -100,21 +102,22 @@ export const getCurrentAccountId = (): string | null => {
 /**
  * Fetch the current premium whitelist from JSON file
  */
-export const getPremiumWhitelist = async (): Promise<{ novagrid2026: string[], novagridElite: string[] }> => {
+export const getPremiumWhitelist = async (): Promise<{ novagrid2026: string[], novagridElite: string[], signals: string[] }> => {
     try {
         const response = await fetch('/premium-whitelist.json');
         if (!response.ok) {
             console.error('Failed to fetch premium whitelist');
-            return { novagrid2026: [], novagridElite: [] };
+            return { novagrid2026: [], novagridElite: [], signals: [] };
         }
 
         const data = await response.json();
         return {
             novagrid2026: data.novagrid2026 || [],
-            novagridElite: data.novagridElite || []
+            novagridElite: data.novagridElite || [],
+            signals: data.signals || []
         };
     } catch (error) {
         console.error('Error fetching premium whitelist:', error);
-        return { novagrid2026: [], novagridElite: [] };
+        return { novagrid2026: [], novagridElite: [], signals: [] };
     }
 };

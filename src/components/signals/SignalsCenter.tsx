@@ -2001,6 +2001,73 @@ export const SignalsCenter: React.FC = () => {
                 console.log('ℹ️ No prediction digit to set - NOVAGRID 2026 Bot will use default behavior');
             }
 
+            // 🚀 NOVAGRID 2026 OPTIMIZATION: Dynamic Configuration Based on Signal Strength
+            console.log('🚀 NOVAGRID 2026 OPTIMIZATION: Calculating dynamic parameters...');
+            
+            // Calculate signal strength (0.8 - 2.0 multiplier)
+            const calculateSignalStrength = (signal: SignalsCenterSignal): number => {
+                let strength = 1.0; // Base strength
+                
+                // Factor 1: Entry digit frequency (higher frequency = stronger signal)
+                if (signal.entryDigit !== undefined) {
+                    const digitFrequency = signal.digitPercentages?.[signal.entryDigit] || 10;
+                    if (digitFrequency > 15) strength += 0.3; // Hot digit
+                    else if (digitFrequency < 8) strength += 0.5; // Very rare digit
+                }
+                
+                // Factor 2: Signal type confidence
+                if (signal.type.includes('OVER') || signal.type.includes('UNDER')) {
+                    strength += 0.2; // OVER/UNDER signals are generally more reliable
+                }
+                
+                // Factor 3: Market volatility (higher vol = more opportunities)
+                if (signal.market.includes('100') || signal.market.includes('200')) {
+                    strength += 0.1; // Higher volatility indices
+                }
+                
+                // Cap between 0.8 and 2.0
+                return Math.max(0.8, Math.min(2.0, strength));
+            };
+            
+            const signalStrength = calculateSignalStrength(signal);
+            console.log('📊 Signal Strength Analysis:', {
+                baseStrength: 1.0,
+                calculatedStrength: signalStrength,
+                entryDigit: signal.entryDigit,
+                digitFrequency: signal.digitPercentages?.[signal.entryDigit || 0],
+                signalType: signal.type,
+                market: signal.market
+            });
+            
+            // 💰 Dynamic Stake Management
+            const baseStake = 0.35;
+            const dynamicStake = Math.round((baseStake * signalStrength) * 100) / 100; // Round to 2 decimals
+            console.log('💰 Dynamic Stake Calculation:', {
+                baseStake,
+                signalStrength,
+                dynamicStake,
+                increase: `${Math.round((signalStrength - 1) * 100)}%`
+            });
+            
+            // 🎯 Adaptive Martingale Configuration
+            const baseMartingale = 2.5;
+            const adaptiveMartingale = signalStrength > 1.3 ? 1.8 : signalStrength > 1.1 ? 2.2 : baseMartingale;
+            console.log('🎯 Adaptive Martingale:', {
+                baseMartingale,
+                adaptiveMartingale,
+                reasoning: signalStrength > 1.3 ? 'High confidence - lower risk' : 
+                          signalStrength > 1.1 ? 'Medium confidence - balanced risk' : 'Standard risk'
+            });
+            
+            // 🏆 Dynamic Target Profit
+            const baseProfit = 1.0;
+            const dynamicTarget = Math.round((baseProfit * signalStrength * 1.2) * 100) / 100;
+            console.log('🏆 Dynamic Target Profit:', {
+                baseProfit,
+                dynamicTarget,
+                multiplier: signalStrength * 1.2
+            });
+
             // Apply Adaptive Recovery Strategy for OVER/UNDER signals
             if (recoveryStrategy && recoveryStrategy.isValid) {
                 console.log('🧠 Applying Adaptive Recovery Strategy to NOVAGRID 2026 Bot XML...');
@@ -2008,6 +2075,9 @@ export const SignalsCenter: React.FC = () => {
                     predictionBeforeLoss: recoveryStrategy.predictionBeforeLoss,
                     predictionAfterLoss: recoveryStrategy.predictionAfterLoss,
                     signalType: signal.type,
+                    dynamicStake,
+                    adaptiveMartingale,
+                    dynamicTarget
                 });
 
                 // Find and update "Prediction Before Loss" variable
@@ -2128,6 +2198,190 @@ export const SignalsCenter: React.FC = () => {
                     console.log('🔍 Attempting direct field ID updates...');
 
                     // Based on the XML structure, try to find the specific field IDs
+                }
+            }
+            
+            // 🚀 NOVAGRID 2026 OPTIMIZATION: Apply Dynamic Parameters to XML
+            console.log('🚀 Applying NOVAGRID 2026 optimizations to XML...');
+            
+            // Update Initial Stake (search for field with NUM value 0.35)
+            let stakeUpdated = false;
+            const allNumFields = xmlDoc.querySelectorAll('field[name="NUM"]');
+            allNumFields.forEach((field, index) => {
+                if (field.textContent === '0.35' && !stakeUpdated) {
+                    const parentBlock = field.closest('block[type="variables_set"]');
+                    if (parentBlock) {
+                        const varField = parentBlock.querySelector('field[name="VAR"]');
+                        if (varField && varField.textContent === 'Initial Stake') {
+                            console.log(`💰 Updating Initial Stake: 0.35 → ${dynamicStake}`);
+                            field.textContent = dynamicStake.toString();
+                            stakeUpdated = true;
+                        }
+                    }
+                }
+            });
+            
+            // Update Martingale Split (search for variable name)
+            let martingaleUpdated = false;
+            const variableBlocks = xmlDoc.querySelectorAll('block[type="variables_set"]');
+            variableBlocks.forEach(block => {
+                const varField = block.querySelector('field[name="VAR"]');
+                if (varField && varField.textContent === 'Martingale Split') {
+                    const numField = block.querySelector('field[name="NUM"]');
+                    if (numField && !martingaleUpdated) {
+                        const oldValue = numField.textContent;
+                        console.log(`🎯 Updating Martingale Split: ${oldValue} → ${adaptiveMartingale}`);
+                        numField.textContent = adaptiveMartingale.toString();
+                        martingaleUpdated = true;
+                    }
+                }
+            });
+            
+            // Update Target Profit
+            let targetProfitUpdated = false;
+            variableBlocks.forEach(block => {
+                const varField = block.querySelector('field[name="VAR"]');
+                if (varField && varField.textContent === 'Target Profit') {
+                    const numField = block.querySelector('field[name="NUM"]');
+                    if (numField && !targetProfitUpdated) {
+                        const oldValue = numField.textContent;
+                        console.log(`🏆 Updating Target Profit: ${oldValue} → ${dynamicTarget}`);
+                        numField.textContent = dynamicTarget.toString();
+                        targetProfitUpdated = true;
+                    }
+                }
+            });
+            
+            // 🎯 NOVAGRID 2026 DIGIT CONFIGURATION: Set 1st Digit and 2nd Digit from Signal Card
+            console.log('🎯 Setting NOVAGRID 2026 digit predictions from signal card...');
+            
+            // Determine the digit values to use
+            let firstDigitValue: number | undefined;
+            let secondDigitValue: number | undefined;
+            
+            // Priority 1: Use displayFirstDigit and displaySecondDigit from signal card if available
+            if (signal.displayFirstDigit !== undefined && signal.displaySecondDigit !== undefined) {
+                firstDigitValue = signal.displayFirstDigit;
+                secondDigitValue = signal.displaySecondDigit;
+                console.log('📊 Using signal card display digits:', {
+                    firstDigit: firstDigitValue,
+                    secondDigit: secondDigitValue,
+                    source: 'Signal Card Display Values'
+                });
+            } 
+            // Priority 2: Use recovery strategy predictions if available
+            else if (recoveryStrategy && recoveryStrategy.isValid) {
+                firstDigitValue = recoveryStrategy.predictionBeforeLoss;
+                secondDigitValue = recoveryStrategy.predictionAfterLoss;
+                console.log('🧠 Using adaptive recovery strategy digits:', {
+                    firstDigit: firstDigitValue,
+                    secondDigit: secondDigitValue,
+                    source: 'Adaptive Recovery Strategy'
+                });
+            }
+            // Priority 3: Calculate from entry digit and signal type
+            else if (signal.entryDigit !== undefined) {
+                if (signal.type.startsWith('OVER')) {
+                    // For OVER signals: 1st digit max 4, 2nd digit max 5, 2nd >= 1st
+                    firstDigitValue = Math.min(signal.entryDigit, 4);
+                    secondDigitValue = Math.min(Math.max(firstDigitValue, signal.entryDigit), 5);
+                } else if (signal.type.startsWith('UNDER')) {
+                    // For UNDER signals: 1st digit min 5, 2nd digit min 4, 2nd <= 1st
+                    firstDigitValue = Math.max(signal.entryDigit, 5);
+                    secondDigitValue = Math.max(Math.min(firstDigitValue, signal.entryDigit), 4);
+                } else {
+                    // Default fallback
+                    firstDigitValue = signal.entryDigit;
+                    secondDigitValue = signal.entryDigit;
+                }
+                console.log('🔢 Calculated digits from entry digit:', {
+                    entryDigit: signal.entryDigit,
+                    signalType: signal.type,
+                    firstDigit: firstDigitValue,
+                    secondDigit: secondDigitValue,
+                    source: 'Entry Digit Calculation'
+                });
+            }
+            
+            // Update 1st Digit and 2nd Digit variables in XML
+            let firstDigitUpdated = false;
+            let secondDigitUpdated = false;
+            
+            if (firstDigitValue !== undefined && secondDigitValue !== undefined) {
+                // Method 1: Search by variable name
+                variableBlocks.forEach(block => {
+                    const varField = block.querySelector('field[name="VAR"]');
+                    const numField = block.querySelector('field[name="NUM"]');
+                    
+                    if (varField && numField) {
+                        const varName = varField.textContent;
+                        
+                        if (varName === '1st Digit' && !firstDigitUpdated) {
+                            const oldValue = numField.textContent;
+                            numField.textContent = firstDigitValue.toString();
+                            firstDigitUpdated = true;
+                            console.log(`🥇 Updated 1st Digit: ${oldValue} → ${firstDigitValue}`);
+                        } else if (varName === '2nd Digit' && !secondDigitUpdated) {
+                            const oldValue = numField.textContent;
+                            numField.textContent = secondDigitValue.toString();
+                            secondDigitUpdated = true;
+                            console.log(`🥈 Updated 2nd Digit: ${oldValue} → ${secondDigitValue}`);
+                        }
+                    }
+                });
+                
+                // Method 2: Search by exact variable IDs if method 1 failed
+                if (!firstDigitUpdated || !secondDigitUpdated) {
+                    console.log('🔍 Searching for digit variables by exact IDs...');
+                    
+                    // 1st Digit ID: KLVzVBdhe~-(,`|V)4x%
+                    // 2nd Digit ID: -!Wj|k8z+.[K$:$#FDIU
+                    const firstDigitField = xmlDoc.querySelector('field[name="VAR"][id="KLVzVBdhe~-(,`|V)4x%"]');
+                    const secondDigitField = xmlDoc.querySelector('field[name="VAR"][id="-!Wj|k8z+.[K$:$#FDIU"]');
+                    
+                    if (firstDigitField && !firstDigitUpdated) {
+                        const block = firstDigitField.closest('block[type="variables_set"]');
+                        const numField = block?.querySelector('field[name="NUM"]');
+                        if (numField) {
+                            const oldValue = numField.textContent;
+                            numField.textContent = firstDigitValue.toString();
+                            firstDigitUpdated = true;
+                            console.log(`🥇 Updated 1st Digit via ID: ${oldValue} → ${firstDigitValue}`);
+                        }
+                    }
+                    
+                    if (secondDigitField && !secondDigitUpdated) {
+                        const block = secondDigitField.closest('block[type="variables_set"]');
+                        const numField = block?.querySelector('field[name="NUM"]');
+                        if (numField) {
+                            const oldValue = numField.textContent;
+                            numField.textContent = secondDigitValue.toString();
+                            secondDigitUpdated = true;
+                            console.log(`🥈 Updated 2nd Digit via ID: ${oldValue} → ${secondDigitValue}`);
+                        }
+                    }
+                }
+                
+                console.log('✅ NOVAGRID 2026 Digit Configuration Results:', {
+                    firstDigit: `${firstDigitValue} (${firstDigitUpdated ? '✅ applied' : '❌ failed'})`,
+                    secondDigit: `${secondDigitValue} (${secondDigitUpdated ? '✅ applied' : '❌ failed'})`,
+                    source: signal.displayFirstDigit !== undefined ? 'Signal Card Display' : 
+                           recoveryStrategy?.isValid ? 'Recovery Strategy' : 'Entry Digit Calculation'
+                });
+            } else {
+                console.warn('⚠️ Could not determine 1st Digit and 2nd Digit values from signal data');
+            }
+            
+            console.log('✅ NOVAGRID 2026 Optimization Summary:', {
+                signalStrength: `${Math.round((signalStrength - 1) * 100)}% boost`,
+                dynamicStake: `${dynamicStake} (${stakeUpdated ? 'applied' : 'not found'})`,
+                adaptiveMartingale: `${adaptiveMartingale} (${martingaleUpdated ? 'applied' : 'not found'})`,
+                dynamicTarget: `${dynamicTarget} (${targetProfitUpdated ? 'applied' : 'not found'})`,
+                firstDigit: firstDigitValue !== undefined ? `${firstDigitValue} (${firstDigitUpdated ? 'applied' : 'failed'})` : 'not set',
+                secondDigit: secondDigitValue !== undefined ? `${secondDigitValue} (${secondDigitUpdated ? 'applied' : 'failed'})` : 'not set',
+                entryDigit: signal.entryDigit,
+                predictionDigit: predictionDigit
+            });
                     const beforeLossField =
                         xmlDoc.querySelector('field[name="NUM"][id="ds#,)MD-cK$O6Oiu=p8o"]') ||
                         xmlDoc.querySelector('block[id="ds#,)MD-cK$O6Oiu=p8o"] field[name="NUM"]');
@@ -2204,12 +2458,18 @@ export const SignalsCenter: React.FC = () => {
             // Load the bot
             if (window.load_modal && typeof window.load_modal.loadStrategyToBuilder === 'function') {
                 console.log('📤 Loading NOVAGRID 2026 Bot to builder...');
-                console.log('🎯 Configuration Summary:');
+                console.log('🎯 NOVAGRID 2026 OPTIMIZED Configuration Summary:');
                 console.log(`   Market: ${signal.market} (${signal.marketDisplay})`);
                 console.log(`   Type: ${signal.type} (${contractType})`);
                 console.log(`   Entry Digit (Search Number): ${signal.entryDigit}`);
-                console.log(`   1st Digit (Prediction Before Loss): ${signal.displayFirstDigit || 'calculated from entry'}`);
-                console.log(`   2nd Digit (Prediction After Loss): ${signal.displaySecondDigit || 'calculated from entry'}`);
+                console.log(`   🎯 DIGIT PREDICTIONS:`);
+                console.log(`      - 1st Digit: ${firstDigitValue !== undefined ? firstDigitValue : 'not set'} (${firstDigitUpdated ? '✅ applied' : '❌ failed'})`);
+                console.log(`      - 2nd Digit: ${secondDigitValue !== undefined ? secondDigitValue : 'not set'} (${secondDigitUpdated ? '✅ applied' : '❌ failed'})`);
+                console.log(`   🚀 OPTIMIZATIONS APPLIED:`);
+                console.log(`      - Signal Strength: ${signalStrength.toFixed(2)}x (${Math.round((signalStrength - 1) * 100)}% boost)`);
+                console.log(`      - Dynamic Stake: ${dynamicStake} (${stakeUpdated ? '✅ applied' : '❌ fallback to StakeManager'})`);
+                console.log(`      - Adaptive Martingale: ${adaptiveMartingale}x (${martingaleUpdated ? '✅ applied' : '❌ fallback to StakeManager'})`);
+                console.log(`      - Dynamic Target: ${dynamicTarget} (${targetProfitUpdated ? '✅ applied' : '❌ using default'})`);
                 console.log(`   Stake: ${stakeManager.getStake()} (from StakeManager)`);
                 console.log(`   Martingale: ${stakeManager.getMartingale()}x (from StakeManager)`);
 
@@ -2236,10 +2496,19 @@ export const SignalsCenter: React.FC = () => {
                             console.log('✅ AUTO-RUN: Run button found, clicking now...');
                             runButton.click();
                             console.log('🎉 AUTO-RUN: NOVAGRID 2026 Bot auto-started successfully!');
+                            console.log('🚀 NOVAGRID 2026 OPTIMIZED BOT NOW RUNNING:');
+                            console.log(`   📊 Signal: ${signal.type} on ${signal.marketDisplay}`);
+                            console.log(`   🎯 Entry Digit: ${signal.entryDigit}`);
+                            console.log(`   🎯 1st Digit: ${firstDigitValue !== undefined ? firstDigitValue : 'default'}`);
+                            console.log(`   🎯 2nd Digit: ${secondDigitValue !== undefined ? secondDigitValue : 'default'}`);
+                            console.log(`   💪 Signal Strength: ${signalStrength.toFixed(2)}x boost`);
+                            console.log(`   💰 Dynamic Stake: ${dynamicStake}`);
+                            console.log(`   🎯 Adaptive Martingale: ${adaptiveMartingale}x`);
+                            console.log(`   🏆 Dynamic Target: ${dynamicTarget}`);
 
                             // Show a brief success notification
                             console.log(
-                                `🎯 AUTO-RUN COMPLETE: ${signal.type} NOVAGRID 2026 bot is now running for ${signal.marketDisplay}`
+                                `🎯 AUTO-RUN COMPLETE: ${signal.type} NOVAGRID 2026 OPTIMIZED bot is now running for ${signal.marketDisplay} with ${Math.round((signalStrength - 1) * 100)}% performance boost!`
                             );
                         } else {
                             console.warn('⚠️ AUTO-RUN: Run button not found, trying alternative method...');

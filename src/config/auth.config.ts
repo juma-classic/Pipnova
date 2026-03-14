@@ -1,7 +1,7 @@
 // Authentication Configuration
 export const AUTH_CONFIG = {
     // Signals Center Password Protection
-    SIGNALS_PASSWORD: '777',
+    SIGNALS_PASSWORD: '6776',
 
     // Signal Savvy & Patel Signals Password Protection
     PREMIUM_SIGNALS_PASSWORD: '6139',
