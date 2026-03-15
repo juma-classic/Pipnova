@@ -1677,19 +1677,19 @@ export const SignalsCenter: React.FC = () => {
             // 🔐 PREMIUM ACCESS CHECK - Verify user has access to NOVAGRID 2026
             console.log('🔐 Checking premium access for NOVAGRID 2026...');
             const hasAccess = await hasPremiumAccess('Novagrid 2026');
-            
+
             if (!hasAccess) {
                 console.error('❌ PREMIUM ACCESS DENIED: User not whitelisted for NOVAGRID 2026');
                 console.error('🚫 Signal card click blocked - premium authentication required');
-                
+
                 // Show user they need premium access (but don't interrupt the flow with alerts)
                 console.warn('⚠️ NOVAGRID 2026 requires premium access. Please use the premium bot section.');
-                
+
                 // Optionally, you could redirect to premium bots or show a notification
                 // For now, we'll just return silently to avoid interrupting the user
                 return;
             }
-            
+
             console.log('✅ PREMIUM ACCESS GRANTED: User has NOVAGRID 2026 access');
 
             // Verify market value
@@ -1713,7 +1713,7 @@ export const SignalsCenter: React.FC = () => {
                         console.log('🎯 Using signal card digit predictions:', {
                             predictionBeforeLoss: firstDigit,
                             predictionAfterLoss: secondDigit,
-                            source: 'Signal Card Display'
+                            source: 'Signal Card Display',
                         });
                     } else {
                         // Fallback: Calculate from entry digit (same logic as signal card)
@@ -1733,7 +1733,7 @@ export const SignalsCenter: React.FC = () => {
                                 entryDigit: signal.entryDigit,
                                 predictionBeforeLoss: firstDigit,
                                 predictionAfterLoss: secondDigit,
-                                source: 'Entry Digit Calculation'
+                                source: 'Entry Digit Calculation',
                             });
                         }
                     }
@@ -1773,7 +1773,10 @@ export const SignalsCenter: React.FC = () => {
                         console.log('✅ Applied signal card digits to recovery strategy:', {
                             predictionBeforeLoss: firstDigit,
                             predictionAfterLoss: secondDigit,
-                            source: signal.displayFirstDigit !== undefined ? 'Signal Card Display' : 'Entry Digit Calculation'
+                            source:
+                                signal.displayFirstDigit !== undefined
+                                    ? 'Signal Card Display'
+                                    : 'Entry Digit Calculation',
                         });
                     }
 
@@ -2003,32 +2006,33 @@ export const SignalsCenter: React.FC = () => {
 
             // 🚀 NOVAGRID 2026 OPTIMIZATION: Dynamic Configuration Based on Signal Strength
             console.log('🚀 NOVAGRID 2026 OPTIMIZATION: Calculating dynamic parameters...');
-            
+
             // Calculate signal strength (0.8 - 2.0 multiplier)
             const calculateSignalStrength = (signal: SignalsCenterSignal): number => {
                 let strength = 1.0; // Base strength
-                
+
                 // Factor 1: Entry digit frequency (higher frequency = stronger signal)
                 if (signal.entryDigit !== undefined) {
                     const digitFrequency = signal.digitPercentages?.[signal.entryDigit] || 10;
-                    if (digitFrequency > 15) strength += 0.3; // Hot digit
+                    if (digitFrequency > 15)
+                        strength += 0.3; // Hot digit
                     else if (digitFrequency < 8) strength += 0.5; // Very rare digit
                 }
-                
+
                 // Factor 2: Signal type confidence
                 if (signal.type.includes('OVER') || signal.type.includes('UNDER')) {
                     strength += 0.2; // OVER/UNDER signals are generally more reliable
                 }
-                
+
                 // Factor 3: Market volatility (higher vol = more opportunities)
                 if (signal.market.includes('100') || signal.market.includes('200')) {
                     strength += 0.1; // Higher volatility indices
                 }
-                
+
                 // Cap between 0.8 and 2.0
                 return Math.max(0.8, Math.min(2.0, strength));
             };
-            
+
             const signalStrength = calculateSignalStrength(signal);
             console.log('📊 Signal Strength Analysis:', {
                 baseStrength: 1.0,
@@ -2036,36 +2040,40 @@ export const SignalsCenter: React.FC = () => {
                 entryDigit: signal.entryDigit,
                 digitFrequency: signal.digitPercentages?.[signal.entryDigit || 0],
                 signalType: signal.type,
-                market: signal.market
+                market: signal.market,
             });
-            
+
             // 💰 Dynamic Stake Management
             const baseStake = 0.35;
-            const dynamicStake = Math.round((baseStake * signalStrength) * 100) / 100; // Round to 2 decimals
+            const dynamicStake = Math.round(baseStake * signalStrength * 100) / 100; // Round to 2 decimals
             console.log('💰 Dynamic Stake Calculation:', {
                 baseStake,
                 signalStrength,
                 dynamicStake,
-                increase: `${Math.round((signalStrength - 1) * 100)}%`
+                increase: `${Math.round((signalStrength - 1) * 100)}%`,
             });
-            
+
             // 🎯 Adaptive Martingale Configuration
             const baseMartingale = 2.5;
             const adaptiveMartingale = signalStrength > 1.3 ? 1.8 : signalStrength > 1.1 ? 2.2 : baseMartingale;
             console.log('🎯 Adaptive Martingale:', {
                 baseMartingale,
                 adaptiveMartingale,
-                reasoning: signalStrength > 1.3 ? 'High confidence - lower risk' : 
-                          signalStrength > 1.1 ? 'Medium confidence - balanced risk' : 'Standard risk'
+                reasoning:
+                    signalStrength > 1.3
+                        ? 'High confidence - lower risk'
+                        : signalStrength > 1.1
+                          ? 'Medium confidence - balanced risk'
+                          : 'Standard risk',
             });
-            
+
             // 🏆 Dynamic Target Profit
             const baseProfit = 1.0;
-            const dynamicTarget = Math.round((baseProfit * signalStrength * 1.2) * 100) / 100;
+            const dynamicTarget = Math.round(baseProfit * signalStrength * 1.2 * 100) / 100;
             console.log('🏆 Dynamic Target Profit:', {
                 baseProfit,
                 dynamicTarget,
-                multiplier: signalStrength * 1.2
+                multiplier: signalStrength * 1.2,
             });
 
             // Apply Adaptive Recovery Strategy for OVER/UNDER signals
@@ -2077,7 +2085,7 @@ export const SignalsCenter: React.FC = () => {
                     signalType: signal.type,
                     dynamicStake,
                     adaptiveMartingale,
-                    dynamicTarget
+                    dynamicTarget,
                 });
 
                 // Find and update "Prediction Before Loss" variable
@@ -2200,10 +2208,10 @@ export const SignalsCenter: React.FC = () => {
                     // Based on the XML structure, try to find the specific field IDs
                 }
             }
-            
+
             // 🚀 NOVAGRID 2026 OPTIMIZATION: Apply Dynamic Parameters to XML
             console.log('🚀 Applying NOVAGRID 2026 optimizations to XML...');
-            
+
             // Update Initial Stake (search for field with NUM value 0.35)
             let stakeUpdated = false;
             const allNumFields = xmlDoc.querySelectorAll('field[name="NUM"]');
@@ -2220,7 +2228,7 @@ export const SignalsCenter: React.FC = () => {
                     }
                 }
             });
-            
+
             // Update Martingale Split (search for variable name)
             let martingaleUpdated = false;
             const variableBlocks = xmlDoc.querySelectorAll('block[type="variables_set"]');
@@ -2236,7 +2244,7 @@ export const SignalsCenter: React.FC = () => {
                     }
                 }
             });
-            
+
             // Update Target Profit
             let targetProfitUpdated = false;
             variableBlocks.forEach(block => {
@@ -2251,14 +2259,14 @@ export const SignalsCenter: React.FC = () => {
                     }
                 }
             });
-            
+
             // 🎯 NOVAGRID 2026 DIGIT CONFIGURATION: Set 1st Digit and 2nd Digit from Signal Card
             console.log('🎯 Setting NOVAGRID 2026 digit predictions from signal card...');
-            
+
             // Determine the digit values to use
             let firstDigitValue: number | undefined;
             let secondDigitValue: number | undefined;
-            
+
             // Priority 1: Use displayFirstDigit and displaySecondDigit from signal card if available
             if (signal.displayFirstDigit !== undefined && signal.displaySecondDigit !== undefined) {
                 firstDigitValue = signal.displayFirstDigit;
@@ -2266,9 +2274,9 @@ export const SignalsCenter: React.FC = () => {
                 console.log('📊 Using signal card display digits:', {
                     firstDigit: firstDigitValue,
                     secondDigit: secondDigitValue,
-                    source: 'Signal Card Display Values'
+                    source: 'Signal Card Display Values',
                 });
-            } 
+            }
             // Priority 2: Use recovery strategy predictions if available
             else if (recoveryStrategy && recoveryStrategy.isValid) {
                 firstDigitValue = recoveryStrategy.predictionBeforeLoss;
@@ -2276,7 +2284,7 @@ export const SignalsCenter: React.FC = () => {
                 console.log('🧠 Using adaptive recovery strategy digits:', {
                     firstDigit: firstDigitValue,
                     secondDigit: secondDigitValue,
-                    source: 'Adaptive Recovery Strategy'
+                    source: 'Adaptive Recovery Strategy',
                 });
             }
             // Priority 3: Calculate from entry digit and signal type
@@ -2299,23 +2307,23 @@ export const SignalsCenter: React.FC = () => {
                     signalType: signal.type,
                     firstDigit: firstDigitValue,
                     secondDigit: secondDigitValue,
-                    source: 'Entry Digit Calculation'
+                    source: 'Entry Digit Calculation',
                 });
             }
-            
+
             // Update 1st Digit and 2nd Digit variables in XML
             let firstDigitUpdated = false;
             let secondDigitUpdated = false;
-            
+
             if (firstDigitValue !== undefined && secondDigitValue !== undefined) {
                 // Method 1: Search by variable name
                 variableBlocks.forEach(block => {
                     const varField = block.querySelector('field[name="VAR"]');
                     const numField = block.querySelector('field[name="NUM"]');
-                    
+
                     if (varField && numField) {
                         const varName = varField.textContent;
-                        
+
                         if (varName === '1st Digit' && !firstDigitUpdated) {
                             const oldValue = numField.textContent;
                             numField.textContent = firstDigitValue.toString();
@@ -2329,16 +2337,16 @@ export const SignalsCenter: React.FC = () => {
                         }
                     }
                 });
-                
+
                 // Method 2: Search by exact variable IDs if method 1 failed
                 if (!firstDigitUpdated || !secondDigitUpdated) {
                     console.log('🔍 Searching for digit variables by exact IDs...');
-                    
+
                     // 1st Digit ID: KLVzVBdhe~-(,`|V)4x%
                     // 2nd Digit ID: -!Wj|k8z+.[K$:$#FDIU
                     const firstDigitField = xmlDoc.querySelector('field[name="VAR"][id="KLVzVBdhe~-(,`|V)4x%"]');
                     const secondDigitField = xmlDoc.querySelector('field[name="VAR"][id="-!Wj|k8z+.[K$:$#FDIU"]');
-                    
+
                     if (firstDigitField && !firstDigitUpdated) {
                         const block = firstDigitField.closest('block[type="variables_set"]');
                         const numField = block?.querySelector('field[name="NUM"]');
@@ -2349,7 +2357,7 @@ export const SignalsCenter: React.FC = () => {
                             console.log(`🥇 Updated 1st Digit via ID: ${oldValue} → ${firstDigitValue}`);
                         }
                     }
-                    
+
                     if (secondDigitField && !secondDigitUpdated) {
                         const block = secondDigitField.closest('block[type="variables_set"]');
                         const numField = block?.querySelector('field[name="NUM"]');
@@ -2361,52 +2369,56 @@ export const SignalsCenter: React.FC = () => {
                         }
                     }
                 }
-                
+
                 console.log('✅ NOVAGRID 2026 Digit Configuration Results:', {
                     firstDigit: `${firstDigitValue} (${firstDigitUpdated ? '✅ applied' : '❌ failed'})`,
                     secondDigit: `${secondDigitValue} (${secondDigitUpdated ? '✅ applied' : '❌ failed'})`,
-                    source: signal.displayFirstDigit !== undefined ? 'Signal Card Display' : 
-                           recoveryStrategy?.isValid ? 'Recovery Strategy' : 'Entry Digit Calculation'
+                    source:
+                        signal.displayFirstDigit !== undefined
+                            ? 'Signal Card Display'
+                            : recoveryStrategy?.isValid
+                              ? 'Recovery Strategy'
+                              : 'Entry Digit Calculation',
                 });
             } else {
                 console.warn('⚠️ Could not determine 1st Digit and 2nd Digit values from signal data');
             }
-            
+
             console.log('✅ NOVAGRID 2026 Optimization Summary:', {
                 signalStrength: `${Math.round((signalStrength - 1) * 100)}% boost`,
                 dynamicStake: `${dynamicStake} (${stakeUpdated ? 'applied' : 'not found'})`,
                 adaptiveMartingale: `${adaptiveMartingale} (${martingaleUpdated ? 'applied' : 'not found'})`,
                 dynamicTarget: `${dynamicTarget} (${targetProfitUpdated ? 'applied' : 'not found'})`,
-                firstDigit: firstDigitValue !== undefined ? `${firstDigitValue} (${firstDigitUpdated ? 'applied' : 'failed'})` : 'not set',
-                secondDigit: secondDigitValue !== undefined ? `${secondDigitValue} (${secondDigitUpdated ? 'applied' : 'failed'})` : 'not set',
+                firstDigit:
+                    firstDigitValue !== undefined
+                        ? `${firstDigitValue} (${firstDigitUpdated ? 'applied' : 'failed'})`
+                        : 'not set',
+                secondDigit:
+                    secondDigitValue !== undefined
+                        ? `${secondDigitValue} (${secondDigitUpdated ? 'applied' : 'failed'})`
+                        : 'not set',
                 entryDigit: signal.entryDigit,
-                predictionDigit: predictionDigit
+                predictionDigit: predictionDigit,
             });
-                    const beforeLossField =
-                        xmlDoc.querySelector('field[name="NUM"][id="ds#,)MD-cK$O6Oiu=p8o"]') ||
-                        xmlDoc.querySelector('block[id="ds#,)MD-cK$O6Oiu=p8o"] field[name="NUM"]');
-                    const afterLossField =
-                        xmlDoc.querySelector('field[name="NUM"][id="#~Ah/G7=NM2HbHHG]P8N"]') ||
-                        xmlDoc.querySelector('block[id="#~Ah/G7=NM2HbHHG]P8N"] field[name="NUM"]');
+            const beforeLossField =
+                xmlDoc.querySelector('field[name="NUM"][id="ds#,)MD-cK$O6Oiu=p8o"]') ||
+                xmlDoc.querySelector('block[id="ds#,)MD-cK$O6Oiu=p8o"] field[name="NUM"]');
+            const afterLossField =
+                xmlDoc.querySelector('field[name="NUM"][id="#~Ah/G7=NM2HbHHG]P8N"]') ||
+                xmlDoc.querySelector('block[id="#~Ah/G7=NM2HbHHG]P8N"] field[name="NUM"]');
 
-                    if (beforeLossField && !predictionBeforeLossUpdated) {
-                        console.log('🎯 Found prediction before loss field by ID, updating...');
-                        beforeLossField.textContent = recoveryStrategy.predictionBeforeLoss.toString();
-                        predictionBeforeLossUpdated = true;
-                        console.log(
-                            `✅ Prediction Before Loss set via direct ID: ${recoveryStrategy.predictionBeforeLoss}`
-                        );
-                    }
+            if (beforeLossField && !predictionBeforeLossUpdated) {
+                console.log('🎯 Found prediction before loss field by ID, updating...');
+                beforeLossField.textContent = recoveryStrategy.predictionBeforeLoss.toString();
+                predictionBeforeLossUpdated = true;
+                console.log(`✅ Prediction Before Loss set via direct ID: ${recoveryStrategy.predictionBeforeLoss}`);
+            }
 
-                    if (afterLossField && !predictionAfterLossUpdated) {
-                        console.log('🔄 Found prediction after loss field by ID, updating...');
-                        afterLossField.textContent = recoveryStrategy.predictionAfterLoss.toString();
-                        predictionAfterLossUpdated = true;
-                        console.log(
-                            `✅ Prediction After Loss set via direct ID: ${recoveryStrategy.predictionAfterLoss}`
-                        );
-                    }
-                }
+            if (afterLossField && !predictionAfterLossUpdated) {
+                console.log('🔄 Found prediction after loss field by ID, updating...');
+                afterLossField.textContent = recoveryStrategy.predictionAfterLoss.toString();
+                predictionAfterLossUpdated = true;
+                console.log(`✅ Prediction After Loss set via direct ID: ${recoveryStrategy.predictionAfterLoss}`);
             }
 
             // Apply StakeManager settings using centralized service
@@ -2463,13 +2475,25 @@ export const SignalsCenter: React.FC = () => {
                 console.log(`   Type: ${signal.type} (${contractType})`);
                 console.log(`   Entry Digit (Search Number): ${signal.entryDigit}`);
                 console.log(`   🎯 DIGIT PREDICTIONS:`);
-                console.log(`      - 1st Digit: ${firstDigitValue !== undefined ? firstDigitValue : 'not set'} (${firstDigitUpdated ? '✅ applied' : '❌ failed'})`);
-                console.log(`      - 2nd Digit: ${secondDigitValue !== undefined ? secondDigitValue : 'not set'} (${secondDigitUpdated ? '✅ applied' : '❌ failed'})`);
+                console.log(
+                    `      - 1st Digit: ${firstDigitValue !== undefined ? firstDigitValue : 'not set'} (${firstDigitUpdated ? '✅ applied' : '❌ failed'})`
+                );
+                console.log(
+                    `      - 2nd Digit: ${secondDigitValue !== undefined ? secondDigitValue : 'not set'} (${secondDigitUpdated ? '✅ applied' : '❌ failed'})`
+                );
                 console.log(`   🚀 OPTIMIZATIONS APPLIED:`);
-                console.log(`      - Signal Strength: ${signalStrength.toFixed(2)}x (${Math.round((signalStrength - 1) * 100)}% boost)`);
-                console.log(`      - Dynamic Stake: ${dynamicStake} (${stakeUpdated ? '✅ applied' : '❌ fallback to StakeManager'})`);
-                console.log(`      - Adaptive Martingale: ${adaptiveMartingale}x (${martingaleUpdated ? '✅ applied' : '❌ fallback to StakeManager'})`);
-                console.log(`      - Dynamic Target: ${dynamicTarget} (${targetProfitUpdated ? '✅ applied' : '❌ using default'})`);
+                console.log(
+                    `      - Signal Strength: ${signalStrength.toFixed(2)}x (${Math.round((signalStrength - 1) * 100)}% boost)`
+                );
+                console.log(
+                    `      - Dynamic Stake: ${dynamicStake} (${stakeUpdated ? '✅ applied' : '❌ fallback to StakeManager'})`
+                );
+                console.log(
+                    `      - Adaptive Martingale: ${adaptiveMartingale}x (${martingaleUpdated ? '✅ applied' : '❌ fallback to StakeManager'})`
+                );
+                console.log(
+                    `      - Dynamic Target: ${dynamicTarget} (${targetProfitUpdated ? '✅ applied' : '❌ using default'})`
+                );
                 console.log(`   Stake: ${stakeManager.getStake()} (from StakeManager)`);
                 console.log(`   Martingale: ${stakeManager.getMartingale()}x (from StakeManager)`);
 
@@ -2499,8 +2523,12 @@ export const SignalsCenter: React.FC = () => {
                             console.log('🚀 NOVAGRID 2026 OPTIMIZED BOT NOW RUNNING:');
                             console.log(`   📊 Signal: ${signal.type} on ${signal.marketDisplay}`);
                             console.log(`   🎯 Entry Digit: ${signal.entryDigit}`);
-                            console.log(`   🎯 1st Digit: ${firstDigitValue !== undefined ? firstDigitValue : 'default'}`);
-                            console.log(`   🎯 2nd Digit: ${secondDigitValue !== undefined ? secondDigitValue : 'default'}`);
+                            console.log(
+                                `   🎯 1st Digit: ${firstDigitValue !== undefined ? firstDigitValue : 'default'}`
+                            );
+                            console.log(
+                                `   🎯 2nd Digit: ${secondDigitValue !== undefined ? secondDigitValue : 'default'}`
+                            );
                             console.log(`   💪 Signal Strength: ${signalStrength.toFixed(2)}x boost`);
                             console.log(`   💰 Dynamic Stake: ${dynamicStake}`);
                             console.log(`   🎯 Adaptive Martingale: ${adaptiveMartingale}x`);
@@ -2531,7 +2559,9 @@ export const SignalsCenter: React.FC = () => {
         } catch (error) {
             console.error('❌ Failed to load NOVAGRID 2026 Bot:', error);
             // Removed alert to avoid interrupting the flow
-            console.error(`Failed to load NOVAGRID 2026 bot: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            console.error(
+                `Failed to load NOVAGRID 2026 bot: ${error instanceof Error ? error.message : 'Unknown error'}`
+            );
         }
     };
 
