@@ -1674,24 +1674,6 @@ export const SignalsCenter: React.FC = () => {
                 searchNumber: signal.entryDigit, // Entry digit becomes search number
             });
 
-            // 🔐 PREMIUM ACCESS CHECK - Verify user has access to NOVAGRID 2026
-            console.log('🔐 Checking premium access for NOVAGRID 2026...');
-            const hasAccess = await hasPremiumAccess('Novagrid 2026');
-
-            if (!hasAccess) {
-                console.error('❌ PREMIUM ACCESS DENIED: User not whitelisted for NOVAGRID 2026');
-                console.error('🚫 Signal card click blocked - premium authentication required');
-
-                // Show user they need premium access (but don't interrupt the flow with alerts)
-                console.warn('⚠️ NOVAGRID 2026 requires premium access. Please use the premium bot section.');
-
-                // Optionally, you could redirect to premium bots or show a notification
-                // For now, we'll just return silently to avoid interrupting the user
-                return;
-            }
-
-            console.log('✅ PREMIUM ACCESS GRANTED: User has NOVAGRID 2026 access');
-
             // Verify market value
             if (!signal.market) {
                 throw new Error('Signal market is not defined');
@@ -2596,67 +2578,18 @@ export const SignalsCenter: React.FC = () => {
             return;
         }
 
-        // Handle active signals
+        // Handle active signals - all signals are OVER/UNDER, auto-load NOVAGRID 2026 Bot
         if (signal.status === 'ACTIVE' && !signal.isTrading && !isAutoLooping[signal.id]) {
-            // Check signal type and load appropriate bot
-            const isOverUnderSignal = signal.type.startsWith('OVER') || signal.type.startsWith('UNDER');
-            const isEvenOddSignal = signal.type === 'EVEN' || signal.type === 'ODD';
-            const isRiseFallSignal = signal.type === 'RISE' || signal.type === 'FALL';
-
-            if (isOverUnderSignal) {
-                if (signal.entryDigit !== undefined) {
-                    // Auto-load NOVAGRID 2026 Bot for OVER/UNDER signals WITH entry point
-                    console.log('🎯 Auto-loading NOVAGRID 2026 Bot for signal with entry point:', signal.type);
-                    console.log('📋 Signal details for NOVAGRID 2026 Bot:', {
-                        id: signal.id,
-                        type: signal.type,
-                        market: signal.market,
-                        marketDisplay: signal.marketDisplay,
-                        entryDigit: signal.entryDigit,
-                        searchNumber: signal.entryDigit, // Entry digit becomes search number in NOVAGRID 2026
-                        status: signal.status,
-                    });
-                    await loadNovagridBot(signal);
-                } else {
-                    // Auto-load NOVAGRID 2026 Bot for OVER/UNDER signals WITHOUT entry point
-                    console.log('🎯 Auto-loading NOVAGRID 2026 Bot for signal without entry point:', signal.type);
-                    console.log('📋 Signal details (no entry point):', {
-                        id: signal.id,
-                        type: signal.type,
-                        market: signal.market,
-                        marketDisplay: signal.marketDisplay,
-                        entryDigit: 'undefined (will use bot default)',
-                        status: signal.status,
-                    });
-                    await loadNovagridBot(signal);
-                }
-            } else if (isEvenOddSignal) {
-                // Auto-load CFX Even Odd Bot for EVEN/ODD signals
-                console.log('🎲 Auto-loading CFX Even Odd Bot for signal:', signal.type);
-                console.log('📋 Signal details for CFX Even Odd Bot:', {
-                    id: signal.id,
-                    type: signal.type,
-                    market: signal.market,
-                    marketDisplay: signal.marketDisplay,
-                    status: signal.status,
-                });
-                await loadCFXEvenOddBot(signal);
-            } else if (isRiseFallSignal) {
-                // Auto-load CFX Rise Fall Bot for RISE/FALL signals
-                console.log('🚀 Auto-loading CFX Rise Fall Bot for signal:', signal.type);
-                console.log('📋 Signal details for CFX Rise Fall Bot:', {
-                    id: signal.id,
-                    type: signal.type,
-                    market: signal.market,
-                    marketDisplay: signal.marketDisplay,
-                    status: signal.status,
-                });
-                await loadCFXRiseFallBot(signal);
-            } else {
-                // Open Free Bots tab for other signals
-                console.log('🎯 Opening Free Bots tab for signal:', signal.type);
-                setActiveTab(DBOT_TABS.FREE_BOTS);
-            }
+            console.log('🎯 Auto-loading NOVAGRID 2026 Bot for signal:', signal.type);
+            console.log('📋 Signal details:', {
+                id: signal.id,
+                type: signal.type,
+                market: signal.market,
+                marketDisplay: signal.marketDisplay,
+                entryDigit: signal.entryDigit,
+                status: signal.status,
+            });
+            await loadNovagridBot(signal);
         }
     };
 
