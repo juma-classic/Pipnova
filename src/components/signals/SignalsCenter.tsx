@@ -1992,40 +1992,43 @@ export const SignalsCenter: React.FC = () => {
                     secondDigit: signal.displaySecondDigit,
                 });
 
-                // Find all NUM fields and update the ones that look like prediction values
-                const allNumFields = xmlDoc.querySelectorAll('field[name="NUM"]');
+                // Find the exact blocks that set 1st Digit and 2nd Digit variables
+                // Structure: block[type="variables_set"] > field[name="VAR"] with variable name "1st Digit" or "2nd Digit"
+                const variableSetBlocks = xmlDoc.querySelectorAll('block[type="variables_set"]');
                 let firstDigitUpdated = false;
                 let secondDigitUpdated = false;
 
-                allNumFields.forEach((field, index) => {
-                    const parentBlock = field.closest('block');
-                    if (!parentBlock) return;
+                variableSetBlocks.forEach(block => {
+                    const varField = block.querySelector('field[name="VAR"]');
+                    if (!varField) return;
 
-                    const blockId = parentBlock.getAttribute('id');
-                    const currentValue = field.textContent;
+                    const varName = varField.textContent;
 
-                    // Look for fields that might be prediction-related
-                    // Try to match by variable name or block structure
-                    const varField = parentBlock.querySelector('field[name="VAR"]');
-                    const varName = varField?.textContent?.toLowerCase() || '';
-
-                    // Update first prediction (Prediction Before Loss)
-                    if (
-                        !firstDigitUpdated &&
-                        (varName.includes('before') || varName.includes('first') || blockId?.includes('before'))
-                    ) {
-                        console.log(`✅ Updating 1st Digit field: "${currentValue}" → "${signal.displayFirstDigit}"`);
-                        field.textContent = signal.displayFirstDigit.toString();
-                        firstDigitUpdated = true;
+                    // Update 1st Digit (variable name "1st Digit")
+                    if (varName === '1st Digit' && !firstDigitUpdated) {
+                        const mathBlock = block.querySelector('block[type="math_number"]');
+                        if (mathBlock) {
+                            const numField = mathBlock.querySelector('field[name="NUM"]');
+                            if (numField) {
+                                const oldValue = numField.textContent;
+                                numField.textContent = signal.displayFirstDigit.toString();
+                                firstDigitUpdated = true;
+                                console.log(`✅ Updated 1st Digit: "${oldValue}" → "${signal.displayFirstDigit}"`);
+                            }
+                        }
                     }
-                    // Update second prediction (Prediction After Loss)
-                    else if (
-                        !secondDigitUpdated &&
-                        (varName.includes('after') || varName.includes('second') || blockId?.includes('after'))
-                    ) {
-                        console.log(`✅ Updating 2nd Digit field: "${currentValue}" → "${signal.displaySecondDigit}"`);
-                        field.textContent = signal.displaySecondDigit.toString();
-                        secondDigitUpdated = true;
+                    // Update 2nd Digit (variable name "2nd Digit")
+                    else if (varName === '2nd Digit' && !secondDigitUpdated) {
+                        const mathBlock = block.querySelector('block[type="math_number"]');
+                        if (mathBlock) {
+                            const numField = mathBlock.querySelector('field[name="NUM"]');
+                            if (numField) {
+                                const oldValue = numField.textContent;
+                                numField.textContent = signal.displaySecondDigit.toString();
+                                secondDigitUpdated = true;
+                                console.log(`✅ Updated 2nd Digit: "${oldValue}" → "${signal.displaySecondDigit}"`);
+                            }
+                        }
                     }
                 });
 
