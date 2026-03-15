@@ -1984,6 +1984,59 @@ export const SignalsCenter: React.FC = () => {
                 console.log('ℹ️ No prediction digit found - NOVAGRID 2026 bot will use default or prompt user');
             }
 
+            // 🎯 CRITICAL: Apply signal's display digits (1st and 2nd digit) directly to XML
+            // These are the predictions shown on the signal card
+            if (signal.displayFirstDigit !== undefined && signal.displaySecondDigit !== undefined) {
+                console.log('🎯 Applying signal card display digits to bot:', {
+                    firstDigit: signal.displayFirstDigit,
+                    secondDigit: signal.displaySecondDigit,
+                });
+
+                // Find all NUM fields and update the ones that look like prediction values
+                const allNumFields = xmlDoc.querySelectorAll('field[name="NUM"]');
+                let firstDigitUpdated = false;
+                let secondDigitUpdated = false;
+
+                allNumFields.forEach((field, index) => {
+                    const parentBlock = field.closest('block');
+                    if (!parentBlock) return;
+
+                    const blockId = parentBlock.getAttribute('id');
+                    const currentValue = field.textContent;
+
+                    // Look for fields that might be prediction-related
+                    // Try to match by variable name or block structure
+                    const varField = parentBlock.querySelector('field[name="VAR"]');
+                    const varName = varField?.textContent?.toLowerCase() || '';
+
+                    // Update first prediction (Prediction Before Loss)
+                    if (
+                        !firstDigitUpdated &&
+                        (varName.includes('before') || varName.includes('first') || blockId?.includes('before'))
+                    ) {
+                        console.log(`✅ Updating 1st Digit field: "${currentValue}" → "${signal.displayFirstDigit}"`);
+                        field.textContent = signal.displayFirstDigit.toString();
+                        firstDigitUpdated = true;
+                    }
+                    // Update second prediction (Prediction After Loss)
+                    else if (
+                        !secondDigitUpdated &&
+                        (varName.includes('after') || varName.includes('second') || blockId?.includes('after'))
+                    ) {
+                        console.log(`✅ Updating 2nd Digit field: "${currentValue}" → "${signal.displaySecondDigit}"`);
+                        field.textContent = signal.displaySecondDigit.toString();
+                        secondDigitUpdated = true;
+                    }
+                });
+
+                console.log('📊 Signal Display Digits Update Results:', {
+                    firstDigitUpdated,
+                    secondDigitUpdated,
+                    firstDigit: signal.displayFirstDigit,
+                    secondDigit: signal.displaySecondDigit,
+                });
+            }
+
             if (predictionDigit !== undefined) {
                 const predictionValues = xmlDoc.querySelectorAll('value[name="PREDICTION"]');
                 console.log('🔍 Found', predictionValues.length, 'PREDICTION value elements');
