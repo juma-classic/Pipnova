@@ -9,6 +9,9 @@ import { SignalTradeResult, signalTradingService } from '@/services/signal-tradi
 import { signalsCenterBridge, BridgedSignal } from '@/services/signals-center-bridge.service';
 import { EntryAnalysis, EvenOddEntrySuggester } from '@/utils/evenodd-entry-suggester';
 import { hasPremiumAccess } from '@/utils/premium-access-check';
+import { stakeManager } from '@/services/stake-manager.service';
+import { signalBotLoader } from '@/services/signal-bot-loader.service';
+import { adaptiveRecoveryStrategy } from '@/services/adaptive-recovery-strategy.service';
 import { AutoTradeSettings } from './AutoTradeSettings';
 import { ConnectionPoolStatus } from './ConnectionPoolStatus';
 import { ConnectionStatus } from './ConnectionStatus';
@@ -215,6 +218,9 @@ export const SignalsCenter: React.FC = () => {
     const [connectionError, setConnectionError] = useState<string | null>(null);
     const [tickCount, setTickCount] = useState(0);
     const [lastTickTime, setLastTickTime] = useState<number | null>(null);
+
+    // 🚀 PERFORMANCE: Cache bot XML templates to avoid repeated fetches
+    const [cachedBotXml, setCachedBotXml] = useState<string | null>(null);
     const [currentMarketData, setCurrentMarketData] = useState<{ market: string; price: number } | null>(null);
 
     // Calculate validity duration based on signal strength (30-50 seconds)
@@ -381,6 +387,23 @@ export const SignalsCenter: React.FC = () => {
     // Request notification permission
     useEffect(() => {
         signalTradingService.requestNotificationPermission();
+    }, []);
+
+    // 🚀 PERFORMANCE: Pre-fetch and cache NOVAGRID 2026 Bot XML on component mount
+    useEffect(() => {
+        const preloadBotXml = async () => {
+            try {
+                const response = await fetch('/NOVAGRID 2026.xml');
+                if (response.ok) {
+                    const xml = await response.text();
+                    setCachedBotXml(xml);
+                    console.log('✅ NOVAGRID 2026 Bot XML cached successfully');
+                }
+            } catch (error) {
+                console.warn('⚠️ Failed to pre-fetch NOVAGRID 2026 Bot XML:', error);
+            }
+        };
+        preloadBotXml();
     }, []);
 
     // Save signals to localStorage whenever they change
@@ -1720,8 +1743,6 @@ export const SignalsCenter: React.FC = () => {
                         }
                     }
 
-                    const { adaptiveRecoveryStrategy } = await import('@/services/adaptive-recovery-strategy.service');
-
                     // Determine if barrier was adjusted and get the values
                     const extractedDigit = parseInt(signal.type.replace(/[^0-9]/g, ''));
                     const isBarrierAdjusted = !isNaN(extractedDigit) && signal.entryDigit === extractedDigit;
@@ -1782,13 +1803,17 @@ export const SignalsCenter: React.FC = () => {
                 }
             }
 
-            // Fetch NOVAGRID 2026 Bot XML
-            const response = await fetch('/NOVAGRID 2026.xml');
-            if (!response.ok) {
-                throw new Error(`Failed to fetch NOVAGRID 2026 Bot: ${response.statusText}`);
+            // Use cached NOVAGRID 2026 Bot XML (pre-fetched on component mount)
+            let botXml = cachedBotXml;
+            if (!botXml) {
+                // Fallback: fetch if cache is empty
+                console.warn('⚠️ Bot XML cache empty, fetching from server...');
+                const response = await fetch('/NOVAGRID 2026.xml');
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch NOVAGRID 2026 Bot: ${response.statusText}`);
+                }
+                botXml = await response.text();
             }
-
-            let botXml = await response.text();
 
             // Parse and configure XML
             const parser = new DOMParser();
@@ -2404,9 +2429,6 @@ export const SignalsCenter: React.FC = () => {
             }
 
             // Apply StakeManager settings using centralized service
-            const { stakeManager } = await import('@/services/stake-manager.service');
-            const { signalBotLoader } = await import('@/services/signal-bot-loader.service');
-
             console.log('💰 Applying StakeManager settings using centralized service:', {
                 stake: stakeManager.getStake(),
                 martingale: stakeManager.getMartingale(),
